@@ -159,6 +159,10 @@ class Order(db.Model):
     portions = db.Column('portions_number', db.Integer, nullable=False)
     accepted = db.Column('accepted', db.Boolean, nullable=False)
 
+offers_tags = db.Table("offers_tags",
+                       db.Column('offer_id', db.Integer, db.ForeignKey('offer.id'), nullable=False),
+                       db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), nullable=False))
+
 class Offer(db.Model):
     __tablename__ = "offer"
 
@@ -183,24 +187,26 @@ class Offer(db.Model):
     orders = db.relationship('Order', backref='offers_orders',
                                foreign_keys='Order.offer')  # One offer to many Orders
 
-    offer_tags = db.relationship('OfferTag', backref='offer_tag_offer', foreign_keys='OfferTag.id') # one offer to many OfferTags
+    tags = db.relationship('Tag', secondary=offers_tags, back_populates='offers')
 
 
-class OfferTag(db.Model):
-    __tablename__ = "offer_tag"
 
-    id = db.Column(db.Integer, primary_key=True)
-    offer_id = db.Column(db.Integer, db.ForeignKey('offer.id'))  # Many offerTags to one offer
-    tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'))  # Many offerTags to one offer
+# class OfferTag(db.Model):
+#     __tablename__ = "offer_tag"
+#
+#     id = db.Column(db.Integer, primary_key=True)
+#     offer_id =   # Many offerTags to one offer
+#     tag_id = db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), nullable=False)  # Many offerTags to one offer
 
-class OfferTag(db.Model):
+
+class Tag(db.Model):
     __tablename__ = "tag"
 
     id = db.Column(db.Integer, primary_key=True)
     tag_name = db.Column('tag_name', db.String(255), nullable=False)
     wanted = db.Column('wanted', db.Boolean, nullable=False)
 
-    offer_tags = db.relationship('OfferTag', backref='offer_tag_tag', foreign_keys='OfferTag.id') # one tag to many OfferTags
+    offers = db.relationship('Offer', back_populates='tags', secondary=offers_tags) # one tag to many OfferTags
 
 
 
