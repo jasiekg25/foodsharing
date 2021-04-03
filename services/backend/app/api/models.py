@@ -162,7 +162,7 @@ class Order(db.Model):
     def to_dict(self):
         data = {
             'id': self.id,
-            'user_name': self.user_id.username,
+            'user_id': self.user_id,
             'offer_id': self.offer_id,
             'portions': self.portions,
             "accepted": self.accepted
@@ -201,6 +201,23 @@ class Offer(db.Model):
 
     tags = db.relationship('Tag', secondary=offers_tags, back_populates='offers')
 
+
+    def to_dict(self):
+        data = {
+            'id': self.id,
+            'user_id': self.user_id,
+            'name': self.name,
+            'active': self.active,
+            "description": self.description,
+            "photo": self.photo,
+            "portions_number": self.portions_number,
+            "used_portions": self.used_portions,
+            "pickup_localization": self.pickup_localization,
+            "post_time": self.post_time,
+            "pickup_times": self.pickup_times,
+            "offer_expiry": self.offer_expiry
+        }
+        return data
 
 # class OfferTag(db.Model):
 #     __tablename__ = "offer_tag"
