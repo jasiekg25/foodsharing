@@ -10,51 +10,19 @@ from app import db, bcrypt
 
 
 class User(db.Model):
+
     __tablename__ = "user"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(128), nullable=False)
-    name = db.Column(db.String(128), nullable=False)
-    surname = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), nullable=False)
     password = db.Column(db.String(255), nullable=False)
-    password_salt = db.Column(db.String(255), nullable=False)
-    profile_description = db.Column(db.String(255), nullable=True)
-    profile_picture = db.Column(db.String(255), nullable=True)
-    phone = db.Column(db.String(255), nullable=False)
-    localization = db.Column(db.String(255), nullable=True)
     active = db.Column(db.Boolean(), default=True, nullable=False)
     created_date = db.Column(db.DateTime, default=func.now(), nullable=False)
 
-    client_rattings_from = db.relationship('ClientRating', backref='client_ratting_from_you',
-                                           foreign_keys='ClientRating.from_user_id')  # One user to many ClientRatings
-    client_rattings_to = db.relationship('ClientRating', backref='client_ratting_to_you',
-                                         foreign_keys='ClientRating.to_user_id')  # One user to many ClientRatings
-
-    sharer_rattings_from = db.relationship('SharerRating', backref='sharer_ratting_form_you',
-                                           foreign_keys='SharerRating.from_user_id')  # One user to many SharerRatings
-    sharer_rattings_to = db.relationship('SharerRating', backref='sharer_ratting_to_you',
-                                         foreign_keys='SharerRating.to_user_id')  # One user to many SharerRatings
-
-    messages_from = db.relationship('Message', backref='messages_from',
-                                    foreign_keys='Message.from_user_id')  # One user as author of many Messages
-    messages_to = db.relationship('Message', backref='messages_to',
-                                  foreign_keys='Message.to_user_id')  # One user as recipient of many Messages
-
-    orders = db.relationship('Order', backref='order_from',
-                             foreign_keys='Order.user_id')  # One user many Orders
-
-    def __init__(self, username="", name="", surname="", email="", password="", profile_description="",
-                 password_salt="", profile_picture="", phone="", localization=""):
+    def __init__(self, username="", email="", password=""):
         self.username = username
-        self.name = name
-        self.surname = surname
         self.email = email
-        self.profile_description = profile_description
-        self.password_salt = password_salt
-        self.profile_picture = profile_picture
-        self.phone = phone
-        self.localization = localization
         self.password = bcrypt.generate_password_hash(
             password, current_app.config.get("BCRYPT_LOG_ROUNDS")
         ).decode()
@@ -153,27 +121,11 @@ class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
                         nullable=False)  # Many orders from one user
-    offer_id = db.Column(db.Integer, db.ForeignKey('offer.id'),
-                         nullable=False)  # Many orders to one offer
+    offer = db.Column(db.Integer, db.ForeignKey('offer.id'),
+                      nullable=False)  # Many orders to one offer
     time = db.Column('message', db.DateTime, nullable=False)
     portions = db.Column('portions_number', db.Integer, nullable=False)
     accepted = db.Column('accepted', db.Boolean, nullable=False)
-
-    def to_dict(self):
-        data = {
-            'id': self.id,
-            'user_id': self.user_id,
-            'offer_id': self.offer_id,
-            'portions': self.portions,
-            "accepted": self.accepted
-        }
-        return data
-
-
-offers_tags = db.Table("offers_tags",
-                       db.Column('offer_id', db.Integer, db.ForeignKey('offer.id'), nullable=False),
-                       db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), nullable=False))
-
 
 class Offer(db.Model):
     __tablename__ = "offer"
@@ -182,7 +134,7 @@ class Offer(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
                         nullable=False)  # Many orders from one user
     name = db.Column('name', db.String(255),
-                     nullable=False)
+                      nullable=False)
     active = db.Column('active', db.Boolean, nullable=False)
     description = db.Column('description', db.Text, nullable=True)
     photo = db.Column('photo', db.String(255), nullable=True)
@@ -194,47 +146,31 @@ class Offer(db.Model):
     offer_expiry = db.Column('offer_expiry', db.DateTime, nullable=False)
 
     messages = db.relationship('Message', backref='offers_messages',
-                               foreign_keys='Message.offer')  # One offer to many Messages
+                             foreign_keys='Message.offer')  # One offer to many Messages
 
     orders = db.relationship('Order', backref='offers_orders',
-                             foreign_keys='Order.offer_id')  # One offer to many Orders
+                               foreign_keys='Order.offer')  # One offer to many Orders
 
-    tags = db.relationship('Tag', secondary=offers_tags, back_populates='offers')
-
-
-    def to_dict(self):
-        data = {
-            'id': self.id,
-            'user_id': self.user_id,
-            'name': self.name,
-            'active': self.active,
-            "description": self.description,
-            "photo": self.photo,
-            "portions_number": self.portions_number,
-            "used_portions": self.used_portions,
-            "pickup_localization": self.pickup_localization,
-            "post_time": self.post_time,
-            "pickup_times": self.pickup_times,
-            "offer_expiry": self.offer_expiry
-        }
-        return data
-
-# class OfferTag(db.Model):
-#     __tablename__ = "offer_tag"
-#
-#     id = db.Column(db.Integer, primary_key=True)
-#     offer_id =   # Many offerTags to one offer
-#     tag_id = db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), nullable=False)  # Many offerTags to one offer
+    offer_tags = db.relationship('OfferTag', backref='offer_tag_offer', foreign_keys='OfferTag.id') # one offer to many OfferTags
 
 
-class Tag(db.Model):
+class OfferTag(db.Model):
+    __tablename__ = "offer_tag"
+
+    id = db.Column(db.Integer, primary_key=True)
+    offer_id = db.Column(db.Integer, db.ForeignKey('offer.id'))  # Many offerTags to one offer
+    tag_id = db.Column(db.Integer, db.ForeignKey('tag.id'))  # Many offerTags to one offer
+
+class OfferTag(db.Model):
     __tablename__ = "tag"
 
     id = db.Column(db.Integer, primary_key=True)
     tag_name = db.Column('tag_name', db.String(255), nullable=False)
     wanted = db.Column('wanted', db.Boolean, nullable=False)
 
-    offers = db.relationship('Offer', back_populates='tags', secondary=offers_tags)  # one tag to many OfferTags
+    offer_tags = db.relationship('OfferTag', backref='offer_tag_tag', foreign_keys='OfferTag.id') # one tag to many OfferTags
+
+
 
 
 class Quote(db.Model):
@@ -251,7 +187,6 @@ class Quote(db.Model):
             'author_name': self.author.name,
         }
         return data
-
 
 class Author(db.Model):
     __tablename__ = "author"
