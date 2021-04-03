@@ -121,15 +121,27 @@ class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
                         nullable=False)  # Many orders from one user
-    offer = db.Column(db.Integer, db.ForeignKey('offer.id'),
-                      nullable=False)  # Many orders to one offer
+    offer_id = db.Column(db.Integer, db.ForeignKey('offer.id'),
+                         nullable=False)  # Many orders to one offer
     time = db.Column('message', db.DateTime, nullable=False)
     portions = db.Column('portions_number', db.Integer, nullable=False)
     accepted = db.Column('accepted', db.Boolean, nullable=False)
 
+    def to_dict(self):
+        data = {
+            'id': self.id,
+            'user_name': self.user_id.username,
+            'offer_id': self.offer_id,
+            'portions': self.portions,
+            "accepted": self.accepted
+        }
+        return data
+
+
 offers_tags = db.Table("offers_tags",
                        db.Column('offer_id', db.Integer, db.ForeignKey('offer.id'), nullable=False),
                        db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), nullable=False))
+
 
 class Offer(db.Model):
     __tablename__ = "offer"
@@ -138,7 +150,7 @@ class Offer(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
                         nullable=False)  # Many orders from one user
     name = db.Column('name', db.String(255),
-                      nullable=False)
+                     nullable=False)
     active = db.Column('active', db.Boolean, nullable=False)
     description = db.Column('description', db.Text, nullable=True)
     photo = db.Column('photo', db.String(255), nullable=True)
@@ -150,13 +162,12 @@ class Offer(db.Model):
     offer_expiry = db.Column('offer_expiry', db.DateTime, nullable=False)
 
     messages = db.relationship('Message', backref='offers_messages',
-                             foreign_keys='Message.offer')  # One offer to many Messages
+                               foreign_keys='Message.offer')  # One offer to many Messages
 
     orders = db.relationship('Order', backref='offers_orders',
-                               foreign_keys='Order.offer')  # One offer to many Orders
+                             foreign_keys='Order.offer_id')  # One offer to many Orders
 
     tags = db.relationship('Tag', secondary=offers_tags, back_populates='offers')
-
 
 
 # class OfferTag(db.Model):
@@ -174,9 +185,7 @@ class Tag(db.Model):
     tag_name = db.Column('tag_name', db.String(255), nullable=False)
     wanted = db.Column('wanted', db.Boolean, nullable=False)
 
-    offers = db.relationship('Offer', back_populates='tags', secondary=offers_tags) # one tag to many OfferTags
-
-
+    offers = db.relationship('Offer', back_populates='tags', secondary=offers_tags)  # one tag to many OfferTags
 
 
 class Quote(db.Model):
