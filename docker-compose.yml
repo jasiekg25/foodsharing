@@ -6,6 +6,7 @@ services:
     build:
       context: ./services/backend
       dockerfile: Dockerfile
+    restart: always
     entrypoint: ['/usr/src/fred/entrypoint.sh']
     volumes:
       - './services/backend:/usr/src/fred'
@@ -36,6 +37,7 @@ services:
     build:
       context: ./services/frontend
       dockerfile: Dockerfile
+    restart: always
     volumes:
       - './services/frontend:/usr/src/fred'
       - '/usr/src/fred/node_modules'
