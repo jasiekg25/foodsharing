@@ -6,7 +6,7 @@ import jwt
 
 from flask import current_app
 from sqlalchemy.sql import func
-from app import db, bcrypt
+from app import db, guard
 
 
 class User(db.Model):
@@ -55,29 +55,14 @@ class User(db.Model):
         self.profile_picture = profile_picture
         self.phone = phone
         self.localization = localization
-        self.password = bcrypt.generate_password_hash(
-            password, current_app.config.get("BCRYPT_LOG_ROUNDS")
-        ).decode()
+        self.hashed_password = guard.hash_password(password)
 
     def encode_token(self, user_id, token_type):
-        if token_type == "access":
-            seconds = current_app.config.get("ACCESS_TOKEN_EXPIRATION")
-        else:
-            seconds = current_app.config.get("REFRESH_TOKEN_EXPIRATION")
-
-        payload = {
-            "exp": datetime.datetime.utcnow() + datetime.timedelta(seconds=seconds),
-            "iat": datetime.datetime.utcnow(),
-            "sub": user_id,
-        }
-        return jwt.encode(
-            payload, current_app.config.get("SECRET_KEY"), algorithm="HS256"
-        )
+        pass
 
     @staticmethod
     def decode_token(token):
-        payload = jwt.decode(token, current_app.config.get("SECRET_KEY"))
-        return payload["sub"]
+        pass
 
     @property
     def identity(self):
@@ -117,7 +102,7 @@ class ClientRating(db.Model):
         return self.hashed_password
 
     @classmethod
-    def lookup(cls, username):
+    def lookup(cls, email):
         """
         *Required Method*
 
@@ -125,7 +110,7 @@ class ClientRating(db.Model):
         class method that takes a single ``username`` argument and returns a user
         instance if there is one that matches or ``None`` if there is not.
         """
-        return cls.query.filter_by(username=username).one_or_none()
+        return cls.query.filter_by(email=email).one_or_none()
 
     @classmethod
     def identify(cls, id):
