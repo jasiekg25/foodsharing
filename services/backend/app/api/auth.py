@@ -4,6 +4,7 @@
 import jwt
 from flask import request, jsonify
 from flask_restx import Namespace, Resource, fields
+from flask_praetorian import current_user, auth_required
 
 from app import bcrypt, guard
 from app.api.utils import add_user, get_user_by_email, get_user_by_id
@@ -124,27 +125,35 @@ class Refresh(Resource):
 
 
 class Status(Resource):
-    @auth_namespace.marshal_with(user)
+    # @auth_namespace.marshal_with(user)
+    @auth_required
     @auth_namespace.response(200, "Success")
     @auth_namespace.response(401, "Invalid token")
-    @auth_namespace.expect(parser)
+    # @auth_namespace.expect(parser)
     def get(self):
-        auth_header = request.headers.get("Authorization")
-        if auth_header:
-            try:
-                access_token = auth_header.split(" ")[1]
-                resp = User.decode_token(access_token)
-                user = get_user_by_id(resp)
-                if not user:
-                    auth_namespace.abort(401, "Invalid token")
-                return user, 200
-            except jwt.ExpiredSignatureError:
-                auth_namespace.abort(401, "Signature expired. Please log in again.")
-                return "Signature expired. Please log in again."
-            except jwt.InvalidTokenError:
-                auth_namespace.abort(401, "Invalid token. Please log in again.")
-        else:
-            auth_namespace.abort(403, "Token required")
+        user = current_user()
+        ret = {
+            'email': user.email,
+            'username': user.username
+        }
+        return ret, 200
+        
+        # auth_header = request.headers.get("Authorization")
+        # if auth_header:
+        #     try:
+        #         access_token = auth_header.split(" ")[1]
+        #         resp = User.decode_token(access_token)
+        #         user = get_user_by_id(resp)
+        #         if not user:
+        #             auth_namespace.abort(401, "Invalid token")
+        #         return user, 200
+        #     except jwt.ExpiredSignatureError:
+        #         auth_namespace.abort(401, "Signature expired. Please log in again.")
+        #         return "Signature expired. Please log in again."
+        #     except jwt.InvalidTokenError:
+        #         auth_namespace.abort(401, "Invalid token. Please log in again.")
+        # else:
+        #     auth_namespace.abort(403, "Token required")
 
 
 auth_namespace.add_resource(Register, "/register")
