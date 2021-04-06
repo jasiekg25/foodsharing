@@ -7,3 +7,4 @@ gunicorn>=20.0.4
 psycopg2-binary>=2.8.6
 pyjwt>=1.7.1
 python-dateutil>=2.8.1
+flask-praetorian>=1.1.0

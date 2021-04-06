@@ -7,13 +7,15 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
+import flask_praetorian
+from .api.models import User
 
 
 # instantiate the extensions
 db = SQLAlchemy()
 cors = CORS()
 bcrypt = Bcrypt()
-
+guard = flask_praetorian.Praetorian()
 
 
 def create_app(script_info=None):
@@ -29,6 +31,7 @@ def create_app(script_info=None):
     db.init_app(app)
     cors.init_app(app, resources={r"*": {"origins": "*"}})
     bcrypt.init_app(app)
+    guard.init_app(app, User)
 
 
     # register api
