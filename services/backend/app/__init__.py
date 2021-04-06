@@ -2,24 +2,16 @@
 
 
 import os
-import datetime
-import jwt
-
-from flask import current_app
-from sqlalchemy.sql import func
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from flask_bcrypt import Bcrypt
-import flask_praetorian
-from .config import DevelopmentConfig
+from flask_praetorian import Praetorian
 
 
 # instantiate the extensions
 db = SQLAlchemy()
 cors = CORS()
-bcrypt = Bcrypt()
-guard = flask_praetorian.Praetorian()
+guard = Praetorian()
 
 
 def create_app(script_info=None):
@@ -29,12 +21,11 @@ def create_app(script_info=None):
 
     # set config
     app_settings = os.getenv("APP_SETTINGS")
-    app.config.from_object(DevelopmentConfig)
+    app.config.from_object(app_settings)
 
     # set up extensions
     db.init_app(app)
     cors.init_app(app, resources={r"*": {"origins": "*"}})
-    bcrypt.init_app(app)
     
     from .api.models import User
     guard.init_app(app, User)
