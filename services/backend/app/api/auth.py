@@ -5,10 +5,9 @@ import jwt
 from flask import request, jsonify
 from flask_restx import Namespace, Resource, fields
 
-from app import bcrypt
+from app import bcrypt, guard
 from app.api.utils import add_user, get_user_by_email, get_user_by_id
 from app.api.models import User
-from app import guard
 
 auth_namespace = Namespace("auth")
 
@@ -57,15 +56,14 @@ class Register(Resource):
 
 
 class Login(Resource):
-    @auth_namespace.marshal_with(tokens)
-    @auth_namespace.expect(login, validate=True)
     @auth_namespace.response(200, "Success")
     @auth_namespace.response(404, "User does not exist")
     def post(self):
         post_data = request.get_json(force=True)
-        username = post_data.get("username", None)
+        email = post_data.get("email", None)
         password = post_data.get("password", None)
-        user = guard.authenticate(username, password)
+        
+        user = guard.authenticate(email, password)
         ret = {"access_token": guard.encode_jwt_token(user)}
         
         return ret
@@ -88,7 +86,6 @@ class Login(Resource):
 
 
 class Refresh(Resource):
-    @auth_namespace.marshal_with(tokens)
     @auth_namespace.expect(refresh, validate=True)
     @auth_namespace.response(200, "Success")
     @auth_namespace.response(401, "Invalid token")
