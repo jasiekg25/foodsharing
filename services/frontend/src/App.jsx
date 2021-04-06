@@ -101,8 +101,10 @@ class App extends Component {
     console.log(res.data);
     this.createMessage('success', 'You have registered successfully.');
   })
-  .catch((err) => { console.log(err); });
-  this.createMessage('danger', 'That user already exists.');
+  .catch((err) => { 
+    console.log(err); 
+    this.createMessage('danger', 'That user already exists.');
+  });
 };
 
 handleLoginFormSubmit = (data) => {
@@ -114,8 +116,10 @@ handleLoginFormSubmit = (data) => {
     window.localStorage.setItem('refreshToken', res.data.refresh_token);
     this.createMessage('success', 'You have logged in successfully.');
   })
-  .catch((err) => { console.log(err); });
-  this.createMessage('danger', 'Incorrect email and/or password.');
+  .catch((err) => { 
+    console.log(err); 
+    this.createMessage('danger', 'Incorrect email and/or password.');
+  });
 };
 
 validRefresh = () => {
