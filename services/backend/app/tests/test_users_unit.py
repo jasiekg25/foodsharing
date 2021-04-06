@@ -249,7 +249,7 @@ def test_update_user_with_passord(test_app, test_database, add_user):
     password_two = "somethingdifferent"
 
     user = add_user("user-to-be-updated", "update-me@testdriven.io", password_one)
-    assert guard.hash_password(user.password) == guard.hash_password(password_one)
+    assert guard._verify_password(password_one, user.hashed_password)
 
     client = test_app.test_client()
     resp = client.put(
@@ -262,5 +262,5 @@ def test_update_user_with_passord(test_app, test_database, add_user):
     assert resp.status_code == 200
 
     user = get_user_by_id(user.id)
-    assert guard.hash_password(user.password) == guard.hash_password(password_one)
-    assert not guard.hash_password(user.password) == guard.hash_password(password_two)
+    assert guard._verify_password(password_one, user.hashed_password)
+    assert not guard._verify_password(password_two, user.hashed_password)

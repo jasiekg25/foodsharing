@@ -62,6 +62,9 @@ class Login(Resource):
         email = post_data.get("email", None)
         password = post_data.get("password", None)
         
+        if not get_user_by_email(email):
+            auth_namespace.abort(404, "User does not exist")
+        
         user = guard.authenticate(email, password)
         ret = {"access_token": guard.encode_jwt_token(user)}
         return ret

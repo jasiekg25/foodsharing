@@ -81,7 +81,6 @@ def test_registered_user_login(test_app, test_database, add_user):
     assert resp.status_code == 200
     assert resp.content_type == "application/json"
     assert data["access_token"]
-    assert data["refresh_token"]
 
 
 def test_not_registered_user_login(test_app, test_database):
