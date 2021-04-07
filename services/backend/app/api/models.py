@@ -10,19 +10,51 @@ from app import db, bcrypt
 
 
 class User(db.Model):
-
     __tablename__ = "user"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(128), nullable=False)
+    name = db.Column(db.String(128), nullable=False)
+    surname = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), nullable=False)
     password = db.Column(db.String(255), nullable=False)
+    password_salt = db.Column(db.String(255), nullable=False)
+    profile_description = db.Column(db.String(255), nullable=True)
+    profile_picture = db.Column(db.String(255), nullable=True)
+    phone = db.Column(db.String(255), nullable=False)
+    localization = db.Column(db.String(255), nullable=True)
     active = db.Column(db.Boolean(), default=True, nullable=False)
     created_date = db.Column(db.DateTime, default=func.now(), nullable=False)
 
-    def __init__(self, username="", email="", password=""):
+    client_rattings_from = db.relationship('ClientRating', backref='client_ratting_from_you',
+                                           foreign_keys='ClientRating.from_user_id')  # One user to many ClientRatings
+    client_rattings_to = db.relationship('ClientRating', backref='client_ratting_to_you',
+                                         foreign_keys='ClientRating.to_user_id')  # One user to many ClientRatings
+
+    sharer_rattings_from = db.relationship('SharerRating', backref='sharer_ratting_form_you',
+                                           foreign_keys='SharerRating.from_user_id')  # One user to many SharerRatings
+    sharer_rattings_to = db.relationship('SharerRating', backref='sharer_ratting_to_you',
+                                         foreign_keys='SharerRating.to_user_id')  # One user to many SharerRatings
+
+    messages_from = db.relationship('Message', backref='messages_from',
+                                    foreign_keys='Message.from_user_id')  # One user as author of many Messages
+    messages_to = db.relationship('Message', backref='messages_to',
+                                  foreign_keys='Message.to_user_id')  # One user as recipient of many Messages
+
+    orders = db.relationship('Order', backref='order_from',
+                             foreign_keys='Order.user_id')  # One user many Orders
+
+    def __init__(self, username="", name="", surname="", email="", password="", profile_description="",
+                 password_salt="", profile_picture="", phone="", localization=""):
         self.username = username
+        self.name = name
+        self.surname = surname
         self.email = email
+        self.profile_description = profile_description
+        self.password_salt = password_salt
+        self.profile_picture = profile_picture
+        self.phone = phone
+        self.localization = localization
         self.password = bcrypt.generate_password_hash(
             password, current_app.config.get("BCRYPT_LOG_ROUNDS")
         ).decode()
@@ -219,6 +251,7 @@ class Quote(db.Model):
             'author_name': self.author.name,
         }
         return data
+
 
 class Author(db.Model):
     __tablename__ = "author"
