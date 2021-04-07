@@ -23,8 +23,8 @@ const RegisterForm = props => {
                   password: ""
                 }}
                 onSubmit={(values, { setSubmitting, resetForm }) => {
-                  props.handleRegisterFormSubmit(values);
-                  resetForm();
+                  if (props.handleRegisterFormSubmit(values))
+                    resetForm();
                   setSubmitting(false);
                 }}
                 validationSchema={Yup.object().shape({
