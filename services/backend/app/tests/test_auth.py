@@ -61,6 +61,15 @@ def test_user_registration_invalid_json(test_app, test_database, payload):
 
 
 def test_registered_user_login(test_app, test_database, add_user):
+    """
+    #TODO this is different using praetorian
+    also it now returns:
+    {
+    "error": "EarlyRefreshError",
+    "message": "access permission for token has not expired. may not refresh",
+    "status_code": 425
+    }
+    """
     add_user("test3", "test3@test.com", "test")
     client = test_app.test_client()
     resp = client.post(
@@ -72,7 +81,6 @@ def test_registered_user_login(test_app, test_database, add_user):
     assert resp.status_code == 200
     assert resp.content_type == "application/json"
     assert data["access_token"]
-    assert data["refresh_token"]
 
 
 def test_not_registered_user_login(test_app, test_database):
