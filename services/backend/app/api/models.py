@@ -1,10 +1,5 @@
 # app/api/models.py
 
-import os
-import datetime
-import jwt
-
-from flask import current_app
 from sqlalchemy.sql import func
 from app import db, guard
 
@@ -73,8 +68,6 @@ class User(db.Model):
         attribute or property that provides the unique id of the user instance
         """
         return self.id
-class ClientRating(db.Model):
-    __tablename__ = "client_rating"
 
     @property
     def rolenames(self):
@@ -123,7 +116,10 @@ class ClientRating(db.Model):
         """
         return cls.query.get(id)
 
-
+class ClientRating(db.Model):
+    
+    __tablename__ = "client_rating"
+    
     id = db.Column(db.Integer, primary_key=True)
     from_user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
                              nullable=False)  # Many ratings from one user
