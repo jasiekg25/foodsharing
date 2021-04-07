@@ -22,7 +22,7 @@ order = orders_namespace.model(
         "id": fields.Integer(readOnly=True),
         "user_id": fields.Integer(readOnly=True),
         "offer_id": fields.Integer(readOnly=True),
-        "time": fields.DataTime(readOnly=True),
+        "time": fields.DateTime(readOnly=True),
         "portions": fields.Integer(readOnly=True),
         "accepted": fields.Boolean(readOnly=True),
     },

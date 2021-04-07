@@ -7,6 +7,8 @@ from app.api.auth import auth_namespace
 from app.api.ping import ping_namespace
 from app.api.users import users_namespace
 from app.api.quotes import quotes_namespace
+from app.api.orders import orders_namespace
+from app.api.offers import offers_namespace
 
 api = Api(version="1.0", title="FRED APIs", doc="/docs/")
 
@@ -14,3 +16,6 @@ api.add_namespace(ping_namespace, path="/ping")
 api.add_namespace(auth_namespace, path="/auth")
 api.add_namespace(users_namespace, path="/users")
 api.add_namespace(quotes_namespace, path="/quotes")
+api.add_namespace(orders_namespace, path="/orders")
+api.add_namespace(offers_namespace, path="/offers")
+

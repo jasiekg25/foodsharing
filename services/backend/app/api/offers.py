@@ -23,14 +23,14 @@ offer = offers_namespace.model(
         "user_id": fields.Integer(readOnly=True),
         "name":  fields.String(readOnly=True),
         "active":  fields.Boolean(readOnly=True),
-        "description":  fields.Text(readOnly=True),
+        "description":  fields.String(readOnly=True),
         "photo":  fields.String(readOnly=True),
         "portions_number":  fields.Integer(readOnly=True),
         "used_portions":  fields.Integer(readOnly=True),
         "pickup_localizations":  fields.String(readOnly=True),
-        "post_time":  fields.DataTime(readOnly=True),
+        "post_time":  fields.DateTime(readOnly=True),
         "pickup_times":  fields.String(readOnly=True),
-        "offer_expiry":  fields.DataTime(readOnly=True),
+        "offer_expiry":  fields.DateTime(readOnly=True),
     },
 )
 
