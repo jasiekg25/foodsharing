@@ -45,8 +45,14 @@ class App extends Component {
   }
 
   componentDidMount() {
+    this.readLocalAccessToken();
     this.getUsers();
     this.getRandomQuotes();
+  }
+
+  readLocalAccessToken() {
+    const token = window.localStorage.getItem('accessToken');
+    this.setState({ accessToken: token });
   }
 
   getUsers = () => {
@@ -116,6 +122,7 @@ handleLoginFormSubmit = (data) => {
     this.setState({ accessToken: res.data.access_token });
     this.getUsers();
     window.localStorage.setItem('refreshToken', res.data.refresh_token);
+    window.localStorage.setItem('accessToken', res.data.access_token);
     this.createMessage('success', 'You have logged in successfully.');
     return true
   })
@@ -155,6 +162,7 @@ isAuthenticated = () => {
 
 logoutUser = () => {
   window.localStorage.removeItem('refreshToken');
+  window.localStorage.removeItem('accessToken');
   this.setState({ accessToken: null });
   this.createMessage('success', 'You have logged out.');
 };
