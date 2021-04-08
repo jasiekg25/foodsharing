@@ -1,8 +1,7 @@
 import React, {Component} from "react";
 import axios from "axios";
 import {Route, Switch} from 'react-router-dom';
-import {authInterceptor, refreshInterceptor} from "./api";
-
+import "./api"
 
 import NavBar from './components/NavBar';
 import Home from './components/Home';
@@ -135,9 +134,6 @@ class App extends Component {
   };
 
   isAuthenticated = () => {
-    axios
-    .get(`${process.env.REACT_APP_BACKEND_SERVICE_URL}/auth/refresh`)
-    .catch()
     const token = localStorage.getItem("accessToken")
     if (token) {
       return true;

@@ -1,9 +1,9 @@
 import axios from "axios";
+import { history } from "./index"
 
 const baseUrl = process.env.REACT_APP_BACKEND_SERVICE_URL;
 
-//request interceptor to add the auth token header to requests
-export const authInterceptor = axios.interceptors.request.use(
+const authInterceptor = axios.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
@@ -15,9 +15,9 @@ export const authInterceptor = axios.interceptors.request.use(
     Promise.reject(error);
   }
 );
-
-//response interceptor to refresh token on receiving token expired error
-export const refreshInterceptor = axios.interceptors.response.use(
+    
+    //response interceptor to refresh token on receiving token expired error
+const refreshInterceptor = axios.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -29,7 +29,7 @@ export const refreshInterceptor = axios.interceptors.response.use(
     if(error.response.data.error == "ExpiredRefreshError") {
         localStorage.removeItem("accessToken");
         console.log("Elapsed token removed!")
-        window.location.href = `/login`;
+        history.push('/login')
     }
 
     if (
@@ -51,5 +51,3 @@ export const refreshInterceptor = axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-// doesnt work when refreshing because this is not called
