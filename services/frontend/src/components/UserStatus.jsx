@@ -17,11 +17,7 @@ class UserStatus extends Component {
   getUserStatus(event) {
     const options = {
       url: `${process.env.REACT_APP_BACKEND_SERVICE_URL}/auth/status`,
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${this.props.accessToken}`
-      }
+      method: "get"
     };
     return axios(options)
       .then(res => {
