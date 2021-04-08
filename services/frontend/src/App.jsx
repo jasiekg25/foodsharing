@@ -12,6 +12,7 @@ import RegisterForm from './components/RegisterForm';
 import Message from './components/Message';
 import AddUser from "./components/AddUser";
 import Image404 from './img/404.svg';
+import TimeOut from "./components/TimeOut";
 
 
 const PageNoFound = () => (
@@ -228,11 +229,10 @@ class App extends Component {
 
             )}
           />
-          <Route
-            component={PageNoFound}
-
-          />
-
+          <Route exact path="/timeout" render={() =>
+            <TimeOut createMessage={this.createMessage} />
+          } />
+          <Route component={PageNoFound} />
         </Switch>
       </div>
     );

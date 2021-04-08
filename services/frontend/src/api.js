@@ -29,7 +29,7 @@ const refreshInterceptor = axios.interceptors.response.use(
     if(error.response.data.error == "ExpiredRefreshError") {
         localStorage.removeItem("accessToken");
         console.log("Elapsed token removed!")
-        history.push('/login')
+        history.push('/timeout')
     }
 
     if (
