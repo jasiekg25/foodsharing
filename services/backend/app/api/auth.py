@@ -71,10 +71,10 @@ class Login(Resource):
 
 
 class Refresh(Resource):
-    @auth_namespace.expect(refresh, validate=True)
+    # @auth_namespace.expect(refresh, validate=True)
     @auth_namespace.response(200, "Success")
     @auth_namespace.response(401, "Invalid token")
-    def post(self):
+    def get(self):
         old_token = guard.read_token_from_header()
         new_token = guard.refresh_jwt_token(old_token)
         ret = {'access_token': new_token}

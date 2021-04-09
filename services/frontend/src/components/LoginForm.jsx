@@ -22,8 +22,8 @@ const LoginForm = props => {
                   password: ""
                 }}
                 onSubmit={(values, { setSubmitting, resetForm }) => {
-                  props.handleLoginFormSubmit(values);
-                  resetForm();
+                  if (props.handleLoginFormSubmit(values))
+                    resetForm();
                   setSubmitting(false);
                 }}
                 validationSchema={Yup.object().shape({

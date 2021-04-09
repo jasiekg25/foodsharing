@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import axios from "axios";
 import {Route, Switch} from 'react-router-dom';
-
+import "./api"
 
 import NavBar from './components/NavBar';
 import Home from './components/Home';
@@ -12,6 +12,7 @@ import RegisterForm from './components/RegisterForm';
 import Message from './components/Message';
 import AddUser from "./components/AddUser";
 import Image404 from './img/404.svg';
+import TimeOut from "./components/TimeOut";
 
 
 const PageNoFound = () => (
@@ -45,8 +46,15 @@ class App extends Component {
   }
 
   componentDidMount() {
+    this.refreshToken();
     this.getUsers();
     this.getRandomQuotes();
+  }
+
+  refreshToken() {
+    axios
+    .get(`${process.env.REACT_APP_BACKEND_SERVICE_URL}/auth/refresh`)
+    .catch()
   }
 
   getUsers = () => {
@@ -94,83 +102,68 @@ class App extends Component {
 };
 
 
-  handleRegisterFormSubmit = (data) => {
-  const url = `${process.env.REACT_APP_BACKEND_SERVICE_URL}/auth/register`
-  axios.post(url, data)
-  .then((res) => {
-    console.log(res.data);
-    this.createMessage('success', 'You have registered successfully.');
-  })
-  .catch((err) => { 
-    console.log(err); 
-    this.createMessage('danger', 'That user already exists.');
-  });
-};
-
-handleLoginFormSubmit = (data) => {
-  const url = `${process.env.REACT_APP_BACKEND_SERVICE_URL}/auth/login`
-  axios.post(url, data)
-  .then((res) => {
-    this.setState({ accessToken: res.data.access_token });
-    this.getUsers();
-    window.localStorage.setItem('refreshToken', res.data.refresh_token);
-    this.createMessage('success', 'You have logged in successfully.');
-  })
-  .catch((err) => { 
-    console.log(err); 
-    this.createMessage('danger', 'Incorrect email and/or password.');
-  });
-};
-
-validRefresh = () => {
-  const token = window.localStorage.getItem('refreshToken');
-  if (token) {
-    axios
-    .post(`${process.env.REACT_APP_BACKEND_SERVICE_URL}/auth/refresh`, {
-      refresh_token: token
+    handleRegisterFormSubmit = (data) => {
+    const url = `${process.env.REACT_APP_BACKEND_SERVICE_URL}/auth/register`
+    axios.post(url, data)
+    .then((res) => {
+      console.log(res.data);
+      this.createMessage('success', 'You have registered successfully.');
+      return true
     })
-    .then(res => {
+    .catch((err) => { 
+      console.log(err); 
+      this.createMessage('danger', 'That user already exists.');
+      return false
+    });
+  };
+
+  handleLoginFormSubmit = (data) => {
+    const url = `${process.env.REACT_APP_BACKEND_SERVICE_URL}/auth/login`
+    axios.post(url, data)
+    .then((res) => {
       this.setState({ accessToken: res.data.access_token });
       this.getUsers();
-      window.localStorage.setItem('refreshToken', res.data.refresh_token);
-      return true;
+      window.localStorage.setItem('accessToken', res.data.access_token);
+      this.createMessage('success', 'You have logged in successfully.');
+      return true
     })
-    .catch(err => {
-      return false;
+    .catch((err) => { 
+      console.log(err); 
+      this.createMessage('danger', 'Incorrect email and/or password.');
+      return false
     });
-  }
-  return false;
-};
+  };
 
-isAuthenticated = () => {
-  if (this.state.accessToken || this.validRefresh()) {
-    return true;
-  }
-  return false;
-};
+  isAuthenticated = () => {
+    const token = localStorage.getItem("accessToken")
+    if (token) {
+      return true;
+    }
+    return false;
+  };
 
-logoutUser = () => {
-  window.localStorage.removeItem('refreshToken');
-  this.setState({ accessToken: null });
-  this.createMessage('success', 'You have logged out.');
-};
+  logoutUser = () => {
+    window.localStorage.removeItem('accessToken');
+    this.setState({ accessToken: null });
+    this.createMessage('success', 'You have logged out.');
+  };
 
-createMessage = (type, text) => {
-  this.setState({
-    messageType: type,
-    messageText: text,
-  });
-  setTimeout(() => {
-      this.removeMessage();
-    }, 3000);
-};
+  createMessage = (type, text) => {
+    this.setState({
+      messageType: type,
+      messageText: text,
+    });
+    setTimeout(() => {
+        this.removeMessage();
+      }, 3000);
+  };
 
-removeMessage = () => {
-  this.setState({
-    messageType: null,
-    messageText: null,
-  });
-};
+  removeMessage = () => {
+    this.setState({
+      messageType: null,
+      messageText: null,
+    });
+  };
 
 
   render() {
@@ -236,11 +229,10 @@ removeMessage = () => {
 
             )}
           />
-          <Route
-            component={PageNoFound}
-
-          />
-
+          <Route exact path="/timeout" render={() =>
+            <TimeOut createMessage={this.createMessage} />
+          } />
+          <Route component={PageNoFound} />
         </Switch>
       </div>
     );
