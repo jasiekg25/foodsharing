@@ -48,25 +48,7 @@ const NavBar = props => {
       aria-label="main navigation"
     >
       <section className="container">
-        <a
-          role="button"
-          className="navbar-burger"
-          aria-label="menu"
-          aria-expanded="false"
-          data-target="navbar-menu"
-        >
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-        </a>
-
         <div id="navbar-menu" className="navbar-menu is-static">
-          <div className="navbar-start">
-            <Link to="/" className="navbar-item nav-title">
-              FRED
-            </Link>
-          </div>
-
           {menu}
         </div>
       </section>

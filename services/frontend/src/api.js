@@ -3,7 +3,7 @@ import { history } from "./index"
 
 const baseUrl = process.env.REACT_APP_BACKEND_SERVICE_URL;
 
-const authInterceptor = axios.interceptors.request.use(
+axios.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
@@ -15,9 +15,9 @@ const authInterceptor = axios.interceptors.request.use(
     Promise.reject(error);
   }
 );
-    
-    //response interceptor to refresh token on receiving token expired error
-const refreshInterceptor = axios.interceptors.response.use(
+
+
+axios.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -26,7 +26,7 @@ const refreshInterceptor = axios.interceptors.response.use(
     const accessToken = localStorage.getItem("accessToken");
 
     // when the refresh time has expired remove token from storage and log out
-    if(error.response.data.error == "ExpiredRefreshError") {
+    if(error.response.data.error === "ExpiredRefreshError") {
         localStorage.removeItem("accessToken");
         console.log("Elapsed token removed!")
         history.push('/timeout')
@@ -51,3 +51,18 @@ const refreshInterceptor = axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+const api = {
+  register: (body) => {
+    return axios.post(`${baseUrl}/auth/register`, body);
+  },
+  login: (body) => {
+    return axios.post(`${baseUrl}/auth/login`, body);
+  },
+  refreshToken: (body) => {
+    return axios.post(`${baseUrl}/auth/refresh`, body);
+  },
+};
+
+
+export default api;
