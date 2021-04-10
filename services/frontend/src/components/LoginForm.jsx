@@ -12,8 +12,6 @@ const LoginForm = props => {
     <section className="hero is-halfheight">
       <div className="hero-body">
         <div className="container">
-          <h1 className="title has-text-centered">Welcome, I am Fred :)</h1>
-
           <div className="columns is-mobile is-centered">
             <div className="column is-one-third is-mobile is-centered">
               <Formik

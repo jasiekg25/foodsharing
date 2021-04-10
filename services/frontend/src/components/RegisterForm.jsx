@@ -12,8 +12,6 @@ const RegisterForm = props => {
     <section className="hero is-halfheight">
       <div className="hero-body">
         <div className="container">
-          <h1 className="title has-text-centered">Try it out, my friend!</h1>
-
           <div className="columns is-mobile is-centered">
             <div className="column is-one-third is-mobile is-centered">
               <Formik
