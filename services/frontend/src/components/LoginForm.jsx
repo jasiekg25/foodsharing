@@ -1,111 +1,88 @@
-import React from "react";
+import React, {useEffect, useState} from 'react';
+import {Button, Form, Row, Col} from "react-bootstrap";
+import "./LoginRegisterForm.css";
 import PropTypes from "prop-types";
-import { Formik } from "formik";
-import * as Yup from "yup";
-import { Redirect } from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 
-const LoginForm = props => {
+function LoginForm(props) {
+
+  const [ form, setForm ] = useState({})
+  const [ errors, setErrors ] = useState({})
+
   if (props.isAuthenticated()) {
     return <Redirect to="/" />;
   }
+
+  const setField = (field, value) => {
+    setForm({
+      ...form,
+      [field]: value
+    })
+    if ( !!errors[field] ) setErrors({
+      ...errors,
+      [field]: null
+    })
+  }
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    const newErrors = findFormErrors();
+    if ( Object.keys(newErrors).length > 0 ) {
+      setErrors(newErrors);
+    } else {
+      if(props.handleLoginFormSubmit(form)){
+
+      }
+      setForm({});
+    }
+  }
+
+  const findFormErrors = () => {
+    const { email, password } = form
+    const newErrors = {}
+    if ( !email || email === '' ) newErrors.email = 'Provide e-mail!'
+    if ( !password || password === '' ) newErrors.password = 'Provide password!'
+    return newErrors;
+  }
+
+
   return (
-    <section className="hero is-halfheight">
-      <div className="hero-body">
-        <div className="container">
-          <div className="columns is-mobile is-centered">
-            <div className="column is-one-third is-mobile is-centered">
-              <Formik
-                initialValues={{
-                  email: "",
-                  password: ""
-                }}
-                onSubmit={(values, { setSubmitting, resetForm }) => {
-                  if (props.handleLoginFormSubmit(values))
-                    resetForm();
-                  setSubmitting(false);
-                }}
-                validationSchema={Yup.object().shape({
-                  email: Yup.string()
-                    .email("Enter a valid email.")
-                    .required("Email is required."),
-                  password: Yup.string().required("Password is required.")
-                })}
-              >
-                {props => {
-                  const {
-                    values,
-                    touched,
-                    errors,
-                    isSubmitting,
-                    handleChange,
-                    handleBlur,
-                    handleSubmit
-                  } = props;
-                  return (
-                    <form onSubmit={handleSubmit}>
-                      <div className="field">
-                        <label className="label" htmlFor="input-email">
-                          Email
-                        </label>
-                        <input
-                          name="email"
-                          id="input-email"
-                          className={
-                            errors.email && touched.email
-                              ? "input error"
-                              : "input"
-                          }
-                          type="email"
-                          placeholder="Enter an email address"
-                          value={values.email}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                        {errors.email && touched.email && (
-                          <div className="input-feedback">{errors.email}</div>
-                        )}
-                      </div>
-                      <div className="field">
-                        <label className="label" htmlFor="input-password">
-                          Password
-                        </label>
-                        <input
-                          name="password"
-                          id="input-password"
-                          className={
-                            errors.password && touched.password
-                              ? "input error"
-                              : "input"
-                          }
-                          type="password"
-                          placeholder="Enter a password"
-                          value={values.password}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                        {errors.password && touched.password && (
-                          <div className="input-feedback">
-                            {errors.password}
-                          </div>
-                        )}
-                      </div>
-                      <input
-                        type="submit"
-                        className="button is-fullwidth secondary-btn is-rounded raised"
-                        value="Log in"
-                        disabled={isSubmitting}
-                      />
-                    </form>
-                  );
-                }}
-              </Formik>
+      <Form onSubmit={handleSubmit}>
+        <div className="login-container">
+          <Form.Group controlId="formBasicTitle">
+            <div className="login-title">
+              <Form.Label>Sign in</Form.Label>
             </div>
-          </div>
+            <div className="login-content">
+              <Form.Control
+                className="login-control" type="email" placeholder="E-mail"
+                onChange={e => setField('email', e.target.value)}
+                isInvalid={!!errors.email}
+              />
+              <Form.Control.Feedback type='invalid'>{errors.email}</Form.Control.Feedback>
+            </div>
+            <div className="login-content">
+              <Form.Control
+                className="login-control" type="password" placeholder="Password"
+                onChange={e => setField('password', e.target.value)}
+                isInvalid={!!errors.password}
+              />
+              <Form.Control.Feedback type='invalid'>{errors.password}</Form.Control.Feedback>
+            </div>
+            <Button className="login-button" type="submit" onClick={handleSubmit} variant="dark">Log in</Button>
+            <Row>
+              <Col md={6}>
+                <h6>Not a member?</h6>
+              </Col>
+              <Col md={4}>
+                <Link className="link" to="/register"> Sign up </Link>
+              </Col>
+            </Row>
+          </Form.Group>
         </div>
-      </div>
-    </section>
+      </Form>
   );
-};
+}
 
 LoginForm.propTypes = {
   handleLoginFormSubmit: PropTypes.func.isRequired,

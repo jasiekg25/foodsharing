@@ -46,5 +46,6 @@ services:
     environment:
       - NODE_ENV=development
       - REACT_APP_BACKEND_SERVICE_URL=http://localhost:5001
+      - CHOKIDAR_USEPOLLING=true
     depends_on:
       - backend
