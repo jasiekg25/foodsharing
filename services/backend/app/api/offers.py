@@ -1,26 +1,19 @@
-# app/api/quotes.py
-# APIs for quotes
+from datetime import datetime
 
-from flask import request
+from flask import request, Response
 from flask_restx import Resource, fields, Namespace
-from app import db
-from app.api.models import Author, Offer
 
-import random
+from app.api.data_access.offers_utils import get_all_offers, add_offer
 
-# from app.api.utils import (
-#     add_offer,
-# )
 
 offers_namespace = Namespace("offers")
 
-# this model does not have to match the database
 # doing this add description to Swagger Doc
 offer = offers_namespace.model(
     "Offer",
     {
         "id": fields.Integer(readOnly=True),
-        "user_id": fields.Integer(readOnly=True),
+        "user_name": fields.String(readOnly=True),
         "name":  fields.String(readOnly=True),
         "active":  fields.Boolean(readOnly=True),
         "description":  fields.String(readOnly=True),
@@ -34,18 +27,19 @@ offer = offers_namespace.model(
     },
 )
 
+
 class Offers(Resource):
 
     @offers_namespace.marshal_with(offer)
     def get(self):
-        """Returns all quotes with author info"""
-        offers = Offer.query.all()
-        offers_list = []
-        for q in offers:
-            # to_dict() is a helper function in Quote class in models.py
-            offers_list.append(q.to_dict())
-        return offers_list, 200
+        """Returns all offers with user info"""
+        try:
+            add_offer(1, "Test", 3, 0, '2314', datetime.utcnow(), '12414', datetime.utcnow())
+            offers = get_all_offers()
 
+            return [offer.to_dict() for offer in offers], 200
+        except Exception:
+            return "Couldn't load offers", 500
 
     @offers_namespace.expect(offer, validate=True)
     @offers_namespace.response(201, "quote was added!")
@@ -60,3 +54,5 @@ class Offers(Resource):
         # add_offer(PARAMETERS) # todo: Implement add_offer
         response_object["message"] = f"quote was added!"
         return response_object, 201
+
+offers_namespace.add_resource(Offers, "")

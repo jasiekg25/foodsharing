@@ -39,6 +39,9 @@ class User(db.Model):
     orders = db.relationship('Order', backref='order_from',
                              foreign_keys='Order.user_id')  # One user many Orders
 
+    offers = db.relationship('Offer', backref='user',
+                             foreign_keys='Offer.user_id')  # One user many Orders
+
     def __init__(self, username="", name="", surname="", email="", password="", profile_description="",
                  password_salt="", profile_picture="", phone="", localization=""):
         self.username = username
@@ -216,8 +219,7 @@ class Offer(db.Model):
     __tablename__ = "offer"
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
-                        nullable=False)  # Many orders from one user
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  # Many orders from one user
     name = db.Column('name', db.String(255),
                      nullable=False)
     active = db.Column('active', db.Boolean, nullable=False)
@@ -242,7 +244,7 @@ class Offer(db.Model):
     def to_dict(self):
         data = {
             'id': self.id,
-            'user_id': self.user_id,
+            'user_name': self.user.username,
             'name': self.name,
             'active': self.active,
             "description": self.description,
