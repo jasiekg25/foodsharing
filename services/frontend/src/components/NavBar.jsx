@@ -1,5 +1,6 @@
 import React from 'react';
 import {Navbar, Nav} from 'react-bootstrap';
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import './NavBar.css';
 
@@ -8,17 +9,17 @@ function NavBar(props) {
 
     let menu = (
         <Nav className="mr-auto">
-            <Nav.Link>About us</Nav.Link>
-            <Nav.Link>Trust & safety</Nav.Link>
-            <Nav.Link href="/login">Log in</Nav.Link>
+            <Link className="nav-link">About us</Link>
+            <Link className="nav-link">Trust & safety</Link>
+            <Link to="/login" className="nav-link">Log in</Link>
         </Nav>
     )
 
     if(props.isAuthenticated()){
         menu = (
             <Nav className="mr-auto">
-                <Nav.Link href="/status">User status</Nav.Link>
-                <Nav.Link onClick={props.logoutUser}>Log out</Nav.Link>
+                <Link to="/status" className="nav-link">User status</Link>
+                <Link onClick={props.logoutUser}  className="nav-link">Log out</Link>
             </Nav>
         )
     }
