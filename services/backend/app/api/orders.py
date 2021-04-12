@@ -1,20 +1,15 @@
-# app/api/quotes.py
-# APIs for quotes
+from datetime import datetime
 
 from flask import request
 from flask_restx import Resource, fields, Namespace
-from app import db
-from app.api.models import Author, Order
 
-import random
+from app.api.data_access.offers_utils import get_offer_by_id, update_used_portions
+from app.api.data_access.orders_utils import get_all_orders
 
-# from app.api.utils import (
-#     add_order,
-# )
 
 orders_namespace = Namespace("orders")
+offers_namespace = Namespace("offers")
 
-# this model does not have to match the database
 # doing this add description to Swagger Doc
 order = orders_namespace.model(
     "Order",
@@ -28,27 +23,54 @@ order = orders_namespace.model(
     },
 )
 
+offer = offers_namespace.model(
+    "Offer",
+    {
+        "id": fields.Integer(readOnly=True),
+        "user_name": fields.String(readOnly=True),
+        "active":  fields.Boolean(readOnly=True),
+        "portions_number":  fields.Integer(readOnly=True),
+        "used_portions":  fields.Integer(readOnly=False),
+        "offer_expiry":  fields.DateTime(readOnly=True),
+    },
+)
+
 class Orders(Resource):
     @orders_namespace.marshal_with(order)
     def get(self):
-        """Returns all quotes with author info"""
-        orders = Order.query.all()
-        orders_list = []
-        for q in orders:
-            # to_dict() is a helper function in Order class in models.py
-            orders_list.append(q.to_dict())
-        return orders_list, 200
+        """Returns all orders"""
+        try:
+            orders = get_all_orders()
+
+            return [order.to_dict() for order in orders], 200
+        except Exception:
+            return "Couldn't load orders", 500
 
 
     @orders_namespace.expect(order, validate=True)
-    @orders_namespace.response(201, "quote was added!")
-    @orders_namespace.response(400, "Sorry, this quote already exists.")
     def post(self):
-        """add a new quote"""
-        post_data = request.get_json()
-        # todo: Add all fields neccessary to add order (discuss with Mateusz)
-        response_object = {}
+        """Place new order"""
+        try:
+            content = request.get_json()
+            offer_from_order = get_offer_by_id(content['offer_id'])
+            offer_dict = offer_from_order.to_dict()
 
-        # add_order(user_id, offer_id, time, portions, accepted) # todo: Main logic for adding order should be in app/api/utils.py
-        response_object["message"] = f"quote was added!"
-        return response_object, 201
+            if offer_dict['portions_number'] - offer_dict['used_portions'] < content['portions']:
+                return "Not enough portions", 400
+
+            if not offer_dict['active']:
+                return "Offer not active any more", 400
+
+            if offer_dict['offer_expiry'] < datetime.now():
+                return "Offer expired", 400
+
+            new_order_portion = content['portions'] + offer_dict['used_portions']
+            update_used_portions(content['offer_id'], new_order_portion)
+
+            return "Order placed", 201
+
+        except Exception:
+            return "Couldn't make order", 500
+
+
+orders_namespace.add_resource(Orders, "")
