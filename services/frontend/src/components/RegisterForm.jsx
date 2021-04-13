@@ -1,153 +1,97 @@
-import React from "react";
+import React, {useEffect, useState} from 'react';
+import {Button, Form, Row, Col} from "react-bootstrap";
+import "./LoginRegisterForm.css";
 import PropTypes from "prop-types";
-import { Formik } from "formik";
-import * as Yup from "yup";
-import { Redirect } from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 
-const RegisterForm = props => {
+function RegisterForm(props) {
+
+  const [ form, setForm ] = useState({})
+  const [ errors, setErrors ] = useState({})
+
   if (props.isAuthenticated()) {
     return <Redirect to="/" />;
   }
+
+  const setField = (field, value) => {
+    setForm({
+      ...form,
+      [field]: value
+    })
+    if ( !!errors[field] ) setErrors({
+      ...errors,
+      [field]: null
+    })
+  }
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    const newErrors = findFormErrors();
+    if ( Object.keys(newErrors).length > 0 ) {
+      setErrors(newErrors);
+    } else {
+      if(props.handleRegisterFormSubmit(form)){
+
+      }
+      setForm({});
+    }
+  }
+
+  const findFormErrors = () => {
+    const { username, email, password } = form
+    const newErrors = {}
+    if ( !username || username === '' ) newErrors.username = 'Provide username!'
+    if ( !email || email === '' ) newErrors.email = 'Provide e-mail!'
+    if ( !password || password === '' ) newErrors.password = 'Provide password!'
+    return newErrors;
+  }
+
+
   return (
-    <section className="hero is-halfheight">
-      <div className="hero-body">
-        <div className="container">
-          <div className="columns is-mobile is-centered">
-            <div className="column is-one-third is-mobile is-centered">
-              <Formik
-                initialValues={{
-                  username: "",
-                  email: "",
-                  password: ""
-                }}
-                onSubmit={(values, { setSubmitting, resetForm }) => {
-                  if (props.handleRegisterFormSubmit(values))
-                    resetForm();
-                  setSubmitting(false);
-                }}
-                validationSchema={Yup.object().shape({
-                  username: Yup.string()
-                    .required("Username is required.")
-                    .min(3, "Username must be greater than 4 characters."),
-                  email: Yup.string()
-                    .email("Enter a valid email.")
-                    .required("Email is required.")
-                    .min(6, "Email must be greater than 7 characters."),
-                  password: Yup.string()
-                    .required("Password is required.")
-                    .min(3, "Password must be greater than 4 characters.")
-                })}
-              >
-                {props => {
-                  const {
-                    values,
-                    touched,
-                    errors,
-                    isSubmitting,
-                    handleChange,
-                    handleBlur,
-                    handleSubmit
-                  } = props;
-                  return (
-                    <form onSubmit={handleSubmit}>
-                      <div className="field">
-                        <label className="label" htmlFor="input-username">
-                          Username
-                        </label>
-                        <input
-                          name="username"
-                          id="input-username"
-                          className={
-                            errors.username && touched.username
-                              ? "input error"
-                              : "input"
-                          }
-                          type="text"
-                          placeholder="Enter a username"
-                          value={values.username}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                        {errors.username && touched.username && (
-                          <div
-                            className="input-feedback"
-                            data-testid="errors-username"
-                          >
-                            {errors.username}
-                          </div>
-                        )}
-                      </div>
-                      <div className="field">
-                        <label className="label" htmlFor="input-email">
-                          Email
-                        </label>
-                        <input
-                          name="email"
-                          id="input-email"
-                          className={
-                            errors.email && touched.email
-                              ? "input error"
-                              : "input"
-                          }
-                          type="email"
-                          placeholder="Enter an email address"
-                          value={values.email}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                        {errors.email && touched.email && (
-                          <div
-                            className="input-feedback"
-                            data-testid="errors-email"
-                          >
-                            {errors.email}
-                          </div>
-                        )}
-                      </div>
-                      <div className="field">
-                        <label className="label" htmlFor="input-password">
-                          Password
-                        </label>
-                        <input
-                          name="password"
-                          id="input-password"
-                          className={
-                            errors.password && touched.password
-                              ? "input error"
-                              : "input"
-                          }
-                          type="password"
-                          placeholder="Enter a password"
-                          value={values.password}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                        {errors.password && touched.password && (
-                          <div
-                            className="input-feedback"
-                            data-testid="errors-password"
-                          >
-                            {errors.password}
-                          </div>
-                        )}
-                      </div>
-                      <input
-                        type="submit"
-                        className="button is-fullwidth secondary-btn is-rounded raised"
-                        value="Register"
-                        disabled={isSubmitting}
-                      />
-                    </form>
-                  );
-                }}
-              </Formik>
+      <Form onSubmit={handleSubmit}>
+        <div className="login-container">
+          <Form.Group controlId="formBasicTitle">
+            <div className="login-title">
+              <Form.Label>Sign up</Form.Label>
             </div>
-          </div>
+            <div className="login-content">
+              <Form.Control
+                className="login-control" type="text" placeholder="Username"
+                onChange={e => setField('username', e.target.value)}
+                isInvalid={!!errors.username}
+              />
+              <Form.Control.Feedback type='invalid'>{errors.username}</Form.Control.Feedback>
+            </div>
+            <div className="login-content">
+              <Form.Control
+                className="login-control" type="email" placeholder="E-mail"
+                onChange={e => setField('email', e.target.value)}
+                isInvalid={!!errors.email}
+              />
+              <Form.Control.Feedback type='invalid'>{errors.email}</Form.Control.Feedback>
+            </div>
+            <div className="login-content">
+              <Form.Control
+                className="login-control" type="password" placeholder="Password"
+                onChange={e => setField('password', e.target.value)}
+                isInvalid={!!errors.password}
+              />
+              <Form.Control.Feedback type='invalid'>{errors.password}</Form.Control.Feedback>
+            </div>
+            <Button className="login-button" type="submit" onClick={handleSubmit} variant="dark">Sign up</Button>
+            <Row>
+              <Col md={6}>
+                <h6>Already have an account?</h6>
+              </Col>
+              <Col md={4}>
+                <Link className="link" to="/login"> Sign in </Link>
+              </Col>
+            </Row>
+          </Form.Group>
         </div>
-      </div>
-    </section>
+      </Form>
   );
-};
+}
 
 RegisterForm.propTypes = {
   handleRegisterFormSubmit: PropTypes.func.isRequired,
