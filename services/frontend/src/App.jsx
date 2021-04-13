@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import axios from "axios";
 import {Route, Switch} from 'react-router-dom';
 import api from "./api"
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import NavBar from './components/NavBar';
 import UserStatus from './components/UserStatus';

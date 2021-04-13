@@ -25,16 +25,14 @@ axios.interceptors.response.use(
     const originalRequest = error.config;
     const accessToken = localStorage.getItem("accessToken");
 
-    // when the refresh time has expired remove token from storage and log out
-    if(error.response.data.error === "ExpiredRefreshError") {
-        localStorage.removeItem("accessToken");
-        console.log("Elapsed token removed!")
-        history.push('/timeout')
-    }
+    // // when the refresh time has expired remove token from storage and log out
+    // if(["ExpiredRefreshError", "InvalidTokenHeader"].includes(error.response.data.error)) {
+    //     history.push('/timeout')
+    // }
 
     if (
         accessToken &&
-        error.response.status === 401 &&
+        error.response.data.error === "ExpiredAccessError" && // 401
         !originalRequest._retry
         ) {
         originalRequest._retry = true;
@@ -45,8 +43,10 @@ axios.interceptors.response.use(
                 localStorage.setItem("accessToken", res.data.access_token);
                 console.log("Access token refreshed!");
                 return axios(originalRequest);
-            }
-            });
+            } 
+            })
+        } else if (accessToken && error.response.status === 401) {
+          history.push('/timeout')
         }
     return Promise.reject(error);
   }
