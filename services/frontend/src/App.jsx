@@ -3,14 +3,17 @@ import axios from "axios";
 import {Route, Switch} from 'react-router-dom';
 import api from "./api"
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { history } from "./index"
+
 
 import NavBar from './components/NavBar';
 import UserStatus from './components/UserStatus';
 import LoginForm from './components/LoginForm';
+import Login from './components/Login';
+import Register from './components/Register';
 import RegisterForm from './components/RegisterForm';
 import Message from './components/Message';
 import Image404 from './img/404.svg';
-import TimeOut from "./components/TimeOut";
 
 
 const PageNoFound = () => (
@@ -108,6 +111,12 @@ class App extends Component {
     });
   };
 
+  tokenTimeout() {
+    localStorage.removeItem("accessToken");
+    console.log("Elapsed token removed!")
+    this.createMessage("danger", "Session elapsed. You need to log in again")
+    history.push("/login");
+  }
 
   render() {
     return (
@@ -137,21 +146,20 @@ class App extends Component {
             exact
             path="/register"
             render={() => (
-              <RegisterForm
+              <Register
                 // eslint-disable-next-line react/jsx-handler-names
-                handleRegisterFormSubmit={this.handleRegisterFormSubmit}
+                onSubmit={(data) => console.log(data)}
                 isAuthenticated={this.isAuthenticated}
               />
             )}
           />
-
           <Route
             exact
             path='/login'
             render={() => (
-              <LoginForm
+              <Login
                 // eslint-disable-next-line react/jsx-handler-names
-                handleLoginFormSubmit={this.handleLoginFormSubmit}
+                onSubmit={this.handleLoginFormSubmit}
                 isAuthenticated={this.isAuthenticated}
               />
             )}
@@ -168,7 +176,7 @@ class App extends Component {
             )}
           />
           <Route exact path="/timeout" render={() =>
-            <TimeOut createMessage={this.createMessage} />
+            this.tokenTimeout()
           } />
           <Route component={PageNoFound} />
         </Switch>
