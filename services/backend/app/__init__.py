@@ -27,7 +27,7 @@ def create_app(script_info=None):
     db.init_app(app)
     cors.init_app(app, resources={r"*": {"origins": "*"}})
     
-    from .api.models import User
+    from .api.models_old import User
     guard.init_app(app, User)
 
 

@@ -4,8 +4,8 @@ from flask import request
 from flask_restx import Resource, fields, Namespace
 from flask_praetorian import current_user, auth_required
 
-from app.api.data_access.offers_utils import get_offer_by_id, update_used_portions
-from app.api.data_access.orders_utils import get_all_orders, add_order
+from app.api.models.offer import get_offer_by_id, update_used_portions
+from app.api.models.order import get_all_orders, add_order
 
 orders_namespace = Namespace("orders")
 offers_namespace = Namespace("offers")

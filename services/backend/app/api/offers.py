@@ -3,8 +3,8 @@ from datetime import datetime
 from flask import request, Response
 from flask_restx import Resource, fields, Namespace
 from flask_praetorian import current_user, auth_required
-from app.api.data_access.offers_utils import get_all_offers, add_offer
 
+from app.api.models.offer import get_all_offers, add_offer
 
 offers_namespace = Namespace("offers")
 
