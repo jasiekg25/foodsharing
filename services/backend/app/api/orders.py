@@ -2,10 +2,10 @@ from datetime import datetime
 
 from flask import request
 from flask_restx import Resource, fields, Namespace
+from flask_praetorian import current_user, auth_required
 
 from app.api.data_access.offers_utils import get_offer_by_id, update_used_portions
-from app.api.data_access.orders_utils import get_all_orders
-
+from app.api.data_access.orders_utils import get_all_orders, add_order
 
 orders_namespace = Namespace("orders")
 offers_namespace = Namespace("offers")
@@ -46,7 +46,7 @@ class Orders(Resource):
         except Exception:
             return "Couldn't load orders", 500
 
-
+    @auth_required
     @orders_namespace.expect(order, validate=True)
     def post(self):
         """Place new order"""
@@ -54,6 +54,8 @@ class Orders(Resource):
             content = request.get_json()
             offer_from_order = get_offer_by_id(content['offer_id'])
             offer_dict = offer_from_order.to_dict()
+
+            user_id = current_user().id
 
             if offer_dict['portions_number'] - offer_dict['used_portions'] < content['portions']:
                 return "Not enough portions", 400
@@ -66,6 +68,8 @@ class Orders(Resource):
 
             new_order_portion = content['portions'] + offer_dict['used_portions']
             update_used_portions(content['offer_id'], new_order_portion)
+
+            add_order(user_id, content['offer_id'], datetime.now(), 1)
 
             return "Order placed", 201
 
