@@ -26,8 +26,8 @@ const schema = yup.object().shape({
   password: yup.string().required("Field required!"),
 });
 
-const Login = ({ onSubmit, isAuthenticated }) => {
-  if (isAuthenticated()) {
+const Login = ({ onSubmit, isLoggedIn }) => {
+  if (isLoggedIn) {
     return <Redirect to="/" />;
   }
   return (

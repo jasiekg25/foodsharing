@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, {useState, useEffect} from "react";
 import axios from "axios";
 import {Route, Switch} from 'react-router-dom';
 import api from "./api"
@@ -33,105 +33,95 @@ const PageNoFound = () => (
   </section>
 );
 
-class App extends Component {
-  constructor() {
-    super();
+const App = () => {
+  const [message, setMessage] = useState({
+    messageType: null,
+    messageText: null,
+  });
 
-    this.state = {
-      messageType: null,
-      messageText: null,
-    };
-  }
+  const [isLoggedIn, setLoggedIn] = useState(false)
 
-  componentDidMount() {
-    this.refreshToken();
-  }
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken")
+    setLoggedIn(token ? true : false)
 
-  refreshToken() {
-    axios
-    .get(`${process.env.REACT_APP_BACKEND_SERVICE_URL}/auth/refresh`)
-    .catch()
-  }
+    api.refreshToken()
+  }, [])
 
-  handleRegisterFormSubmit = (data) => {
+
+  const handleRegisterFormSubmit = (data) => {
     api.register(data)
     .then((res) => {
       console.log(res.data);
-      this.createMessage('success', 'You have registered successfully.');
+      createMessage('success', 'You have registered successfully.');
       return true
     })
     .catch((err) => { 
       console.log(err); 
-      this.createMessage('danger', 'That user already exists.');
+      createMessage('danger', 'That user already exists.');
       return false
     });
   };
 
-  handleLoginFormSubmit = (data) => {
+  const handleLoginFormSubmit = (data) => {
     api.login(data)
     .then((res) => {
       window.localStorage.setItem('accessToken', res.data.access_token);
-      this.createMessage('success', 'You have logged in successfully.');
+      createMessage('success', 'You have logged in successfully.');
+      setLoggedIn(true)
       return true
     })
     .catch((err) => { 
       console.log(err); 
-      this.createMessage('danger', 'Incorrect email and/or password.');
+      createMessage('danger', 'Incorrect email and/or password.');
       return false
     });
   };
 
-  isAuthenticated = () => {
-    const token = localStorage.getItem("accessToken")
-    if (token) {
-      return true;
-    }
-    return false;
-  };
-
-  logoutUser = () => {
+  const logoutUser = () => {
     window.localStorage.removeItem('accessToken');
-    this.createMessage('success', 'You have logged out.');
+    setLoggedIn(false)
+    createMessage('success', 'You have logged out.');
   };
 
-  createMessage = (type, text) => {
-    this.setState({
+  const createMessage = (type, text) => {
+    setMessage({
       messageType: type,
       messageText: text,
     });
     setTimeout(() => {
-        this.removeMessage();
+        removeMessage();
       }, 3000);
   };
 
-  removeMessage = () => {
-    this.setState({
+  const removeMessage = () => {
+    setMessage({
       messageType: null,
       messageText: null,
     });
   };
 
-  tokenTimeout() {
+  const tokenTimeout = () => {
     localStorage.removeItem("accessToken");
     console.log("Elapsed token removed!")
-    this.createMessage("danger", "Session elapsed. You need to log in again")
+    createMessage("danger", "Session elapsed. You need to log in again")
+    setLoggedIn(false)
     history.push("/login");
   }
 
-  render() {
     return (
       <div>
         <NavBar
-          logoutUser={this.logoutUser}
-          isAuthenticated={this.isAuthenticated}
+          logoutUser={logoutUser}
+          isLoggedIn={isLoggedIn}
         />
 
 
-        {this.state.messageType && this.state.messageText &&
+        {message.messageType && message.messageText &&
           <Message
-            messageType={this.state.messageType}
-            messageText={this.state.messageText}
-            removeMessage={this.removeMessage}
+            messageType={message.messageType}
+            messageText={message.messageText}
+            removeMessage={removeMessage}
           />}
 
         <Switch>
@@ -149,7 +139,7 @@ class App extends Component {
               <Register
                 // eslint-disable-next-line react/jsx-handler-names
                 onSubmit={(data) => console.log(data)}
-                isAuthenticated={this.isAuthenticated}
+                isLoggedIn={isLoggedIn}
               />
             )}
           />
@@ -159,8 +149,8 @@ class App extends Component {
             render={() => (
               <Login
                 // eslint-disable-next-line react/jsx-handler-names
-                onSubmit={this.handleLoginFormSubmit}
-                isAuthenticated={this.isAuthenticated}
+                onSubmit={handleLoginFormSubmit}
+                isLoggedIn={isLoggedIn}
               />
             )}
           />
@@ -169,20 +159,18 @@ class App extends Component {
             path="/status"
             render={() => (
               <UserStatus
-                accessToken={this.state.accessToken}
-                isAuthenticated={this.isAuthenticated}
+                isLoggedIn={isLoggedIn}
               />
 
             )}
           />
           <Route exact path="/timeout" render={() =>
-            this.tokenTimeout()
+            tokenTimeout()
           } />
           <Route component={PageNoFound} />
         </Switch>
       </div>
     );
-  }
 }
 
 export default App;

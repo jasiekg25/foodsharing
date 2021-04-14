@@ -15,7 +15,7 @@ function NavBar(props) {
         </Nav>
     )
 
-    if(props.isAuthenticated()){
+    if(props.isLoggedIn){
         menu = (
             <Nav className="mr-auto">
                 <Link to="/status" className="nav-link">User status</Link>
@@ -39,7 +39,7 @@ function NavBar(props) {
 
 NavBar.propTypes = {
     logoutUser: PropTypes.func.isRequired,
-    isAuthenticated: PropTypes.func.isRequired
+    isLoggedIn: PropTypes.bool.isRequired
 };
 
 export default NavBar;

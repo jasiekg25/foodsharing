@@ -31,7 +31,7 @@ class UserStatus extends Component {
       });
   }
   render() {
-    if (!this.props.isAuthenticated()) {
+    if (!this.props.isLoggedIn) {
       return <Redirect to="/login" />;
     }
     return (
@@ -65,8 +65,7 @@ class UserStatus extends Component {
 }
 
 UserStatus.propTypes = {
-  accessToken: PropTypes.string,
-  isAuthenticated: PropTypes.func.isRequired
+  isLoggedIn: PropTypes.func.isRequired
 };
 
 export default UserStatus;

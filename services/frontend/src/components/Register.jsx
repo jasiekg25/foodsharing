@@ -48,13 +48,13 @@ const schema = yup.object().shape({
         .required("Field required!"),
 });
 
-const Register = ({ onSubmit, isAuthenticated }) => {
+const Register = ({ onSubmit, isLoggedIn }) => {
     const handleSubmit = (data) => {
         const {confirmPassword, ...rest} = data
         return onSubmit(rest);
     }
 
-    if (isAuthenticated()) {
+    if (isLoggedIn) {
         return <Redirect to="/" />;
     }
     return (

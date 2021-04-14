@@ -60,7 +60,7 @@ const api = {
     return axios.post(`${baseUrl}/auth/login`, body);
   },
   refreshToken: (body) => {
-    return axios.post(`${baseUrl}/auth/refresh`, body);
+    return axios.get(`${baseUrl}/auth/refresh`);
   },
 };
 
