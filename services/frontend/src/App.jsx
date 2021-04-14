@@ -4,13 +4,17 @@ import {Route, Switch} from 'react-router-dom';
 import api from "./api"
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import NavBar from './components/NavBar';
+import NavBar from './components/home/NavBar';
 import UserStatus from './components/UserStatus';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
 import Message from './components/Message';
 import Image404 from './img/404.svg';
 import TimeOut from "./components/TimeOut";
+import Home from "./components/home/Home";
+import About from "./components/home/About";
+import Rules from "./components/home/Rules";
+import Footer from "./components/home/Footer";
 
 
 const PageNoFound = () => (
@@ -20,7 +24,7 @@ const PageNoFound = () => (
 
         <h1 className="title has-text-centered">Oops, Page Not Found!</h1>
 
-        <div class="columns is-flex is-centered">
+        <div className="columns is-flex is-centered">
 
           <img src={Image404} width="50%" alt="404 Page Not Found" />
 
@@ -130,9 +134,13 @@ class App extends Component {
             exact
             path='/'
             render={() => (
-              <div>
-              </div>
-            )} />
+                <div>
+                  <Home />
+                  <About />
+                  <Rules />
+                </div>
+            )}
+          />
           <Route
             exact
             path="/register"
@@ -167,11 +175,13 @@ class App extends Component {
 
             )}
           />
-          <Route exact path="/timeout" render={() =>
-            <TimeOut createMessage={this.createMessage} />
-          } />
+          <Route
+            exact path="/timeout" render={() =>
+            <TimeOut createMessage={this.createMessage} />}
+          />
           <Route component={PageNoFound} />
         </Switch>
+        <Footer />
       </div>
     );
   }
