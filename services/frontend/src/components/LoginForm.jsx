@@ -53,6 +53,7 @@ function LoginForm(props) {
             <div className="login-title">
               <Form.Label>Sign in</Form.Label>
             </div>
+            
             <div className="login-content">
               <Form.Control
                 className="login-control" type="email" placeholder="E-mail"
@@ -61,6 +62,7 @@ function LoginForm(props) {
               />
               <Form.Control.Feedback type='invalid'>{errors.email}</Form.Control.Feedback>
             </div>
+
             <div className="login-content">
               <Form.Control
                 className="login-control" type="password" placeholder="Password"
