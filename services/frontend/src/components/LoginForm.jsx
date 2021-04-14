@@ -71,10 +71,10 @@ function LoginForm(props) {
             </div>
             <Button className="login-button" type="submit" onClick={handleSubmit} variant="dark">Log in</Button>
             <Row>
-              <Col md={6}>
+              <Col className="member-text" md={6}>
                 <h6>Not a member?</h6>
               </Col>
-              <Col md={4}>
+              <Col className="link-text" md={4}>
                 <Link className="link" to="/register"> Sign up </Link>
               </Col>
             </Row>

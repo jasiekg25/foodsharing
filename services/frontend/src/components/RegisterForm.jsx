@@ -80,10 +80,10 @@ function RegisterForm(props) {
             </div>
             <Button className="login-button" type="submit" onClick={handleSubmit} variant="dark">Sign up</Button>
             <Row>
-              <Col md={6}>
+              <Col className="member-text" md={6}>
                 <h6>Already have an account?</h6>
               </Col>
-              <Col md={4}>
+              <Col className="link-text" md={4}>
                 <Link className="link" to="/login"> Sign in </Link>
               </Col>
             </Row>

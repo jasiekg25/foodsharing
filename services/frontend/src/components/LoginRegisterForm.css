@@ -37,13 +37,13 @@ html, body {
     border: none;
 }
 
-.col-md-6{
+.member-text{
     margin-left: 12%;
     margin-top: 10%;
     margin-bottom: 10%;
 }
 
-.col-md-4{
+.link-text{
     margin-top: 10%;
     margin-bottom: 10%;
 }

@@ -1,0 +1,29 @@
+.about-container{
+    font-family: 'Montserrat', sans-serif;
+    color: black;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.about-title{
+    text-align: left;
+    font-style: normal;
+    font-weight: 500;
+    color: #088608;
+    margin-bottom: 7%;
+    margin-top: 2%;
+}
+
+.sharing-text{
+    font-weight: 900;
+    text-align: center;
+}
+
+.about-text{
+    text-align: left;
+}
+
+.photo-container{
+    margin-top: 6%;
+    filter: brightness(50%);
+}
