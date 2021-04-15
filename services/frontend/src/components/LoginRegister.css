@@ -43,14 +43,15 @@ html, body {
     margin-bottom: 10%;
 }
 
-.link-text{
+.link{
     margin-top: 10%;
     margin-bottom: 10%;
 }
 
-.link{
+.link-text{
     color: #088608;
 }
+
 
 .login-button{
     margin-left: 40%;

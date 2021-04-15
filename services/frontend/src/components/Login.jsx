@@ -1,7 +1,7 @@
 import React from "react";
 import * as yup from "yup";
 import BasicForm from "./BasicForm";
-import "./LoginRegisterForm.css";
+import "./LoginRegister.css";
 import { Row, Col } from "react-bootstrap";
 import { Link, Redirect } from "react-router-dom";
 
@@ -40,11 +40,11 @@ const Login = ({ onSubmit, isLoggedIn }) => {
       />
 
       <Row>
-        <Col md={6}>
+        <Col className="member-text" md={6}>
           <h6>Not a member?</h6>
         </Col>
-        <Col md={4}>
-          <Link className="link" to="/register">
+        <Col className="link" md={4}>
+          <Link className="link-text" to="/register">
             {" "}
             Sign up{" "}
           </Link>
