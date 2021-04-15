@@ -13,7 +13,7 @@ function Rules(props) {
                     following into account:</h5>
                 <Row className="cards-container">
                     <Col md={4}>
-                        <Card className="card">
+                        <Card className="rule-card">
                             <Card.Body>
                                 <Card.Title className="rule-number">#1</Card.Title>
                                 <Card.Text>
@@ -24,7 +24,7 @@ function Rules(props) {
                         </Card>
                     </Col>
                     <Col md={4}>
-                        <Card className="card">
+                        <Card className="rule-card">
                             <Card.Body>
                                 <Card.Title className="rule-number">#2</Card.Title>
                                 <Card.Text>

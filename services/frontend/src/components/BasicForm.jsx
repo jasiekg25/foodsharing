@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import "./LoginRegisterForm.css";
+import "./LoginRegister.css";
 import { Button, Form } from "react-bootstrap";
 
 const BasicForm = ({ inputs, schema, onSubmit, title }) => {

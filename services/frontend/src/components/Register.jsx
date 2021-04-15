@@ -63,11 +63,11 @@ const Register = ({ onSubmit, isLoggedIn }) => {
                 inputs={inputs} schema={schema} 
                 onSubmit={handleSubmit} title="Sign up" />
             <Row>
-                <Col md={6}>
+                <Col className="member-text" md={6}>
                     <h6>Already have an account?</h6>
                 </Col>
-                <Col md={4}>
-                    <Link className="link" to="/login"> Sign in </Link>
+                <Col className="link" md={4}>
+                    <Link className="link-text" to="/login"> Sign in </Link>
                 </Col>
             </Row>
         </div>

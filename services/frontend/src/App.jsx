@@ -7,16 +7,15 @@ import { history } from "./index"
 
 import NavBar from './components/home/NavBar';
 import UserStatus from './components/UserStatus';
-import LoginForm from './components/LoginForm';
 import Login from './components/Login';
 import Register from './components/Register';
-import RegisterForm from './components/RegisterForm';
 import Message from './components/Message';
 import Image404 from './img/404.svg';
 import Home from "./components/home/Home";
 import About from "./components/home/About";
 import Rules from "./components/home/Rules";
 import Footer from "./components/home/Footer";
+import Offers from "./components/Offers";
 
 
 const PageNoFound = () => (
@@ -171,9 +170,15 @@ const App = () => {
 
             )}
           />
-          <Route exact path="/timeout" render={() =>
-            tokenTimeout()
-          } />
+          <Route
+            exact
+            path="/offers"
+            render={() => (
+                  <Offers
+                    isLoggedIn={isLoggedIn}
+                  />
+              )}
+          />
           <Route component={PageNoFound} />
         </Switch>
         <Footer />
