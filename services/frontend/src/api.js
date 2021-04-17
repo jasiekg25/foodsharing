@@ -1,7 +1,7 @@
 import axios from "axios";
 import {history} from "./index"
 
-const baseUrl = process.env.REACT_APP_BACKEND_SERVICE_URL;
+const baseUrl = 'http://localhost:5001';
 
 axios.interceptors.request.use(
     (config) => {
@@ -64,6 +64,9 @@ const api = {
     },
     getOffers: () => {
         return axios.get(`${baseUrl}/offers`);
+    },
+    postOffers: (body) => {
+        return axios.post(`${baseUrl}/offers`, body);
     }
 };
 

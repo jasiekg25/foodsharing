@@ -16,6 +16,7 @@ import About from "./components/home/About";
 import Rules from "./components/home/Rules";
 import Footer from "./components/home/Footer";
 import Offers from "./components/Offers";
+import AddMeal from "./components/AddMeal";
 
 const PageNoFound = () => (
   <section className="hero is-halfheight">
@@ -164,6 +165,13 @@ const App = () => {
           exact
           path="/offers"
           render={() => <Offers isLoggedIn={isLoggedIn} />}
+        />
+        <Route
+          exact
+          path="/add-meal"
+          render={() => <AddMeal 
+            isLoggedIn={isLoggedIn}
+           />}
         />
         <Route component={PageNoFound} />
       </Switch>
