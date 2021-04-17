@@ -13,7 +13,7 @@ function Offers({isLoggedIn}) {
             .then((res) => {
                 setOffers(res.data);
             })
-    })
+    }, [])
 
     if (!isLoggedIn) {
         return <Redirect to="/login" />;
