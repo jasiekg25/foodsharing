@@ -139,7 +139,7 @@ const App = () => {
           render={() => (
             <Register
               // eslint-disable-next-line react/jsx-handler-names
-              onSubmit={(data) => console.log(data)}
+              onSubmit={handleRegisterFormSubmit}
               isLoggedIn={isLoggedIn}
             />
           )}
@@ -169,9 +169,7 @@ const App = () => {
         <Route
           exact
           path="/add-meal"
-          render={() => <AddMeal 
-            isLoggedIn={isLoggedIn}
-           />}
+          render={() => <AddMeal isLoggedIn={isLoggedIn} />}
         />
         <Route component={PageNoFound} />
       </Switch>

@@ -119,10 +119,18 @@ class User(db.Model):
         """
         return cls.query.get(id)
 
+    @staticmethod
+    def add_user(name, surname, email, password):
+        user = User(name=name, surname=surname, email=email, password=password)
+        db.session.add(user)
+        db.session.commit()
+        return user
+
+
 class ClientRating(db.Model):
-    
+
     __tablename__ = "client_rating"
-    
+
     id = db.Column(db.Integer, primary_key=True)
     from_user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
                              nullable=False)  # Many ratings from one user

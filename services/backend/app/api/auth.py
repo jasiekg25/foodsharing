@@ -6,17 +6,24 @@ from flask_restx import Namespace, Resource, fields
 from flask_praetorian import current_user, auth_required
 
 from app import guard
-from app.api.utils import add_user, get_user_by_email, get_user_by_id
+from app.api.utils import get_user_by_email
+from .models_old import User
 
 auth_namespace = Namespace("auth")
 
 user = auth_namespace.model(
     "User",
-    {"username": fields.String(required=True), "email": fields.String(required=True)},
+    {
+        "email": fields.String(required=True),
+        "firstName": fields.String(required=True),
+        "lastName": fields.String(required=True)
+    }
 )
 
 full_user = auth_namespace.clone(
-    "Full User", user, {"password": fields.String(required=True)}
+    "Full User", user, {
+        "password": fields.String(required=True)
+    }
 )
 
 login = auth_namespace.model(
@@ -37,21 +44,21 @@ parser.add_argument("Authorization", location="headers")
 
 
 class Register(Resource):
-    @auth_namespace.marshal_with(user)
     @auth_namespace.expect(full_user, validate=True)
     @auth_namespace.response(201, "Success")
     @auth_namespace.response(400, "Sorry. That email already exists.")
     def post(self):
         post_data = request.get_json()
-        username = post_data.get("username")
+        name = post_data.get("firstName")
+        surname = post_data.get("lastName")
         email = post_data.get("email")
         password = post_data.get("password")
 
         user = get_user_by_email(email)
         if user:
             auth_namespace.abort(400, "Sorry. That email already exists.")
-        user = add_user(username, email, password)
-        return user, 201
+        user = User.add_user(name, surname, email, password)
+        return 200
 
 
 class Login(Resource):
@@ -61,10 +68,10 @@ class Login(Resource):
         post_data = request.get_json(force=True)
         email = post_data.get("email", None)
         password = post_data.get("password", None)
-        
+
         if not get_user_by_email(email):
             auth_namespace.abort(404, "User does not exist")
-        
+
         user = guard.authenticate(email, password)
         ret = {"access_token": guard.encode_jwt_token(user)}
         return ret
