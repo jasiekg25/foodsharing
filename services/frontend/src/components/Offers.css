@@ -7,4 +7,10 @@
 
 .order-button{
     background-color: #088608;
+    border-radius: 7px;
+}
+
+.cancel-order-button {
+    background: #000000;
+    border-radius: 7px;
 }
