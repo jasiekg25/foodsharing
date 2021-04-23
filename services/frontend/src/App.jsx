@@ -91,7 +91,7 @@ const App = () => {
     <div>
       <NavBar logoutUser={logoutUser} isLoggedIn={isLoggedIn} />
 
-      <ToastContainer />
+      <ToastContainer position="top-center"/>
 
       <Switch>
         <Route
