@@ -4,12 +4,12 @@ import { Route, Switch } from "react-router-dom";
 import api from "./api";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { history } from "./index";
+import { ToastContainer, toast } from 'react-toastify';
 
 import NavBar from "./components/home/NavBar";
 import UserStatus from "./components/UserStatus";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import Message from "./components/Message";
 import Image404 from "./img/404.svg";
 import Home from "./components/home/Home";
 import About from "./components/home/About";
@@ -33,11 +33,6 @@ const PageNoFound = () => (
 );
 
 const App = () => {
-  const [message, setMessage] = useState({
-    messageType: null,
-    messageText: null,
-  });
-
   const [isLoggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -52,12 +47,12 @@ const App = () => {
       .register(data)
       .then((res) => {
         console.log(res.data);
-        createMessage("success", "You have registered successfully.");
+        toast.success("You have registered successfully.")
         return true;
       })
       .catch((err) => {
         console.log(err);
-        createMessage("danger", "That user already exists.");
+        toast.error("That user already exists.")
         return false;
       });
   };
@@ -67,13 +62,13 @@ const App = () => {
       .login(data)
       .then((res) => {
         window.localStorage.setItem("accessToken", res.data.access_token);
-        createMessage("success", "You have logged in successfully.");
+        toast.success("You have logged in successfully.")
         setLoggedIn(true);
         return true;
       })
       .catch((err) => {
         console.log(err);
-        createMessage("danger", "Incorrect email and/or password.");
+        toast.error("Incorrect email and/or password.")
         return false;
       });
   };
@@ -81,30 +76,13 @@ const App = () => {
   const logoutUser = () => {
     window.localStorage.removeItem("accessToken");
     setLoggedIn(false);
-    createMessage("success", "You have logged out.");
-  };
-
-  const createMessage = (type, text) => {
-    setMessage({
-      messageType: type,
-      messageText: text,
-    });
-    setTimeout(() => {
-      removeMessage();
-    }, 3000);
-  };
-
-  const removeMessage = () => {
-    setMessage({
-      messageType: null,
-      messageText: null,
-    });
+    toast.success("You have logged out.")
   };
 
   const tokenTimeout = () => {
     localStorage.removeItem("accessToken");
     console.log("Elapsed token removed!");
-    createMessage("danger", "Session elapsed. You need to log in again");
+    toast.error("Session elapsed. You need to log in again")
     setLoggedIn(false);
     history.push("/login");
   };
@@ -113,13 +91,7 @@ const App = () => {
     <div>
       <NavBar logoutUser={logoutUser} isLoggedIn={isLoggedIn} />
 
-      {message.messageType && message.messageText && (
-        <Message
-          messageType={message.messageType}
-          messageText={message.messageText}
-          removeMessage={removeMessage}
-        />
-      )}
+      <ToastContainer position="top-center"/>
 
       <Switch>
         <Route
