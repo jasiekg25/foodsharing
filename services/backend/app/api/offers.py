@@ -6,6 +6,7 @@ from flask_praetorian import current_user, auth_required
 
 from app import logger
 from app.api.models.offer import Offer
+from app.api.models.tag import OffersTags
 
 offers_namespace = Namespace("offers")
 
@@ -25,6 +26,7 @@ offer = offers_namespace.model(
         "post_time":  fields.DateTime(readOnly=True),
         "pickup_times":  fields.String(readOnly=True),
         "offer_expiry":  fields.DateTime(readOnly=True),
+        "tags": fields.String(readOnly=True)
     },
 )
 
@@ -44,7 +46,7 @@ class Offers(Resource):
             return "Couldn't load offers", 500
 
     @auth_required
-    @offers_namespace.expect(offer, validate=True)
+    @offers_namespace.expect(offer)
     def post(self):
         """Add a new offer"""
         logger.info("Offers.post() request_body: %s", str(request.get_json()))
@@ -56,8 +58,11 @@ class Offers(Resource):
                 if parameter not in content:
                     return f"{parameter} missing in request", 400
 
-            Offer.add_offer(user_id, content['name'], True, content['portions_number'], 0, content['pickup_localization'], datetime.now(),
+            offer_id = Offer.add_offer(user_id, content['name'], True, content['portions_number'], 0, content['pickup_localization'], datetime.now(),
                       content['pickup_times'], content['offer_expiry'], content.get('description', None), content.get('photo', None))
+
+            for tag_id in content['tags']:
+                OffersTags.add_offer_tag(offer_id, tag_id)
             return "Offer has been added", 201
 
         except Exception as e:

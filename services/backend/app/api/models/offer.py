@@ -2,7 +2,6 @@ from datetime import datetime
 
 from sqlalchemy.sql import func
 from app import db
-from app.api.models.tag import offers_tags
 
 
 class Offer(db.Model):
@@ -28,7 +27,7 @@ class Offer(db.Model):
     orders = db.relationship('Order', backref='offers_orders',
                              foreign_keys='Order.offer_id')  # One offer to many Orders
 
-    tags = db.relationship('Tag', secondary=offers_tags, back_populates='offers')
+    tags = db.relationship('OffersTags', back_populates='offer')
 
 
     def to_dict(self):
@@ -44,8 +43,10 @@ class Offer(db.Model):
             "pickup_localization": self.pickup_localization,
             "post_time": self.post_time,
             "pickup_times": self.pickup_times,
-            "offer_expiry": self.offer_expiry
+            "offer_expiry": self.offer_expiry,
+            "tags": [offer_tag.tag.tag_name for offer_tag in self.tags]
         }
+
         return data
 
     @staticmethod
@@ -67,6 +68,8 @@ class Offer(db.Model):
         )
         db.session.add(offer)
         db.session.commit()
+        return offer.id
+
 
     @staticmethod
     def get_all_offers():
