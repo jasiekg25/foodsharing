@@ -5,7 +5,7 @@ from flask import request, jsonify
 from flask_restx import Namespace, Resource, fields
 from flask_praetorian import current_user, auth_required
 
-from app import guard
+from app import guard, logger
 from app.api.utils import get_user_by_email
 from .models_old import User
 

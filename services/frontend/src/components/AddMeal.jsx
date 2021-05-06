@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as yup from "yup";
 import "./FormStyles.css";
 import { Row, Col } from "react-bootstrap";
@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Form } from "react-bootstrap";
 import api from '../api.js';
-import DateTimePicker from 'react-datetime-picker';
+import DatePicker from "react-date-picker";
 
 const text_inputs = [
   {
@@ -67,7 +67,8 @@ const redirectToMainPage= (mealClosed) => {
 
 
 const handleAddMealSubmit = (data, expireDate, mealAdded) => {
-    data['offer_expiry'] = expireDate.toLocaleString()
+    expireDate.setHours(23, 59, 59);
+    data['offer_expiry'] = expireDate.toLocaleString('en-US');
     api
       .postOffers(data)
       .then((res) => {
@@ -92,8 +93,19 @@ const AddMeal = ({isLoggedIn}) => {
     });
 
     const [expireDate, expireDateChange] = useState(new Date());
-    const [isMealAdded, isMealAddedChange] = useState(false)
-    const [isMealClosed, isMealClosedChange] = useState(false)
+    const [isMealAdded, isMealAddedChange] = useState(false);
+    const [isMealClosed, isMealClosedChange] = useState(false);
+    const [tags, setTags] = useState([]);
+
+    useEffect(() => {
+        api.getTags()
+            .then((res) => {
+                setTags(res.data);
+            })
+            .catch((err) => {
+                console.log("Could not get any tags " + err.message);
+            })
+    }, [])
     
     if (isMealAdded || isMealClosed) {
         return <Redirect to="/" />;
@@ -140,9 +152,11 @@ const AddMeal = ({isLoggedIn}) => {
 
             <div className="field-content form-group" >
                 <Form.Label className="label-field">{offer_expiry.label}</Form.Label>
-                <DateTimePicker className="datepicker-control"
-                    onChange={expireDateChange}
+                <DatePicker className="datepicker-control"
+                    onChange={date => expireDateChange(date)}
                     value={expireDate}
+                    dataFormat = 'MM/dd/yyyy'
+                    minDate = {new Date()}
                 />
              </div>
 

@@ -4,7 +4,8 @@ from flask import request
 from flask_restx import Resource, fields, Namespace
 from flask_praetorian import current_user, auth_required
 
-from app.api.models.offer import get_offer_by_id, update_used_portions
+from app import logger
+from app.api.models.offer import Offer
 from app.api.models.order import get_all_orders, add_order
 
 orders_namespace = Namespace("orders")
@@ -39,20 +40,23 @@ class Orders(Resource):
     @orders_namespace.marshal_with(order)
     def get(self):
         """Returns all orders"""
+        logger.info("Orders.get()")
         try:
             orders = get_all_orders()
 
             return [order.to_dict() for order in orders], 200
-        except Exception:
+        except Exception as e:
+            logger.exception("Orders.get(): %s", str(e))
             return "Couldn't load orders", 500
 
     @auth_required
     @orders_namespace.expect(order, validate=True)
     def post(self):
         """Place new order"""
+        logger.info("Orders.post() request_body: %s", str(request.get_json()))
         try:
             content = request.get_json()
-            offer_from_order = get_offer_by_id(content['offer_id'])
+            offer_from_order = Offer.get_offer_by_id(content['offer_id'])
             offer_dict = offer_from_order.to_dict()
 
             user_id = current_user().id
@@ -67,13 +71,14 @@ class Orders(Resource):
                 return "Offer expired", 400
 
             new_order_portion = content['portions'] + offer_dict['used_portions']
-            update_used_portions(content['offer_id'], new_order_portion)
+            Offer.update_used_portions(content['offer_id'], new_order_portion)
 
             add_order(user_id, content['offer_id'], datetime.now(), 1)
 
             return "Order placed", 201
 
-        except Exception:
+        except Exception as e:
+            logger.exception("Orders.post(): %s", str(e))
             return "Couldn't make order", 500
 
 
