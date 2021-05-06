@@ -17,6 +17,11 @@ class Tag(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     tag_name = db.Column('tag_name', db.String(255), nullable=False)
-    wanted = db.Column('wanted', db.Boolean, nullable=False)
+    is_wanted = db.Column('is_wanted', db.Boolean, nullable=False)
 
     offers = db.relationship('Offer', back_populates='tags', secondary=offers_tags)  # one tag to many OfferTags
+
+    @staticmethod
+    def get_all_tags():
+        return Tag.query.all()
+

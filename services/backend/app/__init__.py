@@ -38,8 +38,6 @@ def create_app(script_info=None):
     guard.init_app(app, User)
 
 
-
-
     # register api
     from app.api import api
 
