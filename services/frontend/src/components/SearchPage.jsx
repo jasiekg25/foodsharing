@@ -3,6 +3,8 @@ import TagSearch from "./tags/TagSearch";
 import { Row, Container, Button } from "react-bootstrap";
 import Tag from "./tags/Tag";
 import Offers from "./Offers";
+import {Redirect} from "react-router-dom";
+
 
 const mockTags = [
   {
@@ -79,6 +81,10 @@ const SearchPage = ({ isLoggedIn }) => {
     setTags(newTags);
   };
 
+  if (!isLoggedIn) {
+    return <Redirect to="/login" />;
+  }
+
   return (
     <div>
       {!tagSearchVisible && (
@@ -101,7 +107,7 @@ const SearchPage = ({ isLoggedIn }) => {
         />
       )}
 
-      <Offers isLoggedIn={isLoggedIn} />
+      <Offers />
     </div>
   );
 };

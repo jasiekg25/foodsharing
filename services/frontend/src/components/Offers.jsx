@@ -2,8 +2,7 @@ import React, {useEffect, useState} from 'react';
 import api from "../api.js";
 import {Col, Card, Row, Button, Form, Modal} from "react-bootstrap";
 import "./Offers.css";
-import {Redirect} from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
@@ -20,7 +19,7 @@ const schema = yup.object().shape({
         .moreThan(0, "Portions number hat to be greater that 0."),
 });
 
-function Offers({isLoggedIn}) {
+function Offers() {
     const {
         register,
         handleSubmit,
@@ -43,10 +42,6 @@ function Offers({isLoggedIn}) {
                 console.log("Could not get any offers " + err.message);
             })
     }, [])
-
-    if (!isLoggedIn) {
-        return <Redirect to="/login" />;
-    }
 
     const handleClose = () => {
         reset();
