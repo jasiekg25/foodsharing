@@ -35,6 +35,26 @@ const mockTags = [
     tag_name: "DiaryFree",
     selected: false,
   },
+  {
+    id: 7,
+    tag_name: "Sweet",
+    selected: false,
+  },
+  {
+    id: 8,
+    tag_name: "Meat",
+    selected: false,
+  },
+  {
+    id: 9,
+    tag_name: "Soup",
+    selected: false,
+  },
+  {
+    id: 10,
+    tag_name: "Vegetables",
+    selected: false,
+  },
 ];
 
 const SearchPage = ({ isLoggedIn }) => {

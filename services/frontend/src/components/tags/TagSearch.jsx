@@ -21,7 +21,7 @@ const TagSearch = ({ tags, onTagToggle }) => {
       />
 
       {isVisible && (
-        <>
+        <div className="tag-scroll">
           <Row className="tag-row">
             {tags
               .filter((tag) => tag.selected)
@@ -42,7 +42,7 @@ const TagSearch = ({ tags, onTagToggle }) => {
                 return <Tag key={tag.id} tag={tag} toggle={onTagToggle} />;
               })}
           </Row>
-        </>
+        </div>
       )}
     </Container>
   );
