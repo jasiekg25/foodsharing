@@ -31,6 +31,13 @@ You need to install the followings:
 - Node.js
 - Docker
 
+## Load Mock Data
+To load mock data from csv files you need to be in `foodsharing` directory. We prepare some csv files in directory `app_dev` (which is also database name) \
+After running up docker containers check **3 first letter of db container hash**.
+You can use command `sudo docker ps -a | grep foodsharing_db`. \
+Right after use command `./import_data.sh <3 first letter of db container hash> <directory with csv files (same as db_name)>` e.g. `./import_data.sh 797 app_dev`
+
+
 ## Run
 
 1. Clone the repo: `git clone https://github.com/jasiekg25/foodsharing.git`
