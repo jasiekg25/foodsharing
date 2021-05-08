@@ -1,38 +1,38 @@
 id,tag_name,wanted
-0,beef fat,TRUE
-1,butter,TRUE
-2,coconut,TRUE
-3,coconut oil / palm oil,TRUE
-4,copha,TRUE
-5,cream,TRUE
-6,dripping,TRUE
-7,lard,TRUE
-8,mayonnaise,TRUE
-9,sour cream,TRUE
-10,vegetable oils and fats,TRUE
-11,egg,TRUE
-12,brown sugar,TRUE
-13,corn syrup,TRUE
-14,dextrose,TRUE
-15,fructose,TRUE
-16,fruit juice,TRUE
-17,glucose,TRUE
-18,golden syrup,TRUE
-19,honey,TRUE
-20,lactose,TRUE
-21,malt,TRUE
-22,row sugar,TRUE
-23,maple syrup,TRUE
-24,baking powder,TRUE
-25,booster,TRUE
-26,celery salt,TRUE
-27,garlic salt,TRUE
-28,sodium,TRUE
-29,onion salt,TRUE
-30,sea salt,TRUE
-31,seasoning,TRUE
-32,row salt,TRUE
-33,milk,TRUE
-34,wheat,TRUE
-35,soy,TRUE
-36,fat free,TRUE
+0,Beef_fat,TRUE
+1,Butter,TRUE
+2,Coconut,TRUE
+3,Coconut_Oil,TRUE
+4,Copha,TRUE
+5,Cream,TRUE
+6,Dripping,TRUE
+7,Lard,TRUE
+8,Mayonnaise,TRUE
+9,Sour_Cream,TRUE
+10,Vegetable_Oils,TRUE
+11,Egg,TRUE
+12,Brown_Sugar,TRUE
+13,Corn_Syrup,TRUE
+14,Dextrose,TRUE
+15,Fructose,TRUE
+16,Fruit_Juice,TRUE
+17,Glucose,TRUE
+18,Golden_Syrup,TRUE
+19,Honey,TRUE
+20,Lactose,TRUE
+21,Malt,TRUE
+22,Row_Sugar,TRUE
+23,Maple_Syrup,TRUE
+24,Baking_Powder,TRUE
+25,Booster,TRUE
+26,Celery_Salt,TRUE
+27,Garlic_Salt,TRUE
+28,Sodium,TRUE
+29,Onion_Salt,TRUE
+30,Sea_Salt,TRUE
+31,Diary,TRUE
+32,Diary_Free,TRUE
+33,Gluten,TRUE
+34,Gluten_Free,TRUE
+35,Soy,TRUE
+36,Fat_Free,TRUE
