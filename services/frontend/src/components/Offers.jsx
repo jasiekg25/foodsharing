@@ -77,7 +77,6 @@ function Offers({isLoggedIn}) {
                 <div key={offer.id}>
                     <Row className="offers-container">
                         <Col md={4}>
-                            <ToastContainer/>
                             <Card className="offer-card">
                                 <Card.Body>
                                     <Card.Title>{offer.name}</Card.Title>
