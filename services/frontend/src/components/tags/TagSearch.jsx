@@ -2,28 +2,27 @@ import React, { useEffect, useState } from "react";
 import { FormControl, Container, Card, Row } from "react-bootstrap";
 import Tag from "./Tag";
 import useVisible from "../../useVisible";
+import './Tags.css';
 
-// TODO: to będzie przyjmować tags jako props, wyciągamy tags poziom wyżej
 const TagSearch = ({ tags, onTagToggle }) => {
   const { ref, isVisible, setIsVisible } = useVisible(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
     <Container
-      className="col-md-3 rounded"
-      style={{ background: "white", padding: "0" }}
+      className="col-md-3 rounded search-container "
       ref={ref}
     >
       <FormControl
+        className="search-bar"
         placeholder="Search Tags"
         onInput={(e) => setSearchQuery(e.target.value)}
         onFocus={() => setIsVisible(true)}
-        style={{ marginBottom: "10px", height: "40px" }}
       />
 
       {isVisible && (
         <>
-          <Row style={{ padding: "0px 15px" }}>
+          <Row className="tag-row">
             {tags
               .filter((tag) => tag.selected)
               .map((tag) => {
@@ -32,7 +31,7 @@ const TagSearch = ({ tags, onTagToggle }) => {
           </Row>
           <hr />
 
-          <Row style={{ padding: "0px 15px" }}>
+          <Row className="tag-row">
             {tags
               .filter(
                 (tag) =>

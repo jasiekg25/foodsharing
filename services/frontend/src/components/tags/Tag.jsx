@@ -1,15 +1,17 @@
 import React from "react";
 import { Col, Button } from "react-bootstrap";
+import './Tags.css';
+
 
 const Tag = ({ tag, toggle }) => {
   return (
-    <Col md="auto" style={{ padding: "0" }}>
+    <Col md="auto" className="tag-col">
       <Button
+        className="tag-btn"
         variant={tag.selected ? "success" : "outline-secondary"}
         onClick={() => {
           toggle(tag);
         }}
-        style={{ margin: "5px" }}
       >
         #{tag.tag_name}
       </Button>

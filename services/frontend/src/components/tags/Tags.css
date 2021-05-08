@@ -1,0 +1,21 @@
+.tag-col {
+    padding: 0;
+}
+
+.tag-btn {
+    margin: 5px;
+}
+
+.search-container {
+    background: white;
+    padding: 0;
+}
+
+.search-bar {
+    margin-bottom: 10px;
+    height: 40px;
+}
+
+.tag-row {
+    padding: 0px 15px;
+}

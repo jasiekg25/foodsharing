@@ -61,7 +61,7 @@ const SearchPage = ({ isLoggedIn }) => {
   return (
     <div>
       <Container>
-        <Row style={{ padding: "0px 15px" }}>
+        <Row>
           {tags
             .filter((tag) => tag.selected)
             .map((tag) => {
