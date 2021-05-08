@@ -1,0 +1,38 @@
+id,tag_name,wanted
+0,beef fat,TRUE
+1,butter,TRUE
+2,coconut,TRUE
+3,coconut oil / palm oil,TRUE
+4,copha,TRUE
+5,cream,TRUE
+6,dripping,TRUE
+7,lard,TRUE
+8,mayonnaise,TRUE
+9,sour cream,TRUE
+10,vegetable oils and fats,TRUE
+11,egg,TRUE
+12,brown sugar,TRUE
+13,corn syrup,TRUE
+14,dextrose,TRUE
+15,fructose,TRUE
+16,fruit juice,TRUE
+17,glucose,TRUE
+18,golden syrup,TRUE
+19,honey,TRUE
+20,lactose,TRUE
+21,malt,TRUE
+22,row sugar,TRUE
+23,maple syrup,TRUE
+24,baking powder,TRUE
+25,booster,TRUE
+26,celery salt,TRUE
+27,garlic salt,TRUE
+28,sodium,TRUE
+29,onion salt,TRUE
+30,sea salt,TRUE
+31,seasoning,TRUE
+32,row salt,TRUE
+33,milk,TRUE
+34,wheat,TRUE
+35,soy,TRUE
+36,fat free,TRUE
