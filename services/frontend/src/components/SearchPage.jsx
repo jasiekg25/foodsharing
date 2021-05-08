@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TagSearch from "./tags/TagSearch";
-import { Row, Container } from "react-bootstrap";
+import { Row, Container, Button } from "react-bootstrap";
 import Tag from "./tags/Tag";
 import Offers from "./Offers";
 
@@ -59,6 +59,7 @@ const mockTags = [
 
 const SearchPage = ({ isLoggedIn }) => {
   const [tags, setTags] = useState([]);
+  const [tagSearchVisible, setTagSearchVisible] = useState(false);
 
   useEffect(() => {
     // TODO: when there is an endpoint for this add "selected" field
@@ -80,6 +81,9 @@ const SearchPage = ({ isLoggedIn }) => {
 
   return (
     <div>
+      {!tagSearchVisible && (
+        <Button onClick={() => setTagSearchVisible(true)}>Add Tags</Button>
+      )}
       <Container>
         <Row>
           {tags
@@ -89,7 +93,13 @@ const SearchPage = ({ isLoggedIn }) => {
             })}
         </Row>
       </Container>
-      <TagSearch tags={tags} onTagToggle={onTagToggle} />
+      {tagSearchVisible && (
+        <TagSearch
+          tags={tags}
+          onTagToggle={onTagToggle}
+          close={() => setTagSearchVisible(false)}
+        />
+      )}
 
       <Offers isLoggedIn={isLoggedIn} />
     </div>

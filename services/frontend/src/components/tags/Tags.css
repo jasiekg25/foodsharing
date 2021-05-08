@@ -12,12 +12,15 @@
 }
 
 .search-bar {
-    margin-bottom: 10px;
-    height: 40px;
+    background: rgba(235, 234, 234, 0.42);
+    border-radius: 10px;
+    border: none;
+    margin: 5%;
+    height: 65%;
 }
 
 .tag-row {
-    padding: 0px 15px;
+    padding: 0 8%;
 }
 
 .tag-scroll {
