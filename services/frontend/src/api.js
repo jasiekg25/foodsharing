@@ -70,6 +70,9 @@ const api = {
     },
     postOrder: (body) => {
         return axios.post(`${baseUrl}/orders`, body)
+    },
+    getTags: () => {
+        return axios.get(`${baseUrl}/tags`)
     }
 };
 

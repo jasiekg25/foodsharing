@@ -1,5 +1,5 @@
 .form-container {
-  width: 30%;
+  width: 45%;
   margin-top: 3%;
   margin-left: auto;
   margin-right: auto;
@@ -13,8 +13,8 @@
 .field-content {
   margin: auto;
   width: 80%;
-  padding-top: 5%;
-  padding-bottom: 5%;
+  padding-top: 2%;
+  padding-bottom: 2%;
 }
 
 .login-title {
