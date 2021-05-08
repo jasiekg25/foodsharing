@@ -8,7 +8,7 @@ const TagSearch = ({ tags, onTagToggle, close }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
-    <Container className="col-md-3 rounded search-container ">
+    <Container className="col-md-3 search-container">
       <Row>
         <Col md={10}>
           <FormControl
@@ -26,27 +26,25 @@ const TagSearch = ({ tags, onTagToggle, close }) => {
         </Col>
       </Row>
 
-      <div className="tag-scroll">
-        <Row className="tag-row">
-          {tags
-            .filter((tag) => tag.selected)
-            .map((tag) => {
-              return <Tag key={tag.id} tag={tag} toggle={onTagToggle} />;
-            })}
-        </Row>
-        <hr />
-        <Row className="tag-row">
-          {tags
-            .filter(
-              (tag) =>
-                !tag.selected &&
-                tag.tag_name.toLowerCase().includes(searchQuery.toLowerCase())
-            )
-            .map((tag) => {
-              return <Tag key={tag.id} tag={tag} toggle={onTagToggle} />;
-            })}
-        </Row>
-      </div>
+      <Row className="tag-row">
+        {tags
+          .filter((tag) => tag.selected)
+          .map((tag) => {
+            return <Tag key={tag.id} tag={tag} toggle={onTagToggle} />;
+          })}
+      </Row>
+      <hr />
+      <Row className="tag-row tag-scroll hide-scroll">
+        {tags
+          .filter(
+            (tag) =>
+              !tag.selected &&
+              tag.tag_name.toLowerCase().includes(searchQuery.toLowerCase())
+          )
+          .map((tag) => {
+            return <Tag key={tag.id} tag={tag} toggle={onTagToggle} />;
+          })}
+      </Row>
     </Container>
   );
 };
