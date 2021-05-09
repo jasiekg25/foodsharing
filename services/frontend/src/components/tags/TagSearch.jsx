@@ -4,11 +4,11 @@ import Tag from "./Tag";
 import "./Tags.css";
 import { HiXCircle } from "react-icons/hi";
 
-const TagSearch = ({ tags, onTagToggle, close }) => {
+const TagSearch = ({ tags, onTagToggle, close, containerStyle }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
-    <Container className="col-md-3 search-container">
+    <Container className={containerStyle}>
       <Row>
         <Col md={10}>
           <FormControl
@@ -18,11 +18,11 @@ const TagSearch = ({ tags, onTagToggle, close }) => {
           />
         </Col>
         <Col md={2} style={{ display: "inline-flex", alignItems: "center" }}>
-          <HiXCircle
+          {!!close && <HiXCircle
             onClick={close}
             size={25}
             style={{ verticalAlign: "baseline" }}
-          />
+          />}
         </Col>
       </Row>
 

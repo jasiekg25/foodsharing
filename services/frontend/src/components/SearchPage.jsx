@@ -104,6 +104,7 @@ const SearchPage = ({ isLoggedIn }) => {
           tags={tags}
           onTagToggle={onTagToggle}
           close={() => setTagSearchVisible(false)}
+          containerStyle="col-md-3 search-container"
         />
       )}
 

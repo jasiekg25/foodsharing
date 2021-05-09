@@ -8,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Form } from "react-bootstrap";
 import api from '../api.js';
 import DatePicker from "react-date-picker";
+import TagSearch from "./tags/TagSearch";
 
 const text_inputs = [
   {
@@ -65,10 +66,12 @@ const redirectToMainPage= (mealClosed) => {
     mealClosed(true);
 }
 
-
-const handleAddMealSubmit = (data, expireDate, mealAdded) => {
+const handleAddMealSubmit = (data, expireDate, mealAdded, tags) => {
+    console.log(tags);
     expireDate.setHours(23, 59, 59);
     data['offer_expiry'] = expireDate.toLocaleString('en-US');
+    data['tags'] = tags.filter(tag => tag.selected).map(tag => tag.id)
+
     api
       .postOffers(data)
       .then((res) => {
@@ -81,7 +84,6 @@ const handleAddMealSubmit = (data, expireDate, mealAdded) => {
         return <Redirect to="/" />;
       });
   };
-
 
 const AddMeal = ({isLoggedIn}) => {
     const {
@@ -97,10 +99,22 @@ const AddMeal = ({isLoggedIn}) => {
     const [isMealClosed, isMealClosedChange] = useState(false);
     const [tags, setTags] = useState([]);
 
+    const onTagToggle = (tag) => {
+        const index = tags.findIndex((el) => el.id === tag.id);
+        let newTags = [...tags];
+        newTags[index] = { ...tag, selected: !tag.selected };
+    
+        setTags(newTags);
+      };
+
     useEffect(() => {
         api.getTags()
             .then((res) => {
-                setTags(res.data);
+                let tagsData = res.data;
+                for(let tag of tagsData){
+                    tag['selected'] = false;
+                }
+                setTags(tagsData);
             })
             .catch((err) => {
                 console.log("Could not get any tags " + err.message);
@@ -117,7 +131,7 @@ const AddMeal = ({isLoggedIn}) => {
 
     return (
         <div className="form-container form-group">
-            <form onSubmit={handleSubmit((data) => handleAddMealSubmit(data, expireDate, isMealAddedChange))}>
+            <form onSubmit={handleSubmit((data) => handleAddMealSubmit(data, expireDate, isMealAddedChange, tags))}>
 
             <Form.Label className="login-title">Add meal</Form.Label>
 
@@ -160,6 +174,15 @@ const AddMeal = ({isLoggedIn}) => {
                 />
              </div>
 
+            <div className="field-content form-group">
+                <TagSearch className="col-3"
+                    tags={tags}
+                    onTagToggle={onTagToggle}
+                    containerStyle="search-container"
+                />
+            </div>
+
+
             <Row>
                 <Col>
                     <Button size="lg" className="submit-button" type="submit" variant="secondary">
@@ -172,6 +195,7 @@ const AddMeal = ({isLoggedIn}) => {
                     </Button>
                 </Col>
             </Row>
+
 
             </form>
         </div>
