@@ -17,17 +17,17 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # set working directory
-WORKDIR /usr/src/fred
+WORKDIR /usr/src/services
 
 # install dependencies
 RUN pip install --upgrade pip
-COPY ./requirements.txt /usr/src/fred/requirements.txt
-COPY ./requirements-dev.txt /usr/src/fred/requirements-dev.txt
+COPY ./requirements.txt /usr/src/services/requirements.txt
+COPY ./requirements-dev.txt /usr/src/services/requirements-dev.txt
 RUN pip install -r requirements-dev.txt
 
 # add entrypoint.sh
-COPY ./entrypoint.sh /usr/src/fred/entrypoint.sh
-RUN chmod +x /usr/src/fred/entrypoint.sh
+COPY ./entrypoint.sh /usr/src/services/entrypoint.sh
+RUN chmod +x /usr/src/services/entrypoint.sh
 
 # add app
-COPY . /usr/src/fred
+COPY . /usr/src/services

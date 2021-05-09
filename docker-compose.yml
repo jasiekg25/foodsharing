@@ -9,7 +9,7 @@ services:
     restart: always
     entrypoint: ['/usr/src/fred/entrypoint.sh']
     volumes:
-      - './services/backend:/usr/src/fred'
+      - './services/backend:/usr/src/services'
     ports:
       - 5001:5000
     environment:
@@ -39,8 +39,8 @@ services:
       dockerfile: Dockerfile
     restart: always
     volumes:
-      - './services/frontend:/usr/src/fred'
-      - '/usr/src/fred/node_modules'
+      - './services/frontend:/usr/src/services'
+      - '/usr/src/services/node_modules'
     ports:
       - 3007:3000
     environment:
