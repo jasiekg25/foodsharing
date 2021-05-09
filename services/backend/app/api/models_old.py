@@ -126,6 +126,10 @@ class User(db.Model):
         db.session.commit()
         return user
 
+    @staticmethod
+    def get_user_profile_info(user_id):
+        return User.query.filter_by(id = user_id).first()
+
 
 class ClientRating(db.Model):
 

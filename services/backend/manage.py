@@ -31,6 +31,13 @@ def load_data():
     db.session.add(User(username='test', email="test@test.com", password="test"))
     db.session.add(User(username='lebronjames', email="ljames@nba.com", password="mypassword"))
     db.session.add(User(username='stephencurry', email="stephencurry@nba.com", password="mypassword"))
+    db.session.add(User(username='test2', email="test2@test2.com", password="test2"))
+    db.session.add(User(username='jasiek',name="Jan", surname="Gargas",email="Jan@Gargas.com", password="test", phone="668-760-600"))
+    db.session.add(User(username='kinga',name="Kinga", surname="Wierchomska",email="Kinga@Wierchomska.com", password="test", phone="668-760-600"))
+    db.session.add(User(username='michał',name="Michał", surname="Kurleto",email="Michał@Kurleto.com", password="test", phone="668-760-600"))
+    db.session.add(User(username='mateusz',name="Mateusz", surname="Mastalerczyk",email="Mateusz@Mastalerczyk.com", password="test", phone="668-760-600"))
+
+
     print("user table loaded")
 
     db.session.commit()

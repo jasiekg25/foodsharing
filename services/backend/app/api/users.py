@@ -4,6 +4,7 @@
 from flask import request
 from flask_restx import Resource, fields, Namespace
 
+from app import logger
 from app.api.utils import (
     get_all_users,
     get_user_by_email,
@@ -36,6 +37,7 @@ class UsersList(Resource):
     @users_namespace.marshal_with(user, as_list=True)
     def get(self):
         """Returns all users."""
+        logger.info("UsersList.get()")
         return get_all_users(), 200
 
     @users_namespace.expect(user, validate=True)
@@ -44,6 +46,7 @@ class UsersList(Resource):
     @users_namespace.response(400, "Sorry. That email already exists.")
     def post(self):
         """Creates a new user."""
+        logger.info("Offers.post() request_body: %s", str(request.get_json()))
         post_data = request.get_json()
         username = post_data.get("username")
         email = post_data.get("email")
@@ -65,6 +68,7 @@ class Users(Resource):
     @users_namespace.response(404, "User <user_id> does not exist")
     def get(self, user_id):
         """Returns a single user."""
+        logger.info("Users.get() user_id: %s", str(user_id))
         user = get_user_by_id(user_id)
         if not user:
             users_namespace.abort(404, f"User {user_id} does not exist")
@@ -75,6 +79,7 @@ class Users(Resource):
     @users_namespace.response(404, "User <user_id> does not exist")
     def put(self, user_id):
         """Updates a user."""
+        logger.info("Users.put() user_id: %s, request_body: %s", str(user_id), str(request.get_json()))
         post_data = request.get_json()
         username = post_data.get("username")
         email = post_data.get("email")
@@ -91,6 +96,7 @@ class Users(Resource):
     @users_namespace.response(404, "User <user_id> does not exist")
     def delete(self, user_id):
         """Updates a user."""
+        logger.info("Users.delete() user_id: %s", str(user_id))
         response_object = {}
         user = get_user_by_id(user_id)
         if not user:

@@ -6,13 +6,15 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_praetorian import Praetorian
+import logging
+from logging.handlers import RotatingFileHandler
 
 
 # instantiate the extensions
 db = SQLAlchemy()
 cors = CORS()
 guard = Praetorian()
-
+logger = logging.getLogger(__name__)
 
 def create_app(script_info=None):
 
@@ -26,7 +28,12 @@ def create_app(script_info=None):
     # set up extensions
     db.init_app(app)
     cors.init_app(app, resources={r"*": {"origins": "*"}})
-    
+    formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+    logger.setLevel(logging.DEBUG)
+    handler = RotatingFileHandler('./logs/application.log', maxBytes=1024)
+    handler.setFormatter(formatter)
+    app.logger.addHandler(handler)
+
     from .api.models_old import User
     guard.init_app(app, User)
 

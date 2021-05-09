@@ -1,6 +1,7 @@
+from datetime import datetime
+
 from sqlalchemy.sql import func
 from app import db
-from app.api.models.tag import offers_tags
 
 
 class Offer(db.Model):
@@ -26,7 +27,7 @@ class Offer(db.Model):
     orders = db.relationship('Order', backref='offers_orders',
                              foreign_keys='Order.offer_id')  # One offer to many Orders
 
-    tags = db.relationship('Tag', secondary=offers_tags, back_populates='offers')
+    tags = db.relationship('OffersTags', back_populates='offer')
 
 
     def to_dict(self):
@@ -42,38 +43,52 @@ class Offer(db.Model):
             "pickup_localization": self.pickup_localization,
             "post_time": self.post_time,
             "pickup_times": self.pickup_times,
-            "offer_expiry": self.offer_expiry
+            "offer_expiry": self.offer_expiry,
+            "tags": [offer_tag.tag.tag_name for offer_tag in self.tags]
         }
+
         return data
 
-
-def add_offer(user_id, name, active, portions_number, used_portions, pickup_localization, post_time, pickup_times,
-              offer_expiry, description=None, photo=None):
-    offer = Offer(
-        user_id=user_id,
-        name=name,
-        active=active,
-        portions_number=portions_number,
-        used_portions=used_portions,
-        pickup_localization=pickup_localization,
-        post_time=post_time,
-        pickup_times=pickup_times,
-        offer_expiry=offer_expiry,
-        description=description,
-        photo=photo
-    )
-    db.session.add(offer)
-    db.session.commit()
-
-
-def get_all_offers():
-    return Offer.query.all()
+    @staticmethod
+    def add_offer(user_id, name, active, portions_number, used_portions, pickup_localization, post_time,
+                  pickup_times,
+                  offer_expiry, description=None, photo=None):
+        offer = Offer(
+            user_id=user_id,
+            name=name,
+            active=active,
+            portions_number=portions_number,
+            used_portions=used_portions,
+            pickup_localization=pickup_localization,
+            post_time=post_time,
+            pickup_times=pickup_times,
+            offer_expiry=offer_expiry,
+            description=description,
+            photo=photo
+        )
+        db.session.add(offer)
+        db.session.commit()
+        return offer.id
 
 
-def get_offer_by_id(offer_id):
-    return Offer.query.filter_by(id=offer_id).first()
+    @staticmethod
+    def get_all_offers():
+        return Offer.query.all()
+
+    @staticmethod
+    def get_active_offers():
+        return Offer.query.filter_by(active=True)\
+                .filter(Offer.used_portions < Offer.portions_number)\
+                .filter(Offer.offer_expiry >= datetime.now())
 
 
-def update_used_portions(offer_id, new_order_portions):
-    Offer.query.filter_by(id=offer_id).first().used_portions = new_order_portions
-    db.session.commit()
+    @staticmethod
+    def update_used_portions(offer_id, new_order_portions):
+        Offer.query.filter_by(id=offer_id).first().used_portions = new_order_portions
+        db.session.commit()
+
+    @staticmethod
+    def get_offer_by_id(offer_id):
+        return Offer.query.filter_by(id=offer_id).first()
+
+
