@@ -3,12 +3,12 @@
 
 from flask_restx import Api
 
-from app.api.auth import auth_namespace
-from app.api.user_profile import user_profile_namespace
-from app.api.tags import tags_namespace
-from app.api.users import users_namespace
-from app.api.orders import orders_namespace
-from app.api.offers import offers_namespace
+from app.api.swagger.auth import auth_namespace
+from app.api.swagger.user_profile import user_profile_namespace
+from app.api.swagger.tags import tags_namespace
+from app.api.swagger.users import users_namespace
+from app.api.swagger.orders import orders_namespace
+from app.api.swagger.offers import offers_namespace
 
 api = Api(version="1.0", title="FRED APIs", doc="/docs/")
 
