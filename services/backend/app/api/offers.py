@@ -61,7 +61,7 @@ class Offers(Resource):
             offer_id = Offer.add_offer(user_id, content['name'], True, content['portions_number'], 0, content['pickup_localization'], datetime.now(),
                       content['pickup_times'], content['offer_expiry'], content.get('description', None), content.get('photo', None))
 
-            for tag_id in content['tags']:
+            for tag_id in content.get('tags', []):
                 OffersTags.add_offer_tag(offer_id, tag_id)
             return "Offer has been added", 201
 
