@@ -41,5 +41,18 @@ class UserProfile(Resource):
             logger.exception("UserProfile.get(): %s", str(e))
             return "Couldn't load user profile info", 500
 
+    @auth_required
+    def put(self):
+        """Updates current user profile info"""
+        logger.info("UserProfile.put() user_id: %s", str(current_user().id))
+        try:
+            user_id = current_user().id
+            content = request.get_json()
+            User.update_user_profile_info(user_id, content)
+            return 'User profile info has been updated', 200
+        except Exception as e:
+            logger.exception("UserProfile.put(): %s", str(e))
+            return "Couldn't update user profile info", 500
+
 
 user_profile_namespace.add_resource(UserProfile, "")

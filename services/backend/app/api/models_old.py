@@ -128,7 +128,22 @@ class User(db.Model):
 
     @staticmethod
     def get_user_profile_info(user_id):
-        return User.query.filter_by(id = user_id).first()
+        return User.query.filter_by(id=user_id).first()
+
+    @staticmethod
+    def update_user_profile_info(user_id, content):
+        user = User.query.filter_by(id=user_id).first()
+        user.username = content['username']
+        user.name = content['name']
+        user.surname = content['surname']
+        user.email = content['email']
+        user.profile_description = content['profile_description']
+        user.profile_picture = content['profile_picture']
+        user.phone = content['phone']
+        user.localization = content['localization']
+        user.active = content['active']
+        user.created_date = content['created_date']
+        db.session.commit()
 
 
 class ClientRating(db.Model):
