@@ -7,7 +7,7 @@ services:
       context: ./services/backend
       dockerfile: Dockerfile
     restart: always
-    entrypoint: ['/usr/src/servicessu/entrypoint.sh']
+    entrypoint: ['/usr/src/services/entrypoint.sh']
     volumes:
       - './services/backend:/usr/src/services'
     ports:
