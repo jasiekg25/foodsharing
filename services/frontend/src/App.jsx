@@ -17,6 +17,7 @@ import Rules from "./components/home/Rules";
 import Footer from "./components/home/Footer";
 import Offers from "./components/Offers";
 import AddMeal from "./components/AddMeal";
+import SearchPage from "./components/SearchPage";
 
 const PageNoFound = () => (
   <section className="hero is-halfheight">
@@ -133,10 +134,15 @@ const App = () => {
           path="/status"
           render={() => <UserStatus isLoggedIn={isLoggedIn} />}
         />
-        <Route
+        {/* <Route
           exact
           path="/offers"
           render={() => <Offers isLoggedIn={isLoggedIn} />}
+        /> */}
+        <Route
+          exact
+          path="/offers"
+          render={() => <SearchPage isLoggedIn={isLoggedIn} />}
         />
         <Route
           exact

@@ -1,0 +1,42 @@
+.tag-col {
+    padding: 0;
+}
+
+.tag-btn {
+    margin: 5px;
+}
+
+.search-container {
+    background: white;
+    padding: 0;
+    border-radius: 10px;
+}
+
+.search-bar {
+    background: rgba(235, 234, 234, 0.42);
+    border-radius: 10px;
+    border: none;
+    margin: 5%;
+    height: 65%;
+}
+
+.tag-row {
+    padding: 0 8%;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hide-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scroll {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.tag-scroll {
+    max-height: 140px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
