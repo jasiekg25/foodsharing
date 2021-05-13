@@ -39,5 +39,5 @@ def add_order(user_id, offer_id, time, portions):
 def get_all_orders():
     return Order.query.all()
 
-def get_inactive_orders_of_user(user_id):
-    return Order.query.filter_by(user_id=user_id, accepted=True).all()
+def get_orders_of_user(user_id):
+    return Order.query.filter_by(user_id=user_id)

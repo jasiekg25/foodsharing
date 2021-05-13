@@ -93,6 +93,11 @@ class Offer(db.Model):
 
     @staticmethod
     def get_current_offers_of_user(user_id):
-        return Offer.query.filter_by(user_id=user_id, active=True).all()
+       return Offer.query.filter_by(user_id=user_id) \
+        .filter(Offer.active==True) \
+        .filter(Offer.used_portions < Offer.portions_number) \
+        .filter(Offer.offer_expiry >= datetime.now())
+
+
 
 

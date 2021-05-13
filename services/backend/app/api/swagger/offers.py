@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from flask import request, Response
-from flask_restx import Resource, fields, Namespace
+from flask_restx import Resource, fields, Namespace, reqparse
 from flask_praetorian import current_user, auth_required
 
 from app import logger
@@ -30,15 +30,21 @@ offer = offers_namespace.model(
     },
 )
 
+parser = reqparse.RequestParser()
+parser.add_argument("user_id", type=int, required=False, action='split')
 
 class Offers(Resource):
-
+    @offers_namespace.expect(parser)
     @offers_namespace.marshal_with(offer)
     def get(self):
         """Returns all offers with user info"""
         logger.info("Offers.get()")
         try:
-            offers = Offer.get_active_offers()
+            args = parser.parse_args()
+            if len(args) == 0:
+                offers = Offer.get_active_offers()
+            else: # /offers?user_id=<user_id>
+                offers = Offer.get_current_offers_of_user(args['user_id'][0])
 
             return [offer.to_dict() for offer in offers], 200
         except Exception as e:
