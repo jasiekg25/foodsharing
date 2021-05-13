@@ -41,7 +41,7 @@ class Offers(Resource):
         logger.info("Offers.get()")
         try:
             args = parser.parse_args()
-            if len(args) == 0:
+            if args['user_id'] is None:
                 offers = Offer.get_active_offers()
             else: # /offers?user_id=<user_id>
                 offers = Offer.get_current_offers_of_user(args['user_id'][0])

@@ -48,10 +48,12 @@ class Orders(Resource):
         logger.info("Orders.get()")
         try:
             args = parser.parse_args()
-            if len(args) == 0:
+            print(args)
+            if args['user_id'] is None:
                 orders = Order.get_all_orders()
             else: # /orders?user_id=<user_id>
-                orders = Order.get_orders_of_user(args['user_id'][0])
+                orders =  Order.get_orders_of_user(args['user_id'][0])
+
 
             return [order.to_dict() for order in orders], 200
         except Exception as e:
