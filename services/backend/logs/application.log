@@ -6,3 +6,221 @@
 2021-05-09 15:54:42,711 INFO Offers.get()
 2021-05-09 15:54:45,555 INFO Offers.get()
 2021-05-09 15:54:45,555 INFO Offers.get()
+2021-05-13 12:35:02,681 INFO Orders.get()
+2021-05-13 12:35:02,681 INFO Orders.get()
+2021-05-13 12:35:02,682 ERROR Orders.get(): type object 'Order' has no attribute 'get_orders_of_user'
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/orders.py", line 54, in get
+    orders = Order.get_orders_of_user(args['user_id'][0])
+AttributeError: type object 'Order' has no attribute 'get_orders_of_user'
+2021-05-13 12:35:02,682 ERROR Orders.get(): type object 'Order' has no attribute 'get_orders_of_user'
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/orders.py", line 54, in get
+    orders = Order.get_orders_of_user(args['user_id'][0])
+AttributeError: type object 'Order' has no attribute 'get_orders_of_user'
+2021-05-13 12:35:29,787 INFO Orders.get()
+2021-05-13 12:35:29,787 INFO Orders.get()
+2021-05-13 12:35:29,788 ERROR Orders.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/orders.py", line 54, in get
+    orders = Order.get_orders_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:35:29,788 ERROR Orders.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/orders.py", line 54, in get
+    orders = Order.get_orders_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:37:04,100 INFO Orders.get()
+2021-05-13 12:37:04,100 INFO Orders.get()
+2021-05-13 12:37:04,100 ERROR Orders.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/orders.py", line 54, in get
+    orders = Order.get_orders_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:37:04,100 ERROR Orders.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/orders.py", line 54, in get
+    orders = Order.get_orders_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:37:26,434 INFO Orders.get()
+2021-05-13 12:37:26,434 INFO Orders.get()
+2021-05-13 12:37:26,434 ERROR Orders.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/orders.py", line 54, in get
+    orders =  Order.get_all_orders()
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:37:26,434 ERROR Orders.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/orders.py", line 54, in get
+    orders =  Order.get_all_orders()
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:37:38,582 INFO Orders.get()
+2021-05-13 12:37:38,582 INFO Orders.get()
+2021-05-13 12:40:24,260 INFO Orders.get()
+2021-05-13 12:40:24,260 INFO Orders.get()
+2021-05-13 12:40:24,261 ERROR Orders.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/orders.py", line 54, in get
+    orders =  Order.get_orders_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:40:24,261 ERROR Orders.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/orders.py", line 54, in get
+    orders =  Order.get_orders_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:41:06,647 INFO Orders.get()
+2021-05-13 12:41:06,647 INFO Orders.get()
+2021-05-13 12:41:26,481 INFO Orders.get()
+2021-05-13 12:41:26,481 INFO Orders.get()
+2021-05-13 12:41:26,481 ERROR Orders.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/orders.py", line 54, in get
+    orders =  Order.get_orders_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:41:26,481 ERROR Orders.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/orders.py", line 54, in get
+    orders =  Order.get_orders_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:41:46,704 INFO Offers.get()
+2021-05-13 12:41:46,704 INFO Offers.get()
+2021-05-13 12:41:46,705 ERROR Offers.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/offers.py", line 47, in get
+    offers = Offer.get_current_offers_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:41:46,705 ERROR Offers.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/offers.py", line 47, in get
+    offers = Offer.get_current_offers_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:42:25,363 INFO Offers.get()
+2021-05-13 12:42:25,363 INFO Offers.get()
+2021-05-13 12:43:23,164 INFO Offers.get()
+2021-05-13 12:43:23,164 INFO Offers.get()
+2021-05-13 12:43:28,275 INFO Offers.get()
+2021-05-13 12:43:28,275 INFO Offers.get()
+2021-05-13 12:43:28,275 ERROR Offers.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/offers.py", line 47, in get
+    offers = Offer.get_current_offers_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:43:28,275 ERROR Offers.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/offers.py", line 47, in get
+    offers = Offer.get_current_offers_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:45:02,770 INFO Offers.get()
+2021-05-13 12:45:02,770 INFO Offers.get()
+2021-05-13 12:45:02,771 ERROR Offers.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/offers.py", line 47, in get
+    offers = Offer.get_current_offers_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:45:02,771 ERROR Offers.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/offers.py", line 47, in get
+    offers = Offer.get_current_offers_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:45:18,540 INFO Offers.get()
+2021-05-13 12:45:18,540 INFO Offers.get()
+2021-05-13 12:45:18,540 ERROR Offers.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/offers.py", line 47, in get
+    offers = Offer.get_current_offers_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:45:18,540 ERROR Offers.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/offers.py", line 47, in get
+    offers = Offer.get_current_offers_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:45:24,688 INFO Offers.get()
+2021-05-13 12:45:24,688 INFO Offers.get()
+2021-05-13 12:45:24,689 ERROR Offers.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/offers.py", line 47, in get
+    offers = Offer.get_current_offers_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:45:24,689 ERROR Offers.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/offers.py", line 47, in get
+    offers = Offer.get_current_offers_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:49:23,990 INFO Offers.get()
+2021-05-13 12:49:23,990 INFO Offers.get()
+2021-05-13 12:49:23,991 ERROR Offers.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/offers.py", line 47, in get
+    offers = Offer.get_current_offers_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:49:23,991 ERROR Offers.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/offers.py", line 47, in get
+    offers = Offer.get_current_offers_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:49:44,524 INFO Offers.get()
+2021-05-13 12:49:44,524 INFO Offers.get()
+2021-05-13 12:49:44,525 ERROR Offers.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/offers.py", line 47, in get
+    offers = Offer.get_current_offers_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:49:44,525 ERROR Offers.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/offers.py", line 47, in get
+    offers = Offer.get_current_offers_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:50:15,146 INFO Orders.get()
+2021-05-13 12:50:15,146 INFO Orders.get()
+2021-05-13 12:50:15,147 ERROR Orders.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/orders.py", line 55, in get
+    orders =  Order.get_orders_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:50:15,147 ERROR Orders.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/orders.py", line 55, in get
+    orders =  Order.get_orders_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:51:03,080 INFO Orders.get()
+2021-05-13 12:51:03,080 INFO Orders.get()
+2021-05-13 12:51:03,081 ERROR Orders.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/orders.py", line 55, in get
+    orders =  Order.get_orders_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:51:03,081 ERROR Orders.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/orders.py", line 55, in get
+    orders =  Order.get_orders_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:51:06,010 INFO Orders.get()
+2021-05-13 12:51:06,010 INFO Orders.get()
+2021-05-13 12:51:35,145 INFO Orders.get()
+2021-05-13 12:51:35,145 INFO Orders.get()
+2021-05-13 12:51:35,145 ERROR Orders.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/orders.py", line 55, in get
+    orders =  Order.get_orders_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:51:35,145 ERROR Orders.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/orders.py", line 55, in get
+    orders =  Order.get_orders_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:52:13,240 INFO Orders.get()
+2021-05-13 12:52:13,240 INFO Orders.get()
+2021-05-13 12:52:13,241 ERROR Orders.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/orders.py", line 55, in get
+    orders =  Order.get_orders_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:52:13,241 ERROR Orders.get(): 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/usr/src/services/app/api/swagger/orders.py", line 55, in get
+    orders =  Order.get_orders_of_user(args['user_id'][0])
+TypeError: 'NoneType' object is not subscriptable
+2021-05-13 12:55:05,865 INFO Orders.get()
+2021-05-13 12:55:05,865 INFO Orders.get()
+2021-05-13 12:55:33,373 INFO Offers.get()
+2021-05-13 12:55:33,373 INFO Offers.get()
