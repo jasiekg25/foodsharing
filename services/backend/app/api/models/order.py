@@ -41,3 +41,4 @@ def get_all_orders():
 
 def get_orders_of_user(user_id):
     return Order.query.filter_by(user_id=user_id)
+
