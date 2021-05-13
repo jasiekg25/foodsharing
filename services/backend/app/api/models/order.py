@@ -9,7 +9,7 @@ class Order(db.Model):
                         nullable=False)  # Many orders from one user
     offer_id = db.Column(db.Integer, db.ForeignKey('offer.id'),
                          nullable=False)  # Many orders to one offer
-    time = db.Column('message', db.DateTime, nullable=False)
+    time = db.Column('timestamp', db.DateTime, nullable=False)
     portions = db.Column('portions_number', db.Integer, nullable=False)
     accepted = db.Column('accepted', db.Boolean, nullable=False)
 
