@@ -35,10 +35,11 @@ def add_order(user_id, offer_id, time, portions):
     db.session.add(order)
     db.session.commit()
 
+    @staticmethod
+    def get_all_orders():
+        return Order.query.all()
 
-def get_all_orders():
-    return Order.query.all()
-
-def get_orders_of_user(user_id):
-    return Order.query.filter_by(user_id=user_id)
+    @staticmethod
+    def get_orders_of_user(user_id):
+        return Order.query.filter_by(user_id=user_id)
 
