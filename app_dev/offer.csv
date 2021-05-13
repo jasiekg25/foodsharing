@@ -1,6 +1,6 @@
 id,user_id,name,active,description,photo,portions_number,used_portions,pickup_localization,post_time,pickup_times,offer_expiry
-10,5,kotlet,TRUE,"Kotlet od babci Haliny, najlepszy na mieście",null,10,0,"Krakow, poznańska",'2020-10-19 10:23:54',Wieczorami,'2021-10-19 10:23:54'
-11,5,sałatka,TRUE,"Sałatka warzywna, idealna na imieniny I grila",null,15,1,Wielogłowy,'2020-10-19 10:23:54',W samo południe,'2021-10-19 10:23:54'
-12,6,pierogi,TRUE,"Domowe z podlasia, z borówkami",null,22,2,"AGH, Kapitol p215",'2020-10-19 10:23:54',dzisiaj godz 20,'2021-10-19 10:23:54'
-13,7,polski obiag,TRUE,Kotlet + Ziemniaczki + Modra Kapusta,null,20,3,"AGH, Kapitol p212",'2020-10-19 10:23:54',jutro wieczorem,'2021-10-19 10:23:54'
-14,8,pierogi z miesem,TRUE,,null,10,0,"AGH, Kapitol p214",'2020-10-19 10:23:54',Miedzy 7 a 15,'2021-10-19 10:23:54'
+100,5,kotlet,TRUE,"Kotlet od babci Haliny, najlepszy na mieście",null,10,0,"Krakow, poznańska",'2020-10-19 10:23:54',Wieczorami,'2021-10-19 10:23:54'
+101,5,sałatka,TRUE,"Sałatka warzywna, idealna na imieniny I grila",null,15,1,Wielogłowy,'2020-10-19 10:23:54',W samo południe,'2021-10-19 10:23:54'
+102,6,pierogi,TRUE,"Domowe z podlasia, z borówkami",null,22,2,"AGH, Kapitol p215",'2020-10-19 10:23:54',dzisiaj godz 20,'2021-10-19 10:23:54'
+103,7,polski obiag,TRUE,Kotlet + Ziemniaczki + Modra Kapusta,null,20,3,"AGH, Kapitol p212",'2020-10-19 10:23:54',jutro wieczorem,'2021-10-19 10:23:54'
+104,8,pierogi z miesem,TRUE,,null,10,0,"AGH, Kapitol p214",'2020-10-19 10:23:54',Miedzy 7 a 15,'2021-10-19 10:23:54'
