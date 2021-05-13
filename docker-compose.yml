@@ -39,8 +39,8 @@ services:
       dockerfile: Dockerfile
     restart: always
     volumes:
-      - './services/frontend:/usr/src/services'
-      - '/usr/src/services/node_modules'
+      - './services/frontend:/usr/src/fred'
+      - '/usr/src/fred/node_modules'
     ports:
       - 3007:3000
     environment:
