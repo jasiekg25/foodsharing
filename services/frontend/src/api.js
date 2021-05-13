@@ -60,7 +60,7 @@ const api = {
     return axios.post(`${baseUrl}/auth/refresh`, body);
   },
   getOffers: () => {
-    return axios.get(`${baseUrl}/offers`);
+    return axios.get(`${baseUrl}/offers?with_my=False`);
   },
   postOffers: (body) => {
     return axios.post(`${baseUrl}/offers`, body);

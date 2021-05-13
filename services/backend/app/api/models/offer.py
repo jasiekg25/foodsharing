@@ -98,6 +98,13 @@ class Offer(db.Model):
         .filter(Offer.used_portions < Offer.portions_number) \
         .filter(Offer.offer_expiry >= datetime.now())
 
+    @staticmethod
+    def get_all_active_offers_except_mine(user_id):
+        return Offer.query.filter_by(active=True)\
+            .filter(Offer.user_id != user_id)\
+            .filter(Offer.used_portions < Offer.portions_number)\
+            .filter(Offer.offer_expiry >= datetime.now())
+
 
 
 
