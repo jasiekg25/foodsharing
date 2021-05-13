@@ -1,12 +1,12 @@
 from datetime import datetime
 
 from flask import request
-from flask_restx import Resource, fields, Namespace
+from flask_restx import Resource, fields, Namespace, reqparse
 from flask_praetorian import current_user, auth_required
 
 from app import logger
 from app.api.models.offer import Offer
-from app.api.models.order import get_all_orders, add_order
+from app.api.models.order import Order
 
 orders_namespace = Namespace("orders")
 offers_namespace = Namespace("offers")
@@ -36,13 +36,22 @@ offer = offers_namespace.model(
     },
 )
 
+
+parser = reqparse.RequestParser()
+parser.add_argument("user_id", type=int, required=False, action='split')
+
 class Orders(Resource):
+    @orders_namespace.expect(parser)
     @orders_namespace.marshal_with(order)
     def get(self):
         """Returns all orders"""
         logger.info("Orders.get()")
         try:
-            orders = get_all_orders()
+            args = parser.parse_args()
+            if len(args) == 0:
+                orders = Order.get_all_orders()
+            else: # /orders?user_id=<user_id>
+                orders = Order.get_orders_of_user(args['user_id'][0])
 
             return [order.to_dict() for order in orders], 200
         except Exception as e:
@@ -73,13 +82,12 @@ class Orders(Resource):
             new_order_portion = content['portions'] + offer_dict['used_portions']
             Offer.update_used_portions(content['offer_id'], new_order_portion)
 
-            add_order(user_id, content['offer_id'], datetime.now(), 1)
+            Order.add_order(user_id, content['offer_id'], datetime.now(), 1)
 
             return "Order placed", 201
 
         except Exception as e:
             logger.exception("Orders.post(): %s", str(e))
             return "Couldn't make order", 500
-
 
 orders_namespace.add_resource(Orders, "")
