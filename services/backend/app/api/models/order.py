@@ -23,18 +23,23 @@ class Order(db.Model):
         }
         return data
 
+    @staticmethod
+    def add_order(user_id, offer_id, time, portions):
+        order = Order(
+            user_id=user_id,
+            offer_id=offer_id,
+            time=time,
+            portions=portions,
+            accepted=False
+        )
+        db.session.add(order)
+        db.session.commit()
 
-def add_order(user_id, offer_id, time, portions):
-    order = Order(
-        user_id=user_id,
-        offer_id=offer_id,
-        time=time,
-        portions=portions,
-        accepted=False
-    )
-    db.session.add(order)
-    db.session.commit()
+    @staticmethod
+    def get_all_orders():
+        return Order.query.all()
 
+    @staticmethod
+    def get_orders_of_user(user_id):
+        return Order.query.filter_by(user_id=user_id)
 
-def get_all_orders():
-    return Order.query.all()
