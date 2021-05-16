@@ -7,7 +7,6 @@ import { history } from "./index";
 import { ToastContainer, toast } from 'react-toastify';
 
 import NavBar from "./components/home/NavBar";
-import UserStatus from "./components/UserStatus";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Image404 from "./img/404.svg";
@@ -18,6 +17,7 @@ import Footer from "./components/home/Footer";
 import Offers from "./components/Offers";
 import AddMeal from "./components/AddMeal";
 import SearchPage from "./components/SearchPage";
+import Profile from "./components/Profile";
 
 const PageNoFound = () => (
   <section className="hero is-halfheight">
@@ -90,7 +90,7 @@ const App = () => {
 
   return (
     <div>
-      <NavBar logoutUser={logoutUser} isLoggedIn={isLoggedIn} />
+      <NavBar isLoggedIn={isLoggedIn} />
 
       <ToastContainer position="top-center"/>
 
@@ -100,7 +100,7 @@ const App = () => {
           path="/"
           render={() => (
             <div>
-              <Home />
+              <Home isLoggedIn={isLoggedIn} />
               <About />
               <Rules />
             </div>
@@ -129,11 +129,6 @@ const App = () => {
           )}
         />
         <Route exact path="/timeout" render={() => tokenTimeout()} />
-        <Route
-          exact
-          path="/status"
-          render={() => <UserStatus isLoggedIn={isLoggedIn} />}
-        />
         {/* <Route
           exact
           path="/offers"
@@ -148,6 +143,11 @@ const App = () => {
           exact
           path="/add-meal"
           render={() => <AddMeal isLoggedIn={isLoggedIn} />}
+        />
+        <Route
+            exact
+            path="/profile"
+            render={() => <Profile isLoggedIn={isLoggedIn} logoutUser={logoutUser} />}
         />
         <Route component={PageNoFound} />
       </Switch>

@@ -16,7 +16,7 @@ const portions = {
 const schema = yup.object().shape({
     portions: yup
         .number()
-        .moreThan(0, "Portions number hat to be greater that 0."),
+        .moreThan(0, "Portions number has to be greater than 0."),
 });
 
 function Offers() {
