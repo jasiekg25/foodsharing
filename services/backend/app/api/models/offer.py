@@ -49,6 +49,28 @@ class Offer(db.Model):
 
         return data
 
+    def to_search_dict(self):
+        data = {
+            'id': self.id,
+            'user_id': self.user.username,
+            'user_username': self.user.username,
+            'user_name': self.user.name,
+            'user_surname': self.user.surname,
+            'name': self.name,
+            'active': self.active,
+            "description": self.description,
+            "photo": self.photo,
+            "portions_number": self.portions_number,
+            "used_portions": self.used_portions,
+            "pickup_localization": self.pickup_localization,
+            "post_time": self.post_time,
+            "pickup_times": self.pickup_times,
+            "offer_expiry": self.offer_expiry,
+            "tags": [offer_tag.tag.tag_name for offer_tag in self.tags]
+        }
+
+        return data
+
     @staticmethod
     def add_offer(user_id, name, active, portions_number, used_portions, pickup_localization, post_time,
                   pickup_times,
