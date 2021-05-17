@@ -68,6 +68,9 @@ const api = {
   postOffers: (body) => {
     return axios.post(`${baseUrl}/offers`, body);
   },
+  getUserOrders: () => {
+    return axios.get('${baseUrl}/profile_orders')
+  },
   postOrder: (body) => {
     return axios.post(`${baseUrl}/orders`, body);
   },
