@@ -52,12 +52,12 @@ class Offers(Resource):
 
             # deal with tags
             if args['tags_ids'] is None:
-                return [offer.to_dict() for offer in offers], 200
+                return [offer.to_search_dict() for offer in offers], 200
 
             elif args['tags_ids'] is not None:
                 tags_ids = args['tags_ids']
                 offers = filter(lambda offer: any(tag for tag in offer.tags if tag.tag_id in tags_ids), offers)
-                return [offer.to_dict() for offer in offers], 200
+                return [offer.to_search_dict() for offer in offers], 200
 
             # return [offer.to_dict() for offer in offers], 200
         except Exception as e:
