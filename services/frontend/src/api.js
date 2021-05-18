@@ -60,10 +60,16 @@ const api = {
     return axios.post(`${baseUrl}/auth/refresh`, body);
   },
   getOffers: () => {
-    return axios.get(`${baseUrl}/offers`);
+    return axios.get(`${baseUrl}/search_offers`);
+  },
+  getMyCurrentOffers: () => {
+    return axios.get(`${baseUrl}/current_offers`)
   },
   postOffers: (body) => {
     return axios.post(`${baseUrl}/offers`, body);
+  },
+  getUserOrders: () => {
+    return axios.get('${baseUrl}/profile_orders')
   },
   postOrder: (body) => {
     return axios.post(`${baseUrl}/orders`, body);
