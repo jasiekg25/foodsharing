@@ -25,7 +25,8 @@ class Order(db.Model):
             'offer_description': self.offers_orders.description,
             'offer_name': self.offers_orders.name,
             'portions': self.portions,
-            "accepted": self.accepted
+            'accepted': self.accepted,
+            'offer_photo': self.offers_orders.photo
         }
         return data
 

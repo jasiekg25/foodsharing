@@ -23,9 +23,9 @@ order = profile_orders_namespace.model(
         "offer_id": fields.Integer(readOnly=True),
         "offer_description": fields.String(readOnly=True),
         "offer_name": fields.String(readOnly=True),
-        "time": fields.DateTime(readOnly=True),
         "portions": fields.Integer(readOnly=True),
         "accepted": fields.Boolean(readOnly=True),
+        "offer_photo": fields.String(readOnly=True),
     },
 )
 
