@@ -8,11 +8,11 @@ from app import logger
 from app.api.models.offer import Offer
 from app.api.models.order import Order
 
-orders_namespace = Namespace("profile_orders")
+profile_orders_namespace = Namespace("profile_orders")
 offers_namespace = Namespace("offers")
 
 # doing this add description to Swagger Doc
-order = orders_namespace.model(
+order = profile_orders_namespace.model(
     "Order",
     {
         "id": fields.Integer(readOnly=True),
@@ -39,7 +39,7 @@ offer = offers_namespace.model(
 
 class Orders(Resource):
     @auth_required
-    @orders_namespace.marshal_with(order)
+    @profile_orders_namespace.marshal_with(order)
     def get(self):
         """Returns all orders"""
         logger.info("Orders.get()")
@@ -55,4 +55,4 @@ class Orders(Resource):
 
 
 
-orders_namespace.add_resource(Orders, "")
+profile_orders_namespace.add_resource(Orders, "")
