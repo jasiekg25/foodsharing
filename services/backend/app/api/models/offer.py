@@ -52,7 +52,7 @@ class Offer(db.Model):
     def to_search_dict(self):
         data = {
             'id': self.id,
-            'user_id': self.user.username,
+            'user_id': self.user.id,
             'user_username': self.user.username,
             'user_name': self.user.name,
             'user_surname': self.user.surname,
