@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { Route, Switch } from "react-router-dom";
 import api from "./api";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -14,7 +13,6 @@ import Home from "./components/home/Home";
 import About from "./components/home/About";
 import Rules from "./components/home/Rules";
 import Footer from "./components/home/Footer";
-import Offers from "./components/Offers";
 import AddMeal from "./components/AddMeal";
 import SearchPage from "./components/SearchPage";
 import Profile from "./components/Profile";
@@ -43,21 +41,6 @@ const App = () => {
 
     api.refreshToken();
   }, []);
-
-  const handleRegisterFormSubmit = (data) => {
-    api
-      .register(data)
-      .then((res) => {
-        console.log(res.data);
-        toast.success("You have registered successfully.")
-        return true;
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error("That user already exists.")
-        return false;
-      });
-  };
 
   const handleLoginFormSubmit = (data) => {
     api
@@ -112,8 +95,6 @@ const App = () => {
           path="/register"
           render={() => (
             <Register
-              // eslint-disable-next-line react/jsx-handler-names
-              onSubmit={handleRegisterFormSubmit}
               isLoggedIn={isLoggedIn}
             />
           )}
