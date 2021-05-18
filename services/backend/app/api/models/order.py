@@ -18,6 +18,9 @@ class Order(db.Model):
         data = {
             'id': self.id,
             'user_id': self.user_id,
+            'fromUser_name': self.offers_orders.user.name,
+            'fromUser_surname': self.offers_orders.user.surname,
+            'fromUser_id': self.offers_orders.user.id,
             'offer_id': self.offer_id,
             'offer_description': self.offers_orders.description,
             'offer_name': self.offers_orders.name,
