@@ -5,9 +5,11 @@ from flask import request, jsonify
 from flask_restx import Namespace, Resource, fields
 from flask_praetorian import current_user, auth_required
 
-from app import guard, logger
+from app import guard, logger, mail
 from app.api.utils import get_user_by_email
 from app.api.models_old import User
+from flask_mail import Message
+
 
 auth_namespace = Namespace("auth")
 
@@ -57,8 +59,30 @@ class Register(Resource):
         user = get_user_by_email(email)
         if user:
             auth_namespace.abort(400, "Sorry. That email already exists.")
+            
         user = User.add_user(name, surname, email, password)
-        return 200
+        
+        # msg = Message("Testing email", recipients=[email])
+        # mail.send(msg)
+        try:
+            with open('./templates/registration_email.html') as file:
+                template = file.read()
+            guard.send_registration_email(email, user=user, confirmation_sender='SchabCoin', template=template)
+        except Exception as e:
+            logger.exception(e)
+            return "Failed to send registration email", 500
+        
+        ret = {'message': f'successfully sent registration email to user {email}'}
+        return ret, 200
+
+
+class Finilize(Resource):
+    def get(self):
+        registration_token = guard.read_token_from_header()
+        user = guard.get_user_from_registration_token(registration_token)
+        # TODO: perform 'activation' of user here...like setting 'active' or something
+        ret = {'access_token': guard.encode_jwt_token(user)}
+        return ret, 200
 
 
 class Login(Resource):
@@ -102,6 +126,7 @@ class Status(Resource):
 
 
 auth_namespace.add_resource(Register, "/register")
+auth_namespace.add_resource(Finilize, "/finalize")
 auth_namespace.add_resource(Login, "/login")
 auth_namespace.add_resource(Refresh, "/refresh")
 auth_namespace.add_resource(Status, "/status")

@@ -8,6 +8,7 @@ from flask_cors import CORS
 from flask_praetorian import Praetorian
 import logging
 from logging.handlers import RotatingFileHandler
+from flask_mail import Mail
 
 
 # instantiate the extensions
@@ -15,6 +16,8 @@ db = SQLAlchemy()
 cors = CORS()
 guard = Praetorian()
 logger = logging.getLogger(__name__)
+mail = Mail()
+
 
 def create_app(script_info=None):
 
@@ -33,6 +36,7 @@ def create_app(script_info=None):
     handler = RotatingFileHandler('./logs/application.log', maxBytes=1024)
     handler.setFormatter(formatter)
     app.logger.addHandler(handler)
+    mail.init_app(app)
 
     from .api.models_old import User
     guard.init_app(app, User)

@@ -18,6 +18,7 @@ import Offers from "./components/Offers";
 import AddMeal from "./components/AddMeal";
 import SearchPage from "./components/SearchPage";
 import Profile from "./components/Profile";
+import FinalizeRegistration from "./components/FinalizeRegistration";
 
 const PageNoFound = () => (
   <section className="hero is-halfheight">
@@ -116,6 +117,10 @@ const App = () => {
               isLoggedIn={isLoggedIn}
             />
           )}
+        />
+        <Route
+          path="/finalize"
+          component={FinalizeRegistration}
         />
         <Route
           exact
