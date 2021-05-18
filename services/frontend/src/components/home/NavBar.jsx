@@ -13,17 +13,15 @@ function NavBar(props) {
               className="nav-link">About us
             </Link>
             <Link className="nav-link">Trust & safety</Link>
-            <Link to="/login" className="nav-link">Log in</Link>
         </Nav>
     )
 
     if(props.isLoggedIn){
         menu = (
             <Nav className="mr-auto">
-                <Link to="/status" className="nav-link">Profile</Link>
+                <Link to="/profile" className="nav-link">Profile</Link>
                 <Link to="/offers" className="nav-link">Offers</Link>
                 <Link to="/add-meal" className="nav-link">Add meal</Link>
-                <Link onClick={props.logoutUser} className="nav-link">Log out</Link>
             </Nav>
         )
     }

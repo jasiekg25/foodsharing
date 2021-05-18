@@ -1,0 +1,27 @@
+.profile-card{
+    margin-left: 3%;
+    margin-top: 3%;
+    text-align: center;
+    color: black;
+    font-family: Montserrat;
+    border-radius: 20px;
+    box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.25);
+}
+
+.profile-top{
+    background-color: black;;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.25);
+}
+
+.edit-button{
+    margin-left: 80%;
+    color: black;
+    border-radius: 7px;
+}
+
+.profile-photo{
+    width: 20%;
+    margin: auto;
+    border-radius: 100%;
+}

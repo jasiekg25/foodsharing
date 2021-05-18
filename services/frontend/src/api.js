@@ -71,6 +71,12 @@ const api = {
   getTags: () => {
     return axios.get(`${baseUrl}/tags`);
   },
+  getProfile: () => {
+    return axios.get(`${baseUrl}/user_profile`)
+  },
+  putProfile: (body) => {
+    return axios.put(`${baseUrl}/user_profile`, body);
+  },
 };
 
 
