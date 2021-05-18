@@ -1,4 +1,5 @@
 from app import db
+from sqlalchemy import desc
 
 
 class Order(db.Model):
@@ -41,5 +42,5 @@ class Order(db.Model):
 
     @staticmethod
     def get_orders_of_user(user_id):
-        return Order.query.filter_by(user_id=user_id).order_by(Order.accepted)
+        return Order.query.filter_by(user_id=user_id).order_by(desc(Order.accepted))
 
