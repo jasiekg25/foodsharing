@@ -19,6 +19,8 @@ class Order(db.Model):
             'id': self.id,
             'user_id': self.user_id,
             'offer_id': self.offer_id,
+            'offer_description': self.offers_orders.description,
+            'offer_name': self.offers_orders.name,
             'portions': self.portions,
             "accepted": self.accepted
         }
