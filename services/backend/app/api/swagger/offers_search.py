@@ -8,10 +8,10 @@ from app import logger
 from app.api.models.offer import Offer
 from app.api.models.tag import OffersTags, Tag
 
-offers_namespace = Namespace("search_offers")
+offers_search_namespace = Namespace("search_offers")
 
 # doing this add description to Swagger Doc
-offer = offers_namespace.model(
+offer_search = offers_search_namespace.model(
     "Offer",
     {
         "id": fields.Integer(readOnly=True),
@@ -36,10 +36,10 @@ parser = reqparse.RequestParser()
 parser.add_argument("tags_ids", type=int, required=False, action='split')
 
 
-class Offers(Resource):
+class OffersSearch(Resource):
     @auth_required
-    @offers_namespace.expect(parser)
-    @offers_namespace.marshal_with(offer)
+    @offers_search_namespace.expect(parser)
+    @offers_search_namespace.marshal_with(offer_search)
     def get(self):
         """Returns all offers with user info"""
         global offers
@@ -65,4 +65,4 @@ class Offers(Resource):
             return "Couldn't load offers", 500
 
 
-offers_namespace.add_resource(Offers, "")
+offers_search_namespace.add_resource(OffersSearch, "")
