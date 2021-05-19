@@ -42,7 +42,6 @@ class OffersSearch(Resource):
     @offers_search_namespace.marshal_with(offer_search)
     def get(self):
         """Returns all offers with user info"""
-        global offers
         logger.info("Offers.get()")
         try:
             args = parser.parse_args()
