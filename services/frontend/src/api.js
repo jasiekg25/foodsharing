@@ -29,22 +29,25 @@ axios.interceptors.response.use(
     //     history.push('/timeout')
     // }
 
-    if (
-      accessToken &&
-      error.response.data.error === "ExpiredAccessError" && // 401
-      !originalRequest._retry
-    ) {
-      originalRequest._retry = true;
-      return axios.get(`${baseUrl}/auth/refresh`).then((res) => {
-        if (res.status === 200) {
-          localStorage.setItem("accessToken", res.data.access_token);
-          console.log("Access token refreshed!");
-          return axios(originalRequest);
-        }
-      });
-    } else if (accessToken && error.response.status === 401) {
-      history.push("/timeout");
-    }
+    try {
+      if (
+        accessToken &&
+        error.response.data.error === "ExpiredAccessError" && // 401
+        !originalRequest._retry
+      ) {
+        originalRequest._retry = true;
+        return axios.get(`${baseUrl}/auth/refresh`).then((res) => {
+          if (res.status === 200) {
+            localStorage.setItem("accessToken", res.data.access_token);
+            console.log("Access token refreshed!");
+            return axios(originalRequest);
+          }
+        });
+      } else if (accessToken && error.response.status === 401) {
+        history.push("/timeout");
+      }
+    } catch {}
+
     return Promise.reject(error);
   }
 );
@@ -83,7 +86,11 @@ const api = {
   putProfile: (body) => {
     return axios.put(`${baseUrl}/user_profile`, body);
   },
+  finilizeRegistration: () => {
+    return axios.get(`${baseUrl}/auth/finalize`)
+    .then(res => localStorage.setItem("accessToken", res.data.access_token))
+    .then(() => history.push('/offers'));
+  },
 };
-
 
 export default api;
