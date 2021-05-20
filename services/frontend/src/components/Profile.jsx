@@ -146,10 +146,10 @@ function Profile({isLoggedIn, logoutUser}) {
                 <Col md={7}>
                     <div className="orders-offers-buttons">
                         <Button className="orders-offers-button" variant="light" onClick={(e) => handleShowOrdersHistory()}>Orders history</Button>
-                        <Button className="orders-offers-button" variant="light" onClick={(e) => handleShowUserOffers()}>Yours offers</Button>
+                        <Button className="orders-offers-button" variant="light" onClick={(e) => handleShowUserOffers()}>Your offers</Button>
                     </div>
                     <hr className="divider"/>
-                    <div className="orders-offers">
+                    <div className="orders-offers hide-scroll">
                         {orderOffersPanel}
                     </div>
                 </Col>

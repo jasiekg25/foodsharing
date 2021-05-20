@@ -91,6 +91,9 @@ const api = {
     .then(res => localStorage.setItem("accessToken", res.data.access_token))
     .then(() => history.push('/offers'));
   },
+  getOtherUserProfile: (id) => {
+    return axios.get(`${baseUrl}/user_profile?user-id=${id}`)
+  }
 };
 
 export default api;

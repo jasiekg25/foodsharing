@@ -17,6 +17,7 @@ import AddMeal from "./components/AddMeal";
 import SearchPage from "./components/SearchPage";
 import Profile from "./components/Profile";
 import FinalizeRegistration from "./components/FinalizeRegistration";
+import OtherUserProfile from "./components/OtherUserProfile";
 
 const PageNoFound = () => (
   <section className="hero is-halfheight">
@@ -135,6 +136,11 @@ const App = () => {
             path="/profile"
             render={() => <Profile isLoggedIn={isLoggedIn} logoutUser={logoutUser} />}
         />
+          <Route
+              exact
+              path="/users/:id"
+              render={(props) => <OtherUserProfile {...props} />}
+          />
         <Route component={PageNoFound} />
       </Switch>
       <Footer />

@@ -154,8 +154,8 @@ const AddMeal = ({isLoggedIn}) => {
 
             <div className="field-content form-group">
                 <Form.Label className="label-field">{description.label}</Form.Label>
-                <textarea className="textarea-control" {...register(description.name)}>
-                </textarea>
+                <Form.Text as={description.type} className="textarea-control" {...register(description.name)}>
+                </Form.Text>
             </div>
 
             <div className="field-content form-group">
