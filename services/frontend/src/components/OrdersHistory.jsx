@@ -3,6 +3,7 @@ import api from "../api";
 import {Button, Card, ListGroupItem} from "react-bootstrap";
 import "./OrderHistory.css";
 import {BucketFill} from "react-bootstrap-icons";
+import {history} from "../index";
 
 function OrdersHistory() {
 
@@ -16,6 +17,10 @@ function OrdersHistory() {
                 console.log("Could not get current user " + err.message);
             })
     }, [])
+
+    const handleShowUserProfile = (id) => {
+        history.push(`/users/${id}`);
+    }
 
     return (
         orderHistory.map((order) => {
@@ -31,14 +36,15 @@ function OrdersHistory() {
                             <Card.Text><BucketFill size={15}/>  <strong>Ordered portions: </strong> {order.portions}</Card.Text>
                             <Card.Text className="cancel-confirm-buttons"> {
                                 !order.accepted ?
-                                    <Button className="cancel-order-button" variant="dark">Cancel</Button>: null
+                                    <Button className="order-button" variant="success">Confirm pick up</Button>: null
                                 }
                                 {
                                     !order.accepted ?
-                                        <Button className="confirm-button" variant="success">Confirm pick up</Button>: null
+                                        <Button className="cancel-order-button" variant="dark">Cancel</Button>: null
                                 }
                             </Card.Text>
-                            <Card.Text className="view-profile-button"> <Button className="view-button" variant="secondary">View user profile </Button> {order.fromUser_name} {order.fromUser_surname}</Card.Text>
+                            <Card.Text className="view-profile-button"> <Button className="view-button" variant="secondary" onClick={(e) => handleShowUserProfile(order.fromUser_id)}>View user profile </Button> {order.fromUser_name} {order.fromUser_surname}
+                            </Card.Text>
                         </Card.Body>
                     </Card>
                 </div>

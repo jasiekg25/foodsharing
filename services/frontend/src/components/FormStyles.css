@@ -1,5 +1,5 @@
 .form-container {
-  width: 45%;
+  width: 60%;
   margin-top: 3%;
   margin-left: auto;
   margin-right: auto;
@@ -26,6 +26,7 @@
 }
 
 .field-control {
+  height: 7em;
   background: rgba(235, 234, 234, 0.42);
   border-radius: 0 0 25px 25px;
   border: none;

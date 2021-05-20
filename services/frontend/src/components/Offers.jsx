@@ -8,6 +8,7 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {AlarmFill, BucketFill, ClockFill, GeoAltFill, TagFill} from "react-bootstrap-icons";
+import { history } from "../index";
 
 const portions = {
     name: "portions",
@@ -57,6 +58,10 @@ function Offers() {
         setShowModal(true);
     }
 
+    const handleShowUserProfile = (id) => {
+        history.push(`/users/${id}`);
+    }
+
     const orderMeal = (data) => {
         handleClose();
         data['offer_id'] = chosenOffer.id;
@@ -95,7 +100,7 @@ function Offers() {
                                         </ListGroupItem>
                                     </ListGroup>
                                     <div>
-                                        <Card.Text className="view-profile-button"> <Button className="view-button" variant="secondary">View user profile </Button> {offer.user_name}</Card.Text>
+                                        <Card.Text className="view-profile-button"> <Button className="view-button" variant="secondary" onClick={(e) => handleShowUserProfile(offer.user_id)}>View user profile </Button> {offer.user_name}</Card.Text>
                                         <Button className="order-button" variant="success" onClick={(e) => handleShow(offer)}>Make order</Button>
                                     </div>
                                     <Modal className="portions-modal" show={showModal} onHide={handleClose} backdrop="static">

@@ -37,8 +37,8 @@ function UserOffers(props) {
                                 </ListGroupItem>
                             </ListGroup>
                             <Card.Text className="cancel-confirm-buttons">
+                                <Button className="order-button" variant="success">Edit</Button>
                                 <Button className="cancel-order-button" variant="dark">Delete</Button>
-                                <Button className="confirm-button" variant="success">Edit</Button>
                             </Card.Text>
                         </Card.Body>
                     </Card>
