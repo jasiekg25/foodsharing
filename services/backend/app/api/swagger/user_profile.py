@@ -1,5 +1,5 @@
 from flask import request
-from flask_restx import Resource, fields, Namespace
+from flask_restx import Resource, fields, Namespace, reqparse
 from flask_praetorian import current_user, auth_required
 
 from app import logger
@@ -25,17 +25,22 @@ user_profile = user_profile_namespace.model(
     }
 )
 
+parser = reqparse.RequestParser()
+parser.add_argument("user-id", type=int, required=False)#, action='split')
 
 class UserProfile(Resource):
 
     @auth_required
+    @user_profile_namespace.expect(parser)
     @user_profile_namespace.marshal_with(user_profile)
     def get(self):
         """Returns user profile info"""
-        logger.info("UserProfile.get() user_id: %s", str(current_user().id))
         try:
-            user_id = current_user().id
-
+            args = parser.parse_args()
+            user_id = args['user-id']
+            if not user_id:
+                user_id = current_user().id
+            logger.info("UserProfile.get() user_id: %s", str(user_id))
             return User.get_user_profile_info(user_id), 200
         except Exception as e:
             logger.exception("UserProfile.get(): %s", str(e))
