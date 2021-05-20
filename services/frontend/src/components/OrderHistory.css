@@ -1,0 +1,22 @@
+.view-profile-button{
+    float: right;
+}
+
+.view-button{
+    background-color: #495057;
+    border-radius: 7px;
+}
+
+.cancel-confirm-buttons{
+    margin-bottom: 5%;
+}
+
+.confirm-button{
+    background-color: #088608;
+    border-radius: 7px;
+    margin-left: 5%;
+}
+
+.flex-row{
+    border-radius: 20px;
+}

@@ -1,6 +1,5 @@
 .profile-card{
-    margin-left: 3%;
-    margin-top: 3%;
+    margin: 3%;
     text-align: center;
     color: black;
     font-family: Montserrat;
@@ -9,7 +8,7 @@
 }
 
 .profile-top{
-    background-color: black;;
+    background-color: black;
     border-radius: 20px 20px 0 0;
     box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.25);
 }
@@ -24,4 +23,33 @@
     width: 20%;
     margin: auto;
     border-radius: 100%;
+}
+
+.orders-offers{
+    margin-right: 2%;
+    height: 30em;
+    overflow-y: scroll;
+    border-radius: 20px;
+    box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.25);
+}
+
+.orders-offers-buttons{
+    margin-top: 3%;
+}
+
+.orders-offers-button{
+    border-radius: 20px 20px 0 0;
+    color: black;
+}
+
+.card-title{
+    color: black;
+    font-weight: bold;
+}
+
+.divider{
+    background-color: black;
+    margin: 0;
+    width: 97%;
+    height: 1px;
 }

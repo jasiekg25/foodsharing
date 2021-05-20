@@ -8,7 +8,7 @@ const FinalizeRegistration = () => {
 
   useEffect(() => {
     localStorage.setItem("accessToken", token);
-    api.finilizeRegistration();
+    api.finalizeRegistration();
   }, []);
 
   return <></>;
