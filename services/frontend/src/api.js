@@ -65,14 +65,14 @@ const api = {
   getOffers: () => {
     return axios.get(`${baseUrl}/search_offers`);
   },
-  getMyCurrentOffers: () => {
+  getUserCurrentOffers: () => {
     return axios.get(`${baseUrl}/current_offers`)
   },
   postOffers: (body) => {
     return axios.post(`${baseUrl}/offers`, body);
   },
-  getUserOrders: () => {
-    return axios.get('${baseUrl}/profile_orders')
+  getUserOrdersHistory: () => {
+    return axios.get(`${baseUrl}/profile_orders`)
   },
   postOrder: (body) => {
     return axios.post(`${baseUrl}/orders`, body);
@@ -86,7 +86,7 @@ const api = {
   putProfile: (body) => {
     return axios.put(`${baseUrl}/user_profile`, body);
   },
-  finilizeRegistration: () => {
+  finalizeRegistration: () => {
     return axios.get(`${baseUrl}/auth/finalize`)
     .then(res => localStorage.setItem("accessToken", res.data.access_token))
     .then(() => history.push('/offers'));
