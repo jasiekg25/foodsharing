@@ -1,4 +1,5 @@
 from app import db
+from sqlalchemy import desc
 
 
 class Order(db.Model):
@@ -17,9 +18,15 @@ class Order(db.Model):
         data = {
             'id': self.id,
             'user_id': self.user_id,
+            'fromUser_name': self.offers_orders.user.name,
+            'fromUser_surname': self.offers_orders.user.surname,
+            'fromUser_id': self.offers_orders.user.id,
             'offer_id': self.offer_id,
+            'offer_description': self.offers_orders.description,
+            'offer_name': self.offers_orders.name,
             'portions': self.portions,
-            "accepted": self.accepted
+            'accepted': self.accepted,
+            'offer_photo': self.offers_orders.photo
         }
         return data
 
@@ -41,5 +48,5 @@ class Order(db.Model):
 
     @staticmethod
     def get_orders_of_user(user_id):
-        return Order.query.filter_by(user_id=user_id).order_by(Order.accepted)
+        return Order.query.filter_by(user_id=user_id).order_by(desc(Order.accepted))
 

@@ -1,15 +1,16 @@
 .profile-card{
-    margin-left: 3%;
-    margin-top: 3%;
+    margin: 3%;
     text-align: center;
     color: black;
     font-family: Montserrat;
     border-radius: 20px;
     box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.25);
+    background:#efefef;
 }
 
 .profile-top{
-    background-color: black;;
+    background-image: url("https://images.unsplash.com/photo-1575411619998-a654a55391da?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1952&q=80");
+    background-size: 100%;
     border-radius: 20px 20px 0 0;
     box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.25);
 }
@@ -24,4 +25,36 @@
     width: 20%;
     margin: auto;
     border-radius: 100%;
+    box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(255, 255, 255, 1);
 }
+
+.orders-offers{
+    margin-right: 2%;
+    max-height: 30em;
+    overflow-y: scroll;
+    border-radius: 20px;
+    box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.25);
+}
+
+.orders-offers-buttons{
+    margin-top: 3%;
+}
+
+.orders-offers-button{
+    border-radius: 20px 20px 0 0;
+    color: black;
+}
+
+.card-title{
+    color: black;
+    font-weight: bold;
+}
+
+.divider{
+    background-color: black;
+    margin: 0;
+    width: 97%;
+    height: 1px;
+}
+

@@ -3,10 +3,11 @@
     color: black;
     margin-top: 10%;
     margin-left: 2%;
+    border-radius: 20px;
 }
 
 .order-button{
-    background-color: #088608;
+    background-color: #016f4a;
     border-radius: 7px;
 }
 

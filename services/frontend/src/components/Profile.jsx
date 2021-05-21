@@ -10,6 +10,8 @@ import {string} from "yup";
 import {toast} from "react-toastify";
 import "./Profile.css";
 import {EnvelopeFill, GeoAltFill, PinMapFill, TelephoneFill} from "react-bootstrap-icons";
+import OrdersHistory from "./OrdersHistory";
+import UserOffers from "./UserOffers";
 
 const name = {
     name: "name",
@@ -62,6 +64,8 @@ function Profile({isLoggedIn, logoutUser}) {
 
     const [user, setUser] = useState({});
     const [showModal, setShowModal] = useState(false);
+    const [showOrdersHistory, setShowOrdersHistory] = useState(true);
+    let orderOffersPanel = showOrdersHistory ? <OrdersHistory/> : <UserOffers/>;
 
     useEffect(() => {
         getUserInfo();
@@ -85,6 +89,14 @@ function Profile({isLoggedIn, logoutUser}) {
     }
     const handleShow = () => {
         setShowModal(true);
+    }
+
+    let handleShowOrdersHistory = () => {
+        setShowOrdersHistory(true)
+    }
+
+    let handleShowUserOffers = () => {
+        setShowOrdersHistory(false)
     }
 
     const changeProfileInfo = (data) => {
@@ -116,7 +128,7 @@ function Profile({isLoggedIn, logoutUser}) {
                             <Card.Img className="profile-photo" variant="top" src={photo} />
                         </Card.Body>
                         <Card.Body>
-                            <Card.Title>{user.name} {user.surname}</Card.Title>
+                            <Card.Title className="card-title">{user.name} {user.surname}</Card.Title>
                             <Card.Text>
                                 {user.profile_description}
                             </Card.Text>
@@ -131,7 +143,15 @@ function Profile({isLoggedIn, logoutUser}) {
                         </Card.Body>
                     </Card>
                 </Col>
-                <Col md={6}>
+                <Col md={7}>
+                    <div className="orders-offers-buttons">
+                        <Button className="orders-offers-button" variant="light" onClick={(e) => handleShowOrdersHistory()}>Orders history</Button>
+                        <Button className="orders-offers-button" variant="light" onClick={(e) => handleShowUserOffers()}>Your offers</Button>
+                    </div>
+                    <hr className="divider"/>
+                    <div className="orders-offers hide-scroll">
+                        {orderOffersPanel}
+                    </div>
                 </Col>
             </Row>
             <Modal className="portions-modal" show={showModal} onHide={handleClose} backdrop="static">

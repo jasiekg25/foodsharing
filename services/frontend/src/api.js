@@ -29,22 +29,25 @@ axios.interceptors.response.use(
     //     history.push('/timeout')
     // }
 
-    if (
-      accessToken &&
-      error.response.data.error === "ExpiredAccessError" && // 401
-      !originalRequest._retry
-    ) {
-      originalRequest._retry = true;
-      return axios.get(`${baseUrl}/auth/refresh`).then((res) => {
-        if (res.status === 200) {
-          localStorage.setItem("accessToken", res.data.access_token);
-          console.log("Access token refreshed!");
-          return axios(originalRequest);
-        }
-      });
-    } else if (accessToken && error.response.status === 401) {
-      history.push("/timeout");
-    }
+    try {
+      if (
+        accessToken &&
+        error.response.data.error === "ExpiredAccessError" && // 401
+        !originalRequest._retry
+      ) {
+        originalRequest._retry = true;
+        return axios.get(`${baseUrl}/auth/refresh`).then((res) => {
+          if (res.status === 200) {
+            localStorage.setItem("accessToken", res.data.access_token);
+            console.log("Access token refreshed!");
+            return axios(originalRequest);
+          }
+        });
+      } else if (accessToken && error.response.status === 401) {
+        history.push("/timeout");
+      }
+    } catch {}
+
     return Promise.reject(error);
   }
 );
@@ -62,14 +65,14 @@ const api = {
   getOffers: () => {
     return axios.get(`${baseUrl}/search_offers`);
   },
-  getMyCurrentOffers: () => {
+  getUserCurrentOffers: () => {
     return axios.get(`${baseUrl}/current_offers`)
   },
   postOffers: (body) => {
     return axios.post(`${baseUrl}/offers`, body);
   },
-  getUserOrders: () => {
-    return axios.get('${baseUrl}/profile_orders')
+  getUserOrdersHistory: () => {
+    return axios.get(`${baseUrl}/profile_orders`)
   },
   postOrder: (body) => {
     return axios.post(`${baseUrl}/orders`, body);
@@ -83,7 +86,14 @@ const api = {
   putProfile: (body) => {
     return axios.put(`${baseUrl}/user_profile`, body);
   },
+  finalizeRegistration: () => {
+    return axios.get(`${baseUrl}/auth/finalize`)
+    .then(res => localStorage.setItem("accessToken", res.data.access_token))
+    .then(() => history.push('/offers'));
+  },
+  getOtherUserProfile: (id) => {
+    return axios.get(`${baseUrl}/user_profile?user-id=${id}`)
+  }
 };
-
 
 export default api;

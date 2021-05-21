@@ -26,7 +26,7 @@ offer = offers_namespace.model(
         "post_time": fields.DateTime(readOnly=True),
         "pickup_times": fields.String(readOnly=True),
         "offer_expiry": fields.DateTime(readOnly=True),
-        "tags": fields.String(readOnly=True)
+        "tags": fields.List(fields.String(readOnly=True))
     },
 )
 
@@ -40,7 +40,6 @@ class Offers(Resource):
     @offers_namespace.marshal_with(offer)
     def get(self):
         """Returns all offers with user info"""
-        global offers
         logger.info("Offers.get()")
         try:
             args = parser.parse_args()
