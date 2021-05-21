@@ -77,7 +77,7 @@ class Orders(Resource):
             new_order_portion = content['portions'] + offer_dict['used_portions']
             Offer.update_used_portions(content['offer_id'], new_order_portion)
 
-            Order.add_order(user_id, content['offer_id'], datetime.now(), 1)
+            Order.add_order(user_id, content['offer_id'], datetime.now(), content['portions'])
 
             return "Order placed", 201
 
