@@ -6,7 +6,7 @@ from flask_praetorian import current_user, auth_required
 
 from app import logger
 from app.api.models.offer import Offer
-from app.api.models.order import Order
+from app.api.models.orders import Orders
 
 orders_namespace = Namespace("orders")
 offers_namespace = Namespace("offers")
@@ -20,7 +20,8 @@ order = orders_namespace.model(
         "offer_id": fields.Integer(readOnly=True),
         "time": fields.DateTime(readOnly=True),
         "portions": fields.Integer(readOnly=True),
-        "accepted": fields.Boolean(readOnly=True),
+        "is_canceled": fields.Boolean(readOnly=True),
+        "is_picked": fields.Boolean(readOnly=True)
     },
 )
 
@@ -39,14 +40,14 @@ offer = offers_namespace.model(
 
 parser = reqparse.RequestParser()
 
-class Orders(Resource):
+class OrdersNamespace(Resource):
     @orders_namespace.expect(parser)
     @orders_namespace.marshal_with(order)
     def get(self):
         """Returns all orders"""
         logger.info("Orders.get()")
         try:
-            orders = Order.get_all_orders()
+            orders = Orders.get_all_orders()
             return [order.to_dict() for order in orders], 200
 
         except Exception as e:
@@ -77,7 +78,7 @@ class Orders(Resource):
             new_order_portion = content['portions'] + offer_dict['used_portions']
             Offer.update_used_portions(content['offer_id'], new_order_portion)
 
-            Order.add_order(user_id, content['offer_id'], datetime.now(), content['portions'])
+            Orders.add_order(user_id, content['offer_id'], datetime.now(), content['portions'])
 
             return "Order placed", 201
 
@@ -85,4 +86,4 @@ class Orders(Resource):
             logger.exception("Orders.post(): %s", str(e))
             return "Couldn't make order", 500
 
-orders_namespace.add_resource(Orders, "")
+orders_namespace.add_resource(OrdersNamespace, "")
