@@ -3,7 +3,7 @@
 # utility helper functions
 
 from app import db
-from app.api.models_old import User
+from app.api.models.user import User
 
 
 def get_all_users():

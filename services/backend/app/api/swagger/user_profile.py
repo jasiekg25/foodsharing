@@ -3,7 +3,7 @@ from flask_restx import Resource, fields, Namespace, reqparse
 from flask_praetorian import current_user, auth_required
 
 from app import logger
-from app.api.models_old import User
+from app.api.models.user import User
 
 user_profile_namespace = Namespace("user_profile")
 
