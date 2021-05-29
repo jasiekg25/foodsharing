@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { FormControl, Container, Col, Row } from "react-bootstrap";
+import { FormControl, Container, Col, Row , Button} from "react-bootstrap";
 import Tag from "./Tag";
 import "./Tags.css";
 import { HiXCircle } from "react-icons/hi";
 
-const TagSearch = ({ tags, onTagToggle, close, containerStyle }) => {
+const TagSearch = ({ tags, onTagToggle, close, containerStyle, searchButton }) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [showTags, setShowTags] = useState(false);
 
   return (
     <Container className={containerStyle}>
       <Row>
-        <Col md={10}>
+        <Col md={9}>
           <FormControl
             className="search-bar"
-            placeholder="Search Tags"
+            placeholder="Tags"
+            onClick={(e) => setShowTags(true)}
             onInput={(e) => setSearchQuery(e.target.value)}
           />
         </Col>
+          <Col md={3}>
+              {searchButton &&(
+                  <Button className="search-button" variant="success" onClick={(e) => setShowTags(false)}>Search</Button>)
+              }
+          </Col>
         <Col md={2} style={{ display: "inline-flex", alignItems: "center" }}>
           {!!close && <HiXCircle
             onClick={close}
@@ -34,7 +41,8 @@ const TagSearch = ({ tags, onTagToggle, close, containerStyle }) => {
           })}
       </Row>
       <hr />
-      <Row className="tag-row tag-scroll hide-scroll">
+        {showTags ?
+            (<Row className="tag-row tag-scroll hide-scroll">
         {tags
           .filter(
             (tag) =>
@@ -44,7 +52,7 @@ const TagSearch = ({ tags, onTagToggle, close, containerStyle }) => {
           .map((tag) => {
             return <Tag key={tag.id} tag={tag} toggle={onTagToggle} />;
           })}
-      </Row>
+      </Row>) : null}
     </Container>
   );
 };
