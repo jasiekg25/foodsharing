@@ -96,6 +96,21 @@ class Offer(db.Model):
         db.session.commit()
         return offer.id
 
+    @staticmethod
+    def update_offer(user_id, content):
+        print(content['id'])
+        offer = Offer.query.filter_by(id=content['id']).first()
+        offer.name = content['name']
+        offer.active = content['active']
+        offer.portions_number = content['portions_number']
+        offer.pickup_longitude = content['pickup_longitude']
+        offer.pickup_latitude = content['pickup_latitude']
+        offer.pickup_times = content['pickup_times']
+        offer.offer_expiry = content['offer_expiry']
+        offer.description = content['description']
+        offer.photo = content['photo']
+        db.session.commit()
+
 
     @staticmethod
     def get_all_offers():
