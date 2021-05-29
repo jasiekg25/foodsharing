@@ -11,6 +11,11 @@ from app.api.models.tag import OffersTags, Tag
 offers_current_namespace = Namespace("current_offers")
 
 # doing this add description to Swagger Doc
+tags_fields = {
+    'tag_id': fields.Integer(readOnly=True),
+    'tag_name': fields.String(readOnly=True)
+}
+
 offer = offers_current_namespace.model(
     "Offer",
     {
@@ -29,7 +34,7 @@ offer = offers_current_namespace.model(
         "post_time": fields.DateTime(readOnly=True),
         "pickup_times": fields.String(readOnly=True),
         "offer_expiry": fields.DateTime(readOnly=True),
-        "tags": fields.List(fields.String(readOnly=True))
+        "tags": fields.List(fields.Nested(tags_fields))
     },
 )
 
@@ -52,17 +57,34 @@ class ProfileOffers(Resource):
 
             # deal with tags
             if args['tags_ids'] is None:
-                return [offer.to_search_dict() for offer in offers], 200
+                return [offer.to_dict() for offer in offers], 200
 
             elif args['tags_ids'] is not None:
                 tags_ids = args['tags_ids']
                 offers = filter(lambda offer: any(tag for tag in offer.tags if tag.tag_id in tags_ids), offers)
-                return [offer.to_search_dict() for offer in offers], 200
+                return [offer.to_dict() for offer in offers], 200
 
             # return [offer.to_dict() for offer in offers], 200
         except Exception as e:
             logger.exception("Offers.get(): %s", str(e))
             return "Couldn't load offers", 500
+
+
+    @auth_required
+    @offers_current_namespace.expect(offer)
+    def put(self):
+        """Updates current user profile info"""
+        logger.info("Offers.put() user_id: %s", str(current_user().id))
+        try:
+            user_id = current_user().id
+            content = request.get_json()
+            Offer.update_offer(user_id, content)
+            return 'User offer has been updated', 200
+        except Exception as e:
+            logger.exception("Offers.put(): %s", str(e))
+            return "Couldn't update user's offer", 500
+
+
 
 
 offers_current_namespace.add_resource(ProfileOffers, "")
