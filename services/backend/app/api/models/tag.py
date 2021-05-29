@@ -20,11 +20,8 @@ class OffersTags(db.Model):
         db.session.add(offer_tag)
         db.session.commit()
 
-    #
-    # @staticmethod
-    # def update_offer_tag(offer_id, tag_id):
-    #     try:
-    #         offer_tag = OffersTags.
+
+
 
 class Tag(db.Model):
     __tablename__ = "tag"

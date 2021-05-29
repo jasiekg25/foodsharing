@@ -2,6 +2,7 @@ from datetime import datetime
 
 from sqlalchemy.sql import func
 from app import db
+from .tag import OffersTags
 
 
 class Offer(db.Model):
@@ -112,6 +113,11 @@ class Offer(db.Model):
         offer.offer_expiry = content['offer_expiry']
         offer.description = content['description']
         offer.photo = content['photo']
+
+        OffersTags.query.filter_by(offer_id = content['id']).delete()
+
+        for tag in content.get('tags', []):
+            OffersTags.add_offer_tag(content['id'], tag['tag_id'])
         db.session.commit()
 
 
