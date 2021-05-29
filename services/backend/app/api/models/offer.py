@@ -34,7 +34,10 @@ class Offer(db.Model):
     def to_dict(self):
         data = {
             'id': self.id,
-            'user_name': self.user.username,
+            'user_id': self.user.id,
+            'user_username': self.user.username,
+            'user_name': self.user.name,
+            'user_surname': self.user.surname,
             'name': self.name,
             'active': self.active,
             "description": self.description,
@@ -46,7 +49,7 @@ class Offer(db.Model):
             "post_time": self.post_time,
             "pickup_times": self.pickup_times,
             "offer_expiry": self.offer_expiry,
-            "tags": [offer_tag.tag.tag_name for offer_tag in self.tags]
+            "tags": [offer_tag.tag.to_dict() for offer_tag in self.tags]
         }
 
         return data

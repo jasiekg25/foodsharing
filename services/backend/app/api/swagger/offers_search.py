@@ -64,20 +64,5 @@ class OffersSearch(Resource):
             logger.exception("Offers.get(): %s", str(e))
             return "Couldn't load offers", 500
 
-    @auth_required
-    @offers_search_namespace.expect(offer_search)
-    def put(self):
-        """Updates current user profile info"""
-        logger.info("Offers.put() user_id: %s", str(current_user().id))
-        try:
-            user_id = current_user().id
-            content = request.get_json()
-            Offer.update_offer(user_id, content)
-            return 'User offer has been updated', 200
-        except Exception as e:
-            logger.exception("Offers.put(): %s", str(e))
-            return "Couldn't update user's offer", 500
-
-
 
 offers_search_namespace.add_resource(OffersSearch, "")
