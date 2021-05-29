@@ -7,21 +7,30 @@
 }
 
 .search-container {
+    margin-top: 2%;
     background: white;
     padding: 0;
-    border-radius: 10px;
+    border-radius: 20px;
 }
 
 .search-bar {
     background: rgba(235, 234, 234, 0.42);
-    border-radius: 10px;
+    border-radius: 50px;
     border: none;
     margin: 5%;
     height: 65%;
 }
 
+.search-button{
+    background-color: #016f4a;
+    border-radius: 7px;
+    margin-top: 23%;
+    margin-left: 20%;
+    height: 50%;
+}
+
 .tag-row {
-    padding: 0 8%;
+    padding: 2% 8%;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -36,7 +45,7 @@
 }
 
 .tag-scroll {
-    max-height: 140px;
+    max-height: 8em;
     overflow-y: scroll;
     overflow-x: hidden;
 }
