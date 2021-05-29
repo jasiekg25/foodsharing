@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 mail = Mail()
 
 
+
 def create_app(script_info=None):
 
     # instantiate the app
@@ -38,7 +39,14 @@ def create_app(script_info=None):
     app.logger.addHandler(handler)
     mail.init_app(app)
 
-    from .api.models_old import User
+    from .api.models.client_rating import ClientRating
+    from .api.models.message import Message
+    from .api.models.offer import Offer
+    from .api.models.orders import Orders
+    from .api.models.sharer_rating import SharerRating
+    from .api.models.tag import Tag
+
+    from .api.models.user import User
     guard.init_app(app, User)
 
 

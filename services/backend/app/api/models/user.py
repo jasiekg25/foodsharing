@@ -1,8 +1,5 @@
-# app/api/models_old.py
-
 from sqlalchemy.sql import func
 from app import db, guard
-
 
 class User(db.Model):
     __tablename__ = "user"
@@ -14,7 +11,7 @@ class User(db.Model):
     email = db.Column(db.String(128), nullable=False)
     hashed_password = db.Column(db.String(255), nullable=False)
     password_salt = db.Column(db.String(255), nullable=False)
-    profile_description = db.Column(db.String(255), nullable=True)
+    profile_description = db.Column(db.Text, nullable=True)
     profile_picture = db.Column(db.String(255), nullable=True)
     phone = db.Column(db.String(255), nullable=False)
     localization = db.Column(db.String(255), nullable=True)
@@ -36,8 +33,8 @@ class User(db.Model):
     messages_to = db.relationship('Message', backref='messages_to',
                                   foreign_keys='Message.to_user_id')  # One user as recipient of many Messages
 
-    orders = db.relationship('Order', backref='order_from',
-                             foreign_keys='Order.user_id')  # One user many Orders
+    orders = db.relationship('Orders', backref='order_from',
+                             foreign_keys='Orders.user_id')  # One user many Orders
 
     offers = db.relationship('Offer', backref='user',
                              foreign_keys='Offer.user_id')  # One user many Orders
@@ -144,76 +141,4 @@ class User(db.Model):
         user.active = content['active']
         user.created_date = content['created_date']
         db.session.commit()
-
-
-class ClientRating(db.Model):
-
-    __tablename__ = "client_rating"
-
-    id = db.Column(db.Integer, primary_key=True)
-    from_user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
-                             nullable=False)  # Many ratings from one user
-    to_user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
-                           nullable=False)  # Many ratings to one user
-    date = db.Column('date', db.DateTime, nullable=False, default=func.now)
-    rating = db.Column('rating', db.Float, nullable=False)
-
-    def to_dict(self):
-        data = {
-            'id': self.id,
-            'from': self.from_user_id.username,
-            'author_name': self.to_user_id.username,
-            'date': self.date,
-            'ratting': self.rating
-        }
-        return data
-
-
-
-
-class SharerRating(db.Model):
-    __tablename__ = "sharer_rating"
-
-    id = db.Column(db.Integer, primary_key=True)
-    to_user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
-                           nullable=False)  # Many ratings to one user
-    from_user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
-                             nullable=False)  # Many ratings from one user
-    date = db.Column('date', db.DateTime, nullable=False, default=func.now)
-    rating = db.Column('rating', db.Float, nullable=False)
-
-    def to_dict(self):
-        data = {
-            'id': self.id,
-            'from': self.from_user_id.username,
-            'author_name': self.to_user_id.username,
-            'date': self.date,
-            'ratting': self.rating
-        }
-        return data
-
-
-class Message(db.Model):
-    __tablename__ = "message"
-
-    id = db.Column(db.Integer, primary_key=True)
-    from_user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
-                             nullable=False)  # Many messages from one user
-    to_user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
-                           nullable=False)  # Many masseges to one user
-    offer = db.Column(db.Integer, db.ForeignKey('offer.id'),
-                      nullable=False)  # Many ratings to one rater_user (user)
-    message = db.Column('message', db.String(255), nullable=False)
-    timestamp = db.Column('timestamp', db.DateTime, nullable=False, default=func.now)
-
-    def to_dict(self):
-        data = {
-            'id': self.id,
-            'from': self.from_user_id,
-            'to': self.to_user_id,
-            'message': self.message,
-        }
-        return data
-
-
 

@@ -9,7 +9,7 @@ from dateutil import parser
 from flask.cli import FlaskGroup
 
 from app import create_app, db
-from app.api.models_old import User
+from app.api.models.user import User
 
 app = create_app()
 cli = FlaskGroup(create_app=create_app)
