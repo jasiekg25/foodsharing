@@ -42,7 +42,7 @@ class OffersSearch(Resource):
     @offers_search_namespace.expect(parser)
     @offers_search_namespace.marshal_with(offer_search)
     def get(self):
-        """Returns all offers with user info"""
+        """Returns all offers (except created by me ones) with user info"""
         logger.info("Offers.get()")
         try:
             args = parser.parse_args()

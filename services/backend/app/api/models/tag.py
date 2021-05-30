@@ -21,6 +21,8 @@ class OffersTags(db.Model):
         db.session.commit()
 
 
+
+
 class Tag(db.Model):
     __tablename__ = "tag"
 
@@ -32,7 +34,7 @@ class Tag(db.Model):
 
     def to_dict(self):
         data = {
-            'id': self.id,
+            'tag_id': self.id,
             'tag_name': self.tag_name,
         }
         return data

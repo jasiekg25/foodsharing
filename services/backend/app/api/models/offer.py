@@ -2,6 +2,7 @@ from datetime import datetime
 
 from sqlalchemy.sql import func
 from app import db
+from .tag import OffersTags
 
 
 class Offer(db.Model):
@@ -34,7 +35,10 @@ class Offer(db.Model):
     def to_dict(self):
         data = {
             'id': self.id,
-            'user_name': self.user.username,
+            'user_id': self.user.id,
+            'user_username': self.user.username,
+            'user_name': self.user.name,
+            'user_surname': self.user.surname,
             'name': self.name,
             'active': self.active,
             "description": self.description,
@@ -46,7 +50,7 @@ class Offer(db.Model):
             "post_time": self.post_time,
             "pickup_times": self.pickup_times,
             "offer_expiry": self.offer_expiry,
-            "tags": [offer_tag.tag.tag_name for offer_tag in self.tags]
+            "tags": [offer_tag.tag.to_dict() for offer_tag in self.tags]
         }
 
         return data
@@ -95,6 +99,26 @@ class Offer(db.Model):
         db.session.add(offer)
         db.session.commit()
         return offer.id
+
+    @staticmethod
+    def update_offer(user_id, content):
+        print(content['id'])
+        offer = Offer.query.filter_by(id=content['id']).first()
+        offer.name = content['name']
+        offer.active = content['active']
+        offer.portions_number = content['portions_number']
+        offer.pickup_longitude = content['pickup_longitude']
+        offer.pickup_latitude = content['pickup_latitude']
+        offer.pickup_times = content['pickup_times']
+        offer.offer_expiry = content['offer_expiry']
+        offer.description = content['description']
+        offer.photo = content['photo']
+
+        OffersTags.query.filter_by(offer_id = content['id']).delete()
+
+        for tag in content.get('tags', []):
+            OffersTags.add_offer_tag(content['id'], tag['tag_id'])
+        db.session.commit()
 
 
     @staticmethod

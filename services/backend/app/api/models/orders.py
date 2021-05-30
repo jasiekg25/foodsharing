@@ -39,7 +39,8 @@ class Orders(db.Model):
             offer_id=offer_id,
             time=time,
             portions=portions,
-            accepted=False
+            is_canceled=False,
+            is_picked=False
         )
         db.session.add(order)
         db.session.commit()
