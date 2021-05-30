@@ -82,7 +82,6 @@ function Offers() {
             return (
                 <div key={offer.id}>
                     <Row className="offers-container">
-                        <Col md={4}>
                             <Card className="offer-card">
                                 <Card.Body>
                                     <Card.Title>{offer.name}</Card.Title>
@@ -126,7 +125,6 @@ function Offers() {
                                     </Modal>
                                 </Card.Body>
                             </Card>
-                        </Col>
                     </Row>
                 </div>
             )
