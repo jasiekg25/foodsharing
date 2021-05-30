@@ -9,19 +9,18 @@ import { Button, Form } from "react-bootstrap";
 import api from '../api.js';
 import DatePicker from "react-date-picker";
 import TagSearch from "./tags/TagSearch";
+import Map from "./Map";
 
-const text_inputs = [
-  {
+const name = {
     name: "name",
     label: "Title",
     type: "text",
-  },
-  {
+}
+
+const pickup_localozation = {
     name: "pickup_localization",
     label: "Pickup Localization",
-    type: "text",
-  },
-];
+}
 
 const pickup_times = {
     name: "pickup_times",
@@ -54,9 +53,6 @@ const schema = yup.object().shape({
     portions_number: yup
         .number()
         .moreThan(0, "Portions number must positive value"),
-    pickup_localization: yup
-        .string()
-        .required("Localization is required"),
     pickup_times: yup
         .string()
         .required("Pick-up Times are required")
@@ -66,11 +62,12 @@ const redirectToMainPage= (mealClosed) => {
     mealClosed(true);
 }
 
-const handleAddMealSubmit = (data, expireDate, mealAdded, tags) => {
-    console.log(tags);
+const handleAddMealSubmit = (data, expireDate, mealAdded, tags, coordinates) => {
     expireDate.setHours(23, 59, 59);
     data['offer_expiry'] = expireDate.toLocaleString('en-US');
     data['tags'] = tags.filter(tag => tag.selected).map(tag => tag.id)
+    data['latitude'] = coordinates.lat;
+    data['longitude'] = coordinates.lng;
 
     api
       .postOffers(data)
@@ -98,6 +95,10 @@ const AddMeal = ({isLoggedIn}) => {
     const [isMealAdded, isMealAddedChange] = useState(false);
     const [isMealClosed, isMealClosedChange] = useState(false);
     const [tags, setTags] = useState([]);
+    const [coordinates, setCoordinates] = useState({
+        lat: 50.06143,
+        lng: 19.93658,
+      });
 
     const onTagToggle = (tag) => {
         const index = tags.findIndex((el) => el.id === tag.id);
@@ -131,21 +132,17 @@ const AddMeal = ({isLoggedIn}) => {
 
     return (
         <div className="form-container form-group">
-            <form onSubmit={handleSubmit((data) => handleAddMealSubmit(data, expireDate, isMealAddedChange, tags))}>
+            <form onSubmit={handleSubmit((data) => handleAddMealSubmit(data, expireDate, isMealAddedChange, tags, coordinates))}>
 
             <Form.Label className="login-title">Add meal</Form.Label>
 
-            {text_inputs.map((input, key) => {
-                return (
-                <Row key={key} className="field-content form-group">
-                    <Form.Label className="label-field">{input.label}</Form.Label>
-                    <Form.Control size="lg" className="field-control" {...register(input.name)} type={input.type} />
-                    {errors[input.name] && (
-                    <p className="error login-error">{errors[input.name].message}</p>
-                    )}
-                </Row>
-                );
-            })}
+            <Row className="field-content form-group">
+                <Form.Label className="label-field">{name.label}</Form.Label>
+                <Form.Control size="lg" className="field-control" {...register(name.name)} type={name.type} />
+                {errors[name.name] && (
+                <p className="error login-error">{errors[name.name].message}</p>
+                )}
+            </Row>
             
             <Row className="field-content form-group">
                 <Form.Label className="label-field">{portion_input.label}</Form.Label>
@@ -157,6 +154,10 @@ const AddMeal = ({isLoggedIn}) => {
                 <Form.Text as={description.type} className="textarea-control" {...register(description.name)}>
                 </Form.Text>
             </div>
+
+            <Row className="field-content form-group">
+                <Map center={coordinates} setCenter={setCoordinates} className="map-control"/>
+            </Row>
 
             <div className="field-content form-group">
                 <Form.Label className="label-field">{pickup_times.label}</Form.Label>

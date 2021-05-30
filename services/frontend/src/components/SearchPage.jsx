@@ -9,6 +9,10 @@ import Map from "./Map"
 
 const SearchPage = ({ isLoggedIn }) => {
   const [tags, setTags] = useState([]);
+  const [center,  setCenter] =  useState({
+    lat: 50.06143,
+    lng: 19.93658,
+  });
 
   useEffect(() => {
     api.getTags()
@@ -60,7 +64,7 @@ const SearchPage = ({ isLoggedIn }) => {
           <Offers />
         </Col>
         <Col md={6}>
-          <Map />
+          <Map center={center} setCenter={setCenter}/>
         </Col>
       </Row>
     </div>

@@ -70,12 +70,12 @@ class Offers(Resource):
             content = request.get_json()
             user_id = current_user().id
 
-            for parameter in ['name', 'portions_number', 'pickup_localization', 'pickup_times', 'offer_expiry']:
+            for parameter in ['name', 'portions_number', 'longitude', 'latitude', 'pickup_times', 'offer_expiry']:
                 if parameter not in content:
                     return f"{parameter} missing in request", 400
 
             offer_id = Offer.add_offer(user_id, content['name'], True, content['portions_number'], 0,
-                                       content['pickup_localization'], datetime.now(),
+                                       content['longitude'], content['latitude'], datetime.now(),
                                        content['pickup_times'], content['offer_expiry'],
                                        content.get('description', None), content.get('photo', None))
 
