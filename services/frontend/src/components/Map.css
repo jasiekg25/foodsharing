@@ -1,0 +1,13 @@
+.search {
+    position: absolute;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 75%;
+    max-width: 400px;
+    z-index: 10;
+  }
+
+.map {
+  border-radius: 15px;
+}

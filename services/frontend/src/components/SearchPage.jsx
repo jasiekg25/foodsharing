@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import TagSearch from "./tags/TagSearch";
-import { Row, Container, Button } from "react-bootstrap";
+import { Row, Container, Button, Col } from "react-bootstrap";
 import Tag from "./tags/Tag";
 import Offers from "./Offers";
 import {Redirect} from "react-router-dom";
 import api from "../api";
+import Map from "./Map"
 
 const SearchPage = ({ isLoggedIn }) => {
   const [tags, setTags] = useState([]);
@@ -54,7 +55,14 @@ const SearchPage = ({ isLoggedIn }) => {
         />
       }
 
-      <Offers />
+      <Row>
+        <Col>
+          <Offers />
+        </Col>
+        <Col md={6}>
+          <Map />
+        </Col>
+      </Row>
     </div>
   );
 };
