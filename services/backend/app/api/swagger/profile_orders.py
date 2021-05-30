@@ -6,7 +6,7 @@ from flask_praetorian import current_user, auth_required
 
 from app import logger
 from app.api.models.offer import Offer
-from app.api.models.order import Order
+from app.api.models.orders import Orders
 
 profile_orders_namespace = Namespace("profile_orders")
 offers_namespace = Namespace("offers")
@@ -24,7 +24,8 @@ order = profile_orders_namespace.model(
         "offer_description": fields.String(readOnly=True),
         "offer_name": fields.String(readOnly=True),
         "portions": fields.Integer(readOnly=True),
-        "accepted": fields.Boolean(readOnly=True),
+        "is_canceled": fields.Boolean(readOnly=True),
+        "is_picked": fields.Boolean(readOnly=True),
         "offer_photo": fields.String(readOnly=True),
     },
 )
@@ -42,7 +43,7 @@ offer = offers_namespace.model(
 )
 
 
-class Orders(Resource):
+class OrdersNamespace(Resource):
     @auth_required
     @profile_orders_namespace.marshal_with(order)
     def get(self):
@@ -50,7 +51,7 @@ class Orders(Resource):
         logger.info("Orders.get()")
         try:
             user_id = current_user().id
-            orders =  Order.get_orders_of_user(user_id=user_id)
+            orders =  Orders.get_orders_of_user(user_id=user_id)
 
 
             return [order.to_dict() for order in orders], 200
@@ -60,4 +61,4 @@ class Orders(Resource):
 
 
 
-profile_orders_namespace.add_resource(Orders, "")
+profile_orders_namespace.add_resource(OrdersNamespace, "")

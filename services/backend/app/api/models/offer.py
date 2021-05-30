@@ -16,7 +16,8 @@ class Offer(db.Model):
     photo = db.Column('photo', db.String(255), nullable=True)
     portions_number = db.Column('portions_number', db.Integer, nullable=False)
     used_portions = db.Column('used_portions', db.Integer, nullable=False)
-    pickup_localization = db.Column('pickup_localization', db.String(255), nullable=False)
+    pickup_longitude = db.Column('pickup_longitude', db.Float, nullable=False)
+    pickup_latitude = db.Column('pickup_latitude', db.Float, nullable=False)
     post_time = db.Column('post_time', db.DateTime, nullable=False, default=func.now)
     pickup_times = db.Column('pickup_times', db.String(255), nullable=False)
     offer_expiry = db.Column('offer_expiry', db.DateTime, nullable=False)
@@ -24,8 +25,8 @@ class Offer(db.Model):
     messages = db.relationship('Message', backref='offers_messages',
                                foreign_keys='Message.offer')  # One offer to many Messages
 
-    orders = db.relationship('Order', backref='offers_orders',
-                             foreign_keys='Order.offer_id')  # One offer to many Orders
+    orders = db.relationship('Orders', backref='offers_orders',
+                             foreign_keys='Orders.offer_id')  # One offer to many Orders
 
     tags = db.relationship('OffersTags', back_populates='offer')
 
@@ -40,7 +41,8 @@ class Offer(db.Model):
             "photo": self.photo,
             "portions_number": self.portions_number,
             "used_portions": self.used_portions,
-            "pickup_localization": self.pickup_localization,
+            "pickup_latitude": self.pickup_latitude,
+            "pickup_longitude": self.pickup_longitude,
             "post_time": self.post_time,
             "pickup_times": self.pickup_times,
             "offer_expiry": self.offer_expiry,
@@ -62,7 +64,8 @@ class Offer(db.Model):
             "photo": self.photo,
             "portions_number": self.portions_number,
             "used_portions": self.used_portions,
-            "pickup_localization": self.pickup_localization,
+            "pickup_latitude": self.pickup_latitude,
+            "pickup_longitude": self.pickup_longitude,
             "post_time": self.post_time,
             "pickup_times": self.pickup_times,
             "offer_expiry": self.offer_expiry,
@@ -72,7 +75,7 @@ class Offer(db.Model):
         return data
 
     @staticmethod
-    def add_offer(user_id, name, active, portions_number, used_portions, pickup_localization, post_time,
+    def add_offer(user_id, name, active, portions_number, used_portions, pickup_long, pickup_lat, post_time,
                   pickup_times,
                   offer_expiry, description=None, photo=None):
         offer = Offer(
@@ -81,7 +84,8 @@ class Offer(db.Model):
             active=active,
             portions_number=portions_number,
             used_portions=used_portions,
-            pickup_localization=pickup_localization,
+            pickup_longitude=pickup_long,
+            pickup_latitude=pickup_lat,
             post_time=post_time,
             pickup_times=pickup_times,
             offer_expiry=offer_expiry,

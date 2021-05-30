@@ -2,8 +2,8 @@ from app import db
 from sqlalchemy import desc
 
 
-class Order(db.Model):
-    __tablename__ = "order"
+class Orders(db.Model):
+    __tablename__ = "orders"
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
@@ -12,7 +12,8 @@ class Order(db.Model):
                          nullable=False)  # Many orders to one offer
     time = db.Column('timestamp', db.DateTime, nullable=False)
     portions = db.Column('portions_number', db.Integer, nullable=False)
-    accepted = db.Column('accepted', db.Boolean, nullable=False)
+    is_canceled = db.Column('is_canceled', db.Boolean, nullable=False)
+    is_picked = db.Column('is_picked', db.Boolean, nullable=False)
 
     def to_dict(self):
         data = {
@@ -25,14 +26,15 @@ class Order(db.Model):
             'offer_description': self.offers_orders.description,
             'offer_name': self.offers_orders.name,
             'portions': self.portions,
-            'accepted': self.accepted,
+            'is_canceled': self.is_canceled,
+            'is_picked': self.is_picked,
             'offer_photo': self.offers_orders.photo
         }
         return data
 
     @staticmethod
     def add_order(user_id, offer_id, time, portions):
-        order = Order(
+        order = Orders(
             user_id=user_id,
             offer_id=offer_id,
             time=time,
@@ -44,9 +46,9 @@ class Order(db.Model):
 
     @staticmethod
     def get_all_orders():
-        return Order.query.all()
+        return Orders.query.all()
 
     @staticmethod
     def get_orders_of_user(user_id):
-        return Order.query.filter_by(user_id=user_id).order_by(desc(Order.accepted))
+        return Orders.query.filter_by(user_id=user_id).order_by(Orders.is_canceled, Orders.is_picked)
 
