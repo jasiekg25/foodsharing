@@ -3,10 +3,14 @@ from datetime import datetime
 from flask import request
 from flask_restx import Resource, fields, Namespace, reqparse
 from flask_praetorian import current_user, auth_required
+from flask_mail import Message
+import jinja2
 
-from app import logger
+
+from app import logger, mail
 from app.api.models.offer import Offer
 from app.api.models.orders import Orders
+from app.api.models.user import User
 
 orders_namespace = Namespace("orders")
 offers_namespace = Namespace("offers")
@@ -79,6 +83,33 @@ class OrdersNamespace(Resource):
             Offer.update_used_portions(content['offer_id'], new_order_portion)
 
             Orders.add_order(user_id, content['offer_id'], datetime.now(), content['portions'])
+            
+            try:
+                offer = Offer.query.filter_by(id=content['offer_id']).first()
+                author = User.query.filter_by(id=offer.user_id).first()
+                
+                with open('./templates/order_notification.html') as file:
+                    template = file.read()
+
+                data = {
+                    'offer_name': offer.name.title(), 
+                    'portions': content['portions'],
+                    'author': author.name.title(),
+                    'order_url': 'http://localhost:3007/' # TODO put real url for chat
+                }
+                
+                logger.info(data)
+                jinja_tmpl = jinja2.Template(template)
+                message = jinja_tmpl.render(data).strip()
+                
+                msg = Message(
+                    subject="New Order",
+                    html=message,
+                    recipients=[author.email]
+                )
+                mail.send(msg)
+            except Exception as e:
+                logger.exception("Order Email Notification: %s", str(e))
 
             return "Order placed", 201
 
