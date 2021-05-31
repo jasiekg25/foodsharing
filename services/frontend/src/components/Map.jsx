@@ -26,14 +26,9 @@ const options = {
   zoomControl: true,
 };
 
-const Map = () => {
+const Map = ({center,  setCenter}) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
-  });
-
-  const [center, setCenter] = useState({
-    lat: 50.06143,
-    lng: 19.93658,
   });
 
   useEffect(() => {
