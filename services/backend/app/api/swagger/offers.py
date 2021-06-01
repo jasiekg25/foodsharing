@@ -1,10 +1,10 @@
+import json
 from datetime import datetime
 
 from flask import request, Response
 from flask_restx import Resource, fields, Namespace, reqparse, inputs
 from flask_praetorian import current_user, auth_required
-
-from app import logger
+from app import logger, cloudinary_uploader
 from app.api.models.offer import Offer
 from app.api.models.tag import OffersTags, Tag
 
@@ -67,8 +67,10 @@ class Offers(Resource):
         """Add a new offer"""
         logger.info("Offers.post() request_body: %s", str(request.get_json()))
         try:
-            content = request.get_json()
+            content = json.loads(request.form['data'])
             user_id = current_user().id
+            photo = request.files['photo']
+            photo_url = cloudinary_uploader.upload(photo)['url'] if photo else None
 
             for parameter in ['name', 'portions_number', 'longitude', 'latitude', 'pickup_times', 'offer_expiry']:
                 if parameter not in content:
@@ -77,7 +79,7 @@ class Offers(Resource):
             offer_id = Offer.add_offer(user_id, content['name'], True, content['portions_number'], 0,
                                        content['longitude'], content['latitude'], datetime.now(),
                                        content['pickup_times'], content['offer_expiry'],
-                                       content.get('description', None), content.get('photo', None))
+                                       content.get('description', None), photo_url)
 
             for tag_id in content.get('tags', []):
                 OffersTags.add_offer_tag(offer_id, tag_id)
