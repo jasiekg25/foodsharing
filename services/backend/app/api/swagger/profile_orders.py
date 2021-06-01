@@ -59,6 +59,19 @@ class OrdersNamespace(Resource):
             logger.exception("Orders.get(): %s", str(e))
             return "Couldn't load orders", 500
 
+    @auth_required
+    @profile_orders_namespace.expect(order)
+    def put(self):
+        """Updates current user order"""
+        logger.info("Orders.put() user_id: %s", str(current_user().id))
+        try:
+            content = request.get_json()
+            Orders.update_order(content)
+            return 'User order has been updated', 200
+        except Exception as e:
+            logger.exception("Order.put(): %s", str(e))
+            return "Couldn't update user's order", 500
+
 
 
 profile_orders_namespace.add_resource(OrdersNamespace, "")

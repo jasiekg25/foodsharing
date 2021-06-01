@@ -46,6 +46,17 @@ class Orders(db.Model):
         db.session.commit()
 
     @staticmethod
+    def update_order(content):
+        order = Orders.query.filter_by(id=content['id']).first()
+        order.offer_id = content['offer_id']
+        order.portions=content['portions']
+        order.is_canceled=content['is_canceled']
+        order.is_picked=content['is_picked']
+
+        db.session.commit()
+
+
+    @staticmethod
     def get_all_orders():
         return Orders.query.all()
 
