@@ -101,8 +101,7 @@ class Offer(db.Model):
         return offer.id
 
     @staticmethod
-    def update_offer(user_id, content):
-        print(content['id'])
+    def update_offer(content):
         offer = Offer.query.filter_by(id=content['id']).first()
         offer.name = content['name']
         offer.active = content['active']

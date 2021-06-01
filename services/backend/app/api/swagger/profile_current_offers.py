@@ -73,12 +73,11 @@ class ProfileOffers(Resource):
     @auth_required
     @offers_current_namespace.expect(offer)
     def put(self):
-        """Updates current user profile info"""
+        """Updates current user offer"""
         logger.info("Offers.put() user_id: %s", str(current_user().id))
         try:
-            user_id = current_user().id
             content = request.get_json()
-            Offer.update_offer(user_id, content)
+            Offer.update_offer(content)
             return 'User offer has been updated', 200
         except Exception as e:
             logger.exception("Offers.put(): %s", str(e))
