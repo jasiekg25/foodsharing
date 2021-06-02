@@ -50,7 +50,6 @@ class Offer(db.Model):
             "post_time": self.post_time,
             "pickup_times": self.pickup_times,
             "offer_expiry": self.offer_expiry,
-            "photo_url": self.photo,
             "tags": [offer_tag.tag.to_dict() for offer_tag in self.tags]
         }
 
@@ -74,7 +73,6 @@ class Offer(db.Model):
             "post_time": self.post_time,
             "pickup_times": self.pickup_times,
             "offer_expiry": self.offer_expiry,
-            "photo_url": self.photo,
             "tags": [offer_tag.tag.tag_name for offer_tag in self.tags]
         }
 
