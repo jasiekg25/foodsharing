@@ -10,6 +10,8 @@ import api from '../api.js';
 import DatePicker from "react-date-picker";
 import TagSearch from "./tags/TagSearch";
 import Map from "./Map";
+import FileUplader from './fileUplader/FileUplader';
+import Dropzone from 'react-dropzone'
 
 const name = {
     name: "name",
@@ -62,15 +64,20 @@ const redirectToMainPage= (mealClosed) => {
     mealClosed(true);
 }
 
-const handleAddMealSubmit = (data, expireDate, mealAdded, tags, coordinates) => {
+const handleAddMealSubmit = (data, expireDate, mealAdded, tags, coordinates, photo) => {
+    console.log(photo);
+    const formData = new FormData()
+    formData.append('photo', photo)
     expireDate.setHours(23, 59, 59);
     data['offer_expiry'] = expireDate.toLocaleString('en-US');
     data['tags'] = tags.filter(tag => tag.selected).map(tag => tag.id)
     data['latitude'] = coordinates.lat;
     data['longitude'] = coordinates.lng;
 
+    formData.append('data', JSON.stringify(data))
+
     api
-      .postOffers(data)
+      .postOffers(formData)
       .then((res) => {
           console.log(res)
         mealAdded(true);
@@ -82,6 +89,8 @@ const handleAddMealSubmit = (data, expireDate, mealAdded, tags, coordinates) => 
       });
   };
 
+
+
 const AddMeal = ({isLoggedIn}) => {
     const {
         register,
@@ -91,6 +100,7 @@ const AddMeal = ({isLoggedIn}) => {
         resolver: yupResolver(schema),
     });
 
+    const [file, setFile] = useState('');
     const [expireDate, expireDateChange] = useState(new Date());
     const [isMealAdded, isMealAddedChange] = useState(false);
     const [isMealClosed, isMealClosedChange] = useState(false);
@@ -132,7 +142,7 @@ const AddMeal = ({isLoggedIn}) => {
 
     return (
         <div className="form-container form-group">
-            <form onSubmit={handleSubmit((data) => handleAddMealSubmit(data, expireDate, isMealAddedChange, tags, coordinates))}>
+            <form onSubmit={handleSubmit((data) => handleAddMealSubmit(data, expireDate, isMealAddedChange, tags, coordinates, file))}>
 
             <Form.Label className="login-title">Add meal</Form.Label>
 
@@ -148,6 +158,20 @@ const AddMeal = ({isLoggedIn}) => {
                 <Form.Label className="label-field">{portion_input.label}</Form.Label>
                 <Form.Control size="lg" className="field-control" {...register(portion_input.name)} type={portion_input.type} defaultValue='1'/>
             </Row>
+
+            <div className="field-content form-group">
+                {/* <Dropzone onDrop={acceptedFiles => console.log(acceptedFiles)}>
+                    {({getRootProps, getInputProps}) => (
+                        <section>
+                        <div {...getRootProps()}>
+                            <input {...getInputProps()} type="file" onChange={fileChangedHandler}/>
+                            <p>Drag 'n' drop some files here, or click to select files</p>
+                        </div>
+                        </section>
+                    )}
+                </Dropzone> */}
+                <FileUplader file={file} setFile={setFile}/>
+            </div>
 
             <div className="field-content form-group">
                 <Form.Label className="label-field">{description.label}</Form.Label>

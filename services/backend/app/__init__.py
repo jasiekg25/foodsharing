@@ -9,6 +9,8 @@ from flask_praetorian import Praetorian
 import logging
 from logging.handlers import RotatingFileHandler
 from flask_mail import Mail
+import cloudinary
+import cloudinary.uploader as cloudinary_uploader
 
 
 # instantiate the extensions
@@ -18,6 +20,11 @@ guard = Praetorian()
 logger = logging.getLogger(__name__)
 mail = Mail()
 
+cloudinary = cloudinary.config(
+    cloud_name=os.environ['CLOUDINARY_CLOUD_NAME'],
+    api_key=os.environ['CLOUDINARY_API_KEY'],
+    api_secret=os.environ['CLOUDINARY_API_SECRET']
+)
 
 
 def create_app(script_info=None):
