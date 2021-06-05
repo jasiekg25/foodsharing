@@ -69,7 +69,7 @@ class Offers(Resource):
         try:
             content = json.loads(request.form['data'])
             user_id = current_user().id
-            photo = request.files['photo']
+            photo = request.files.get('photo', None)
             photo_url = cloudinary_uploader.upload(photo)['url'] if photo else None
 
             for parameter in ['name', 'portions_number', 'longitude', 'latitude', 'pickup_times', 'offer_expiry']:
