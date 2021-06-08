@@ -21,7 +21,7 @@ const schema = yup.object().shape({
         .moreThan(0, "Portions number has to be greater than 0."),
 });
 
-function Offers() {
+function Offers({offers, getOffers, onOfferSelect}) {
     const {
         register,
         handleSubmit,
@@ -31,23 +31,8 @@ function Offers() {
         resolver: yupResolver(schema),
     });
 
-    const [offers, setOffers] = useState([]);
     const [chosenOffer, setChosenOffer] = useState({})
     const [showModal, setShowModal] = useState(false);
-
-    useEffect(() => {
-        getOffers();
-    }, [])
-
-    const getOffers = () => {
-        api.getOffers()
-            .then((res) => {
-                setOffers(res.data);
-            })
-            .catch((err) => {
-                console.log("Could not get any offers " + err.message);
-            })
-    }
 
     const handleClose = () => {
         reset();
@@ -80,7 +65,8 @@ function Offers() {
     return (
         offers.map((offer) => {
             return (
-                <div key={offer.id}>
+                <div key={offer.id} onClick={() => {
+                    onOfferSelect(offer)}}>
                     <Row className="offers-container">
                             <Card className="offer-card">
                                 <Card.Body>
