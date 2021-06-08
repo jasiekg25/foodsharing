@@ -68,6 +68,9 @@ const api = {
   getUserCurrentOffers: () => {
     return axios.get(`${baseUrl}/current_offers`)
   },
+  putUserCurrentOffers: (body) => {
+    return axios.put(`${baseUrl}/current_offers`, body)
+  },
   postOffers: (body) => {
     return axios.post(`${baseUrl}/offers`, body);
   },
