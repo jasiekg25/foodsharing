@@ -33,33 +33,30 @@ offer_search = offers_search_namespace.model(
     },
 )
 
-parser = reqparse.RequestParser()
-parser.add_argument("tags_ids", type=int, required=False, action='split')
-
 
 class OffersSearch(Resource):
     @auth_required
-    @offers_search_namespace.expect(parser)
     @offers_search_namespace.marshal_with(offer_search)
     def get(self):
         """Returns all offers (except created by me ones) with user info"""
         logger.info("Offers.get()")
         try:
-            args = parser.parse_args()
-
+            content = request.get_json()
             user_id = current_user().id
+
+            # get all offers except mine
             offers = Offer.get_all_active_offers_except_mine(user_id=user_id)
 
             # deal with tags
-            if args['tags_ids'] is None:
-                return [offer.to_search_dict()  for offer in offers], 200
+            tagged_offers = Offer.check_tags(offers, content.get('tags_ids', []))
 
-            elif args['tags_ids'] is not None:
-                tags_ids = args['tags_ids']
-                offers = filter(lambda offer: any(tag for tag in offer.tags if tag.tag_id in tags_ids), offers)
-                return [offer.to_search_dict()  for offer in offers], 200
+            # sort with localization
+            sorted_offers = Offer.sort_by_distance_from_user(tagged_offers, content['lon'], content['lat'])
 
-            # return [offer.to_dict() for offer in offers], 200
+            # pagination
+            paginated_offers = sorted_offers.paginate(page=content['page'], per_page=2, error_out=True)
+
+            return [offer.to_search_dict()  for offer in paginated_offers.items], 200
         except Exception as e:
             logger.exception("Offers.get(): %s", str(e))
             return "Couldn't load offers", 500
