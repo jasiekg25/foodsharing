@@ -49,12 +49,11 @@ class OffersSearch(Resource):
 
             # deal with tags
             tagged_offers = Offer.check_tags(offers, content.get('tags_ids', []))
-
             # sort with localization
             sorted_offers = Offer.sort_by_distance_from_user(tagged_offers, content['lon'], content['lat'])
 
             # pagination
-            paginated_offers = sorted_offers.paginate(page=content['page'], per_page=2, error_out=True)
+            paginated_offers = sorted_offers.paginate(page=content['page'], per_page=2)
 
             return [offer.to_search_dict()  for offer in paginated_offers.items], 200
         except Exception as e:

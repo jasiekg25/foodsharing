@@ -1,9 +1,10 @@
+import math
 from datetime import datetime
-from geopy import distance
+from sqlalchemy.dialects.postgresql import array_agg
 
 from sqlalchemy.sql import func
 from app import db
-from .tag import OffersTags
+from .tag import OffersTags, Tag
 
 
 class Offer(db.Model):
@@ -31,7 +32,6 @@ class Offer(db.Model):
                              foreign_keys='Orders.offer_id')  # One offer to many Orders
 
     tags = db.relationship('OffersTags', back_populates='offer')
-
 
     def to_dict(self):
         data = {
@@ -114,12 +114,11 @@ class Offer(db.Model):
         offer.description = content['description']
         offer.photo = content['photo']
 
-        OffersTags.query.filter_by(offer_id = content['id']).delete()
+        OffersTags.query.filter_by(offer_id=content['id']).delete()
 
         for tag in content.get('tags', []):
             OffersTags.add_offer_tag(content['id'], tag['tag_id'])
         db.session.commit()
-
 
     @staticmethod
     def get_all_offers():
@@ -127,10 +126,9 @@ class Offer(db.Model):
 
     @staticmethod
     def get_active_offers():
-        return Offer.query.filter_by(active=True)\
-                .filter(Offer.used_portions < Offer.portions_number)\
-                .filter(Offer.offer_expiry >= datetime.now())
-
+        return Offer.query.filter_by(active=True) \
+            .filter(Offer.used_portions < Offer.portions_number) \
+            .filter(Offer.offer_expiry >= datetime.now())
 
     @staticmethod
     def update_used_portions(offer_id, new_order_portions):
@@ -143,16 +141,16 @@ class Offer(db.Model):
 
     @staticmethod
     def get_current_offers_of_user(user_id):
-       return Offer.query.filter_by(user_id=user_id) \
-        .filter(Offer.active==True) \
-        .filter(Offer.used_portions < Offer.portions_number) \
-        .filter(Offer.offer_expiry >= datetime.now())
+        return Offer.query.filter_by(user_id=user_id) \
+            .filter(Offer.active == True) \
+            .filter(Offer.used_portions < Offer.portions_number) \
+            .filter(Offer.offer_expiry >= datetime.now())
 
     @staticmethod
     def get_all_active_offers_except_mine(user_id):
-        return Offer.query.filter_by(active=True)\
-            .filter(Offer.user_id != user_id)\
-            .filter(Offer.used_portions < Offer.portions_number)\
+        return Offer.query.filter_by(active=True) \
+            .filter(Offer.user_id != user_id) \
+            .filter(Offer.used_portions < Offer.portions_number) \
             .filter(Offer.offer_expiry >= datetime.now())
 
     @staticmethod
@@ -162,16 +160,21 @@ class Offer(db.Model):
         elif not tags_ids:
             return offers
         elif tags_ids is not None:
-            tagged_offers = \
-                filter(lambda offer: ## number of tags in requst must be equal to number of tags (which are also in tags_ids) in offer
-                       len(list((tag for tag in offer.tags if tag.tag_id in tags_ids))) == len(tags_ids), offers)
-            return tagged_offers
+            return offers\
+                .join(OffersTags)\
+                .filter(OffersTags.tag_id.in_(tags_ids))\
+                .group_by(Offer.id)\
+                .having(array_agg(OffersTags.tag_id).contains(tags_ids))
+
 
     @staticmethod
     def sort_by_distance_from_user(offers, user_lon, user_lat):
-        user_localization = (user_lat, user_lon)
-        result = sorted(offers, key=lambda offer: distance.distance(user_localization, (offer.pickup_latitude, offer.pickup_longitude)).km)
-        return result
-
-
+        return offers.order_by(
+            (func.degrees(
+                func.acos(
+                    func.sin(func.radians(user_lat)) * func.sin(func.radians(Offer.pickup_latitude)) +
+                    func.cos(func.radians(user_lat)) * func.cos(func.radians(Offer.pickup_latitude)) *
+                    func.cos(func.radians(user_lon-Offer.pickup_longitude))
+                )
+            ) * 60 * 1.1515 * 1.609344))
 
