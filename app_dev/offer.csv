@@ -1,6 +1,6 @@
 id,user_id,name,active,description,photo,portions_number,used_portions,pickup_longitude,pickup_latitude,post_time,pickup_times,offer_expiry
-100,5,kotlet,TRUE,"Kotlet od babci Haliny, najlepszy na mieście",null,10,4,19.94,50.06,'2020-10-19 10:23:54',Wieczorami,'2021-10-19 10:23:54'
-101,5,sałatka,TRUE,"Sałatka warzywna, idealna na imieniny I grila",null,15,3,20.05,51.02,'2020-10-19 10:23:54',W samo południe,'2021-10-19 10:23:54'
-102,6,pierogi,TRUE,"Domowe z podlasia, z borówkami",null,22,5,21.15,49.98,'2020-10-19 10:23:54',dzisiaj godz 20,'2021-10-19 10:23:54'
-103,7,polski obiag,TRUE,Kotlet + Ziemniaczki + Modra Kapusta,null,20,4,19.7,47.6,'2020-10-19 10:23:54',jutro wieczorem,'2021-10-19 10:23:54'
-104,8,pierogi z miesem,TRUE,,null,10,3,19.5,50.0689,'2020-10-19 10:23:54',Miedzy 7 a 15,'2021-10-19 10:23:54'
+100,5,kotlet,TRUE,"Kotlet od babci Haliny, najlepszy na mieście",,10,4,19.94,50.06,'2020-10-19 10:23:54',Wieczorami,'2021-10-19 10:23:54'
+101,5,sałatka,TRUE,"Sałatka warzywna, idealna na imieniny I grila",,15,3,20.05,51.02,'2020-10-19 10:23:54',W samo południe,'2021-10-19 10:23:54'
+102,6,pierogi,TRUE,"Domowe z podlasia, z borówkami",,22,5,21.15,49.98,'2020-10-19 10:23:54',dzisiaj godz 20,'2021-10-19 10:23:54'
+103,7,polski obiag,TRUE,Kotlet + Ziemniaczki + Modra Kapusta,,20,4,19.7,47.6,'2020-10-19 10:23:54',jutro wieczorem,'2021-10-19 10:23:54'
+104,8,pierogi z miesem,TRUE,,,10,3,19.5,50.0689,'2020-10-19 10:23:54',Miedzy 7 a 15,'2021-10-19 10:23:54'
