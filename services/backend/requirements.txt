@@ -10,3 +10,4 @@ python-dateutil>=2.8.1
 flask-praetorian>=1.1.0
 Flask-Mail>=0.9.1
 cloudinary>=1.25.0
+geopy>=2.1.0
