@@ -1,4 +1,5 @@
 from datetime import datetime
+from geopy import distance
 
 from sqlalchemy.sql import func
 from app import db
@@ -154,6 +155,23 @@ class Offer(db.Model):
             .filter(Offer.used_portions < Offer.portions_number)\
             .filter(Offer.offer_expiry >= datetime.now())
 
+    @staticmethod
+    def check_tags(offers, tags_ids):
+        if tags_ids is None:
+            return offers
+        elif not tags_ids:
+            return offers
+        elif tags_ids is not None:
+            tagged_offers = \
+                filter(lambda offer: ## number of tags in requst must be equal to number of tags (which are also in tags_ids) in offer
+                       len(list((tag for tag in offer.tags if tag.tag_id in tags_ids))) == len(tags_ids), offers)
+            return tagged_offers
+
+    @staticmethod
+    def sort_by_distance_from_user(offers, user_lon, user_lat):
+        user_localization = (user_lat, user_lon)
+        result = sorted(offers, key=lambda offer: distance.distance(user_localization, (offer.pickup_latitude, offer.pickup_longitude)).km)
+        return result
 
 
 
