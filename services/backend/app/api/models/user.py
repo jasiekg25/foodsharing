@@ -40,7 +40,7 @@ class User(db.Model):
                              foreign_keys='Offer.user_id')  # One user many Orders
 
     def __init__(self, username="", name="", surname="", email="", password="", profile_description="",
-                 password_salt="", profile_picture="", phone="", localization=""):
+                 password_salt="", profile_picture=None, phone="", localization=""):
         self.username = username
         self.name = name
         self.surname = surname
