@@ -101,7 +101,7 @@ class Offer(db.Model):
         return offer.id
 
     @staticmethod
-    def update_offer(content):
+    def update_offer(content, photo_url):
         offer = Offer.query.filter_by(id=content['id']).first()
         offer.name = content['name']
         offer.active = content['active']
@@ -111,7 +111,7 @@ class Offer(db.Model):
         offer.pickup_times = content['pickup_times']
         offer.offer_expiry = content['offer_expiry']
         offer.description = content['description']
-        offer.photo = content['photo']
+        offer.photo = photo_url
 
         OffersTags.query.filter_by(offer_id = content['id']).delete()
 
