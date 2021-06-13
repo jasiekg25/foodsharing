@@ -2,7 +2,7 @@ from flask import request
 from flask_restx import Resource, fields, Namespace, reqparse
 from flask_praetorian import current_user, auth_required
 
-from app import logger
+from app import logger, cloudinary_uploader
 from app.api.models.user import User
 
 user_profile_namespace = Namespace("user_profile")
@@ -53,7 +53,9 @@ class UserProfile(Resource):
         try:
             user_id = current_user().id
             content = request.get_json()
-            User.update_user_profile_info(user_id, content)
+            photo = request.files.get('photo', None)
+            photo_url = cloudinary_uploader.upload(photo)['url'] if photo else None
+            User.update_user_profile_info(user_id, content, photo_url)
             return 'User profile info has been updated', 200
         except Exception as e:
             logger.exception("UserProfile.put(): %s", str(e))

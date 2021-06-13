@@ -4,7 +4,7 @@ from flask import request, Response
 from flask_restx import Resource, fields, Namespace, reqparse, inputs
 from flask_praetorian import current_user, auth_required
 
-from app import logger
+from app import logger, cloudinary_uploader
 from app.api.models.offer import Offer
 from app.api.models.tag import OffersTags, Tag
 
@@ -77,7 +77,9 @@ class ProfileOffers(Resource):
         logger.info("Offers.put() user_id: %s", str(current_user().id))
         try:
             content = request.get_json()
-            Offer.update_offer(content)
+            photo = request.files.get('photo', None)
+            photo_url = cloudinary_uploader.upload(photo)['url'] if photo else None
+            Offer.update_offer(content, photo_url)
             return 'User offer has been updated', 200
         except Exception as e:
             logger.exception("Offers.put(): %s", str(e))

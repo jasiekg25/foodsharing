@@ -19,6 +19,7 @@ class Orders(db.Model):
         data = {
             'id': self.id,
             'user_id': self.user_id,
+            'fromUser_photo': self.offers_orders.user.profile_picture,
             'fromUser_name': self.offers_orders.user.name,
             'fromUser_surname': self.offers_orders.user.surname,
             'fromUser_id': self.offers_orders.user.id,

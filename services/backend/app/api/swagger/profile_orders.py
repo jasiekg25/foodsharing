@@ -17,6 +17,7 @@ order = profile_orders_namespace.model(
     {
         "id": fields.Integer(readOnly=True),
         "user_id": fields.Integer(readOnly=True),
+        "fromUser_photo": fields.String(readOnly=True),
         "fromUser_name": fields.String(readOnly=True),
         "fromUser_surname": fields.String(readOnly=True),
         "fromUser_id": fields.Integer(readOnly=True),
