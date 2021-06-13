@@ -77,7 +77,7 @@ class ProfileOffers(Resource):
         logger.info("Offers.put() user_id: %s", str(current_user().id))
         try:
             content = request.get_json()
-            poto = request.files.get('photo', None)
+            photo = request.files.get('photo', None)
             photo_url = cloudinary_uploader.upload(photo)['url'] if photo else None
             Offer.update_offer(content, photo_url)
             return 'User offer has been updated', 200
