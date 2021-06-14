@@ -31,32 +31,16 @@ offer = offers_namespace.model(
     },
 )
 
-parser = reqparse.RequestParser()
-parser.add_argument("tags_ids", type=int, required=False, action='split')
-
-
 class Offers(Resource):
     @auth_required
-    @offers_namespace.expect(parser)
     @offers_namespace.marshal_with(offer)
     def get(self):
         """Returns all offers with user info"""
         logger.info("Offers.get()")
         try:
-            args = parser.parse_args()
             offers = Offer.query.all()
+            return [offer.to_dict() for offer in offers], 200
 
-            # deal with tags
-            if args['tags_ids'] is None:
-                return [offer.to_dict() for offer in offers], 200
-
-
-            elif args['tags_ids'] is not None:
-                tags_ids = args['tags_ids']
-                offers = filter(lambda offer: any(tag for tag in offer.tags if tag.tag_id in tags_ids), offers)
-                return [offer.to_dict() for offer in offers], 200
-
-            # return [offer.to_dict() for offer in offers], 200
         except Exception as e:
             logger.exception("Offers.get(): %s", str(e))
             return "Couldn't load offers", 500
