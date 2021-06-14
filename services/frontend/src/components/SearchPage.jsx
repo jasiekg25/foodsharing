@@ -60,7 +60,7 @@ const SearchPage = ({ isLoggedIn }) => {
       }
 
       <Row>
-        <Col>
+        <Col md={6}>
           <Offers />
         </Col>
         <Col md={6}>

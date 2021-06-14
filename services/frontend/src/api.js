@@ -77,6 +77,9 @@ const api = {
   getUserOrdersHistory: () => {
     return axios.get(`${baseUrl}/profile_orders`)
   },
+  putUserOrdersHistory: (body) => {
+    return axios.put(`${baseUrl}/profile_orders`, body)
+  },
   postOrder: (body) => {
     return axios.post(`${baseUrl}/orders`, body);
   },

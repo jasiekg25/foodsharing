@@ -8,6 +8,7 @@
 }
 
 .cancel-confirm-buttons{
+    margin-top: 5%;
     margin-bottom: 5%;
 }
 
@@ -19,4 +20,19 @@
 
 .flex-row{
     border-radius: 20px;
+}
+
+.meal-photo{
+    width: 40%;
+    margin: auto auto auto 1%;
+    border-radius: 10%;
+    border: 2px solid rgba(255, 255, 255, 1);
+}
+
+.picked{
+    color: #016f4a;
+}
+
+.canceled{
+    color: darkred;
 }

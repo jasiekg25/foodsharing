@@ -28,7 +28,7 @@ function OtherUserProfile(props) {
             <Col md={6}>
                 <Card className="profile-card">
                     <Card.Body className="profile-top">
-                        <Card.Img className="profile-photo" variant="top" src={photo} />
+                        {user.profile_picture ? <Card.Img className="profile-photo" variant="top" src={user.profile_picture}/> : <Card.Img className="profile-photo" variant="top" src={photo} />}
                     </Card.Body>
                     <Card.Body>
                         <Card.Title className="card-title">{user.name} {user.surname}</Card.Title>
@@ -39,7 +39,6 @@ function OtherUserProfile(props) {
                     <ListGroup className="list-group-flush">
                         <ListGroupItem> <EnvelopeFill size={20}/> {user.email}</ListGroupItem>
                         <ListGroupItem> <TelephoneFill size={20}/> {user.phone}</ListGroupItem>
-                        <ListGroupItem> <GeoAltFill size={20}/> {user.localization}</ListGroupItem>
                         <ListGroupItem> <CalendarFill size={20}/> <strong> With SC since: </strong> {user.created_date}</ListGroupItem>
                         <Card.Footer/>
                     </ListGroup>
