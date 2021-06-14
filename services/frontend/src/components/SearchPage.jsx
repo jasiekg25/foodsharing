@@ -5,8 +5,8 @@ import Tag from "./tags/Tag";
 import Offers from "./Offers";
 import { Redirect } from "react-router-dom";
 import api from "../api";
-import Map from "./Map";
-import useMap from "./useMap";
+import OfferMap from "./maps/OfferMap"
+import useMap from "./maps/useMap";
 
 const SearchPage = ({ isLoggedIn }) => {
   const [tags, setTags] = useState([]);
@@ -90,7 +90,7 @@ const SearchPage = ({ isLoggedIn }) => {
           />
         </Col>
         <Col md={6}>
-          <Map
+          <OfferMap
             mapRef={mapRef}
             center={center}
             setCenter={setCenter}
