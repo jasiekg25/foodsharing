@@ -53,7 +53,7 @@ class OffersSearch(Resource):
             sorted_offers = Offer.sort_by_distance_from_user(tagged_offers, content['lon'], content['lat'])
 
             # pagination
-            paginated_offers = sorted_offers.paginate(page=content['page'], per_page=2)
+            paginated_offers = sorted_offers.paginate(page=content['page'], per_page=15)
 
             return [offer.to_search_dict()  for offer in paginated_offers.items], 200
         except Exception as e:
