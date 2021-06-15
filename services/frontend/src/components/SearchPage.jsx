@@ -16,6 +16,8 @@ const SearchPage = ({ isLoggedIn }) => {
   });
   const [offers, setOffers] = useState([]);
   const [selected, setSelected] = useState(null);
+  const [pageCount, setPageCount] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(true);
 
   useEffect(() => {
     api
@@ -31,20 +33,41 @@ const SearchPage = ({ isLoggedIn }) => {
         console.log("Could not get any tags " + err.message);
       });
 
-    getOffers();
+    getOffers(pageCount);
   }, []);
 
   const getOffers = () => {
+    let queryTags = tags.filter(tag => {return tag['selected'];}).map(tag => tag.id).join(',');
     api
-      .getOffers()
+      .getOffers(pageCount, center.lat, center.lng, queryTags)
       .then((res) => {
-        console.log(res.data);
-        setOffers(res.data);
+        setOffers([...offers, ...res.data]);
+        let newPageCount = pageCount + 1
+        setPageCount(newPageCount);
+        if(res.data.length === 0 || res.data.length < 15)
+          setHasNextPage(false)
       })
       .catch((err) => {
         console.log("Could not get any offers " + err.message);
+        setHasNextPage(false);
       });
   };
+
+  const searchUpdate = () => {
+    let queryTags = tags.filter(tag => {return tag['selected'];}).map(tag => tag.id).join(',');
+    api
+      .getOffers(pageCount, center.lat, center.lng, queryTags)
+      .then((res) => {
+        setOffers(res.data);
+        setPageCount(1);
+        if(res.data.length === 0)
+          setHasNextPage(false)
+      })
+      .catch((err) => {
+        console.log("Could not get any offers " + err.message);
+        setHasNextPage(false);
+      });
+  }
 
   const onTagToggle = (tag) => {
     const index = tags.findIndex((el) => el.id === tag.id);
@@ -79,6 +102,7 @@ const SearchPage = ({ isLoggedIn }) => {
         onTagToggle={onTagToggle}
         searchButton={true}
         containerStyle="col-md-6 search-container"
+        searchFunction={searchUpdate}
       />
 
       <Row>
@@ -87,6 +111,7 @@ const SearchPage = ({ isLoggedIn }) => {
             offers={offers}
             getOffers={getOffers}
             onOfferSelect={onOfferSelect}
+            hasNextPage={hasNextPage}
           />
         </Col>
         <Col md={6}>
