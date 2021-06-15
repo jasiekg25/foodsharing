@@ -19,11 +19,6 @@ const name = {
     type: "text",
 }
 
-const pickup_localozation = {
-    name: "pickup_localization",
-    label: "Pickup Localization",
-}
-
 const pickup_times = {
     name: "pickup_times",
     label: "Pick-up Times",

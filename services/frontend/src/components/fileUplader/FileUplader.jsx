@@ -1,9 +1,19 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDropzone} from 'react-dropzone';
 import './fileUplader.css';
+import {CameraFill} from "react-bootstrap-icons";
 
 const FileUplader = ({file, setFile}) => {
   const [files, setFiles] = useState([]);
+
+    useEffect(() => {
+        if(file !== null){
+            setFiles([Object.assign(file, {
+                preview: file
+            })])
+        }
+    }, [])
+
   const {getRootProps, getInputProps} = useDropzone({
     accept: 'image/*',
     onDrop: acceptedFiles => {
@@ -29,7 +39,7 @@ const FileUplader = ({file, setFile}) => {
     <section className="container">
       <div className='uplader-container' {...getRootProps()}>
         <input {...getInputProps()} type="file" />
-        <p>Drag 'n' drop photo, or click to select a file</p>
+        <CameraFill size={70}/>
       </div>
       <aside className='thumbsContainer'>
         {thumbs}

@@ -9,6 +9,7 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {AlarmFill, BucketFill, ClockFill, GeoAltFill, TagFill} from "react-bootstrap-icons";
 import { history } from "../index";
+import placeholder from "../img/placeholder.jpg";
 
 const portions = {
     name: "portions",
@@ -82,14 +83,16 @@ function Offers() {
             return (
                 <div key={offer.id}>
                     <Row className="offers-container">
-                            <Card className="offer-card">
+                            <Card className="offer-card flex-row">
+                                {
+                                    offer.photo !== "null" ? <Card.Img className="meal-photo" src={offer.photo} /> : <Card.Img className="meal-photo" src={placeholder} />
+                                }
                                 <Card.Body>
                                     <Card.Title>{offer.name}</Card.Title>
                                     <Card.Text>
                                         {offer.description}
                                     </Card.Text>
                                     <ListGroup className="list-group-flush">
-                                        <ListGroupItem> <GeoAltFill size={15}/> <strong> Pick-up localization: </strong> {offer.pickup_localization}</ListGroupItem>
                                         <ListGroupItem> <ClockFill size={15}/> <strong> Pick-up times: </strong> {offer.pickup_times}</ListGroupItem>
                                         <ListGroupItem> <AlarmFill size={15}/> <strong> Expire date: </strong> {offer.offer_expiry}</ListGroupItem>
                                         <ListGroupItem> <BucketFill size={15}/>  <strong>Remaining portions: </strong> {offer.portions_number - offer.used_portions} </ListGroupItem>
