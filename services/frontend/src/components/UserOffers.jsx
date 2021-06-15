@@ -8,7 +8,8 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import FileUplader from "./fileUplader/FileUplader";
 import placeholder from "../img/placeholder.jpg";
-import Map from "./Map";
+import MapPicker from "./maps/MapPicker";
+import useMap from "./maps/useMap";
 import TagSearch from "./tags/TagSearch";
 import DatePicker from "react-date-picker";
 import "./OrderHistory.css";
@@ -63,10 +64,11 @@ function UserOffers(props) {
     const [showDeleteOfferModal, setShowDeleteOfferModal] = useState(false);
     const [showEditOfferModal, setShowEditOfferModal] = useState(false);
     const [file, setFile] = useState('');
-    const [coordinates, setCoordinates] = useState({
+    const { mapRef, center, setCenter} = useMap({
         lat: 50.06143,
         lng: 19.93658,
-    });
+    })
+
     const [expireDate, setExpireDate] = useState(new Date());
     const [tags, setTags] = useState([]);
 
@@ -136,8 +138,8 @@ function UserOffers(props) {
         offer.name = data.name;
         offer.portions_number = data.portions_number;
         offer.description = data.description;
-        offer.pickup_longitude = coordinates.lng;
-        offer.pickup_latitude = coordinates.lat;
+        offer.pickup_longitude = center.lng;
+        offer.pickup_latitude = center.lat;
         offer.photo = file;
         expireDate.setHours(23, 59, 59);
         offer.offer_expiry = expireDate.toLocaleString('en-US');
@@ -169,7 +171,7 @@ function UserOffers(props) {
 
     const handleEditOfferClose = () => {
         setFile("");
-        setCoordinates({
+        setCenter({
             lat: 50.06143,
             lng: 19.93658,
         });
@@ -187,7 +189,7 @@ function UserOffers(props) {
     const handleEditOfferShow = (offer) => {
         setChosenOffer(offer);
         setFile(offer.photo);
-        setCoordinates({
+        setCenter({
             lat: offer.pickup_latitude,
             lng: offer.pickup_longitude,
         });
@@ -281,7 +283,7 @@ function UserOffers(props) {
                                         />
                                     </InputGroup>
                                     <InputGroup>
-                                        <Map center={coordinates} setCenter={setCoordinates} className="map-control"/>
+                                        <MapPicker mapRef={mapRef} center={center} setCenter={setCenter} className="map-control"/>
                                     </InputGroup>
                                     <InputGroup>
                                         <FileUplader file={file} setFile={setFile} />
