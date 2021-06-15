@@ -68,11 +68,17 @@ const api = {
   getUserCurrentOffers: () => {
     return axios.get(`${baseUrl}/current_offers`)
   },
+  putUserCurrentOffers: (body) => {
+    return axios.put(`${baseUrl}/current_offers`, body)
+  },
   postOffers: (body) => {
     return axios.post(`${baseUrl}/offers`, body);
   },
   getUserOrdersHistory: () => {
     return axios.get(`${baseUrl}/profile_orders`)
+  },
+  putUserOrdersHistory: (body) => {
+    return axios.put(`${baseUrl}/profile_orders`, body)
   },
   postOrder: (body) => {
     return axios.post(`${baseUrl}/orders`, body);

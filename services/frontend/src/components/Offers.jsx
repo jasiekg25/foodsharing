@@ -9,6 +9,7 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {AlarmFill, BucketFill, ClockFill, GeoAltFill, TagFill} from "react-bootstrap-icons";
 import { history } from "../index";
+import placeholder from "../img/placeholder.jpg";
 
 const portions = {
     name: "portions",
@@ -21,7 +22,7 @@ const schema = yup.object().shape({
         .moreThan(0, "Portions number has to be greater than 0."),
 });
 
-function Offers() {
+function Offers({offers, getOffers, onOfferSelect}) {
     const {
         register,
         handleSubmit,
@@ -31,23 +32,8 @@ function Offers() {
         resolver: yupResolver(schema),
     });
 
-    const [offers, setOffers] = useState([]);
     const [chosenOffer, setChosenOffer] = useState({})
     const [showModal, setShowModal] = useState(false);
-
-    useEffect(() => {
-        getOffers();
-    }, [])
-
-    const getOffers = () => {
-        api.getOffers()
-            .then((res) => {
-                setOffers(res.data);
-            })
-            .catch((err) => {
-                console.log("Could not get any offers " + err.message);
-            })
-    }
 
     const handleClose = () => {
         reset();
@@ -80,16 +66,19 @@ function Offers() {
     return (
         offers.map((offer) => {
             return (
-                <div key={offer.id}>
+                <div key={offer.id} onClick={() => {
+                    onOfferSelect(offer)}}>
                     <Row className="offers-container">
-                            <Card className="offer-card">
+                            <Card className="offer-card flex-row">
+                                {
+                                    offer.photo !== "null" ? <Card.Img className="meal-photo" src={offer.photo} /> : <Card.Img className="meal-photo" src={placeholder} />
+                                }
                                 <Card.Body>
                                     <Card.Title>{offer.name}</Card.Title>
                                     <Card.Text>
                                         {offer.description}
                                     </Card.Text>
                                     <ListGroup className="list-group-flush">
-                                        <ListGroupItem> <GeoAltFill size={15}/> <strong> Pick-up localization: </strong> {offer.pickup_localization}</ListGroupItem>
                                         <ListGroupItem> <ClockFill size={15}/> <strong> Pick-up times: </strong> {offer.pickup_times}</ListGroupItem>
                                         <ListGroupItem> <AlarmFill size={15}/> <strong> Expire date: </strong> {offer.offer_expiry}</ListGroupItem>
                                         <ListGroupItem> <BucketFill size={15}/>  <strong>Remaining portions: </strong> {offer.portions_number - offer.used_portions} </ListGroupItem>

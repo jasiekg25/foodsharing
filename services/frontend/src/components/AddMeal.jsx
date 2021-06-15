@@ -9,7 +9,8 @@ import { Button, Form } from "react-bootstrap";
 import api from '../api.js';
 import DatePicker from "react-date-picker";
 import TagSearch from "./tags/TagSearch";
-import Map from "./Map";
+import MapPicker from "./maps/MapPicker";
+import useMap from "./maps/useMap"
 import FileUplader from './fileUplader/FileUplader';
 import Dropzone from 'react-dropzone'
 
@@ -17,11 +18,6 @@ const name = {
     name: "name",
     label: "Title",
     type: "text",
-}
-
-const pickup_localozation = {
-    name: "pickup_localization",
-    label: "Pickup Localization",
 }
 
 const pickup_times = {
@@ -105,10 +101,11 @@ const AddMeal = ({isLoggedIn}) => {
     const [isMealAdded, isMealAddedChange] = useState(false);
     const [isMealClosed, isMealClosedChange] = useState(false);
     const [tags, setTags] = useState([]);
-    const [coordinates, setCoordinates] = useState({
+
+    const {mapRef, center, setCenter} = useMap({
         lat: 50.06143,
         lng: 19.93658,
-      });
+    })
 
     const onTagToggle = (tag) => {
         const index = tags.findIndex((el) => el.id === tag.id);
@@ -142,7 +139,7 @@ const AddMeal = ({isLoggedIn}) => {
 
     return (
         <div className="form-container form-group">
-            <form onSubmit={handleSubmit((data) => handleAddMealSubmit(data, expireDate, isMealAddedChange, tags, coordinates, file))}>
+            <form onSubmit={handleSubmit((data) => handleAddMealSubmit(data, expireDate, isMealAddedChange, tags, center, file))}>
 
             <Form.Label className="login-title">Add meal</Form.Label>
 
@@ -180,7 +177,7 @@ const AddMeal = ({isLoggedIn}) => {
             </div>
 
             <Row className="field-content form-group">
-                <Map center={coordinates} setCenter={setCoordinates} className="map-control"/>
+                <MapPicker mapRef={mapRef} center={center} setCenter={setCenter} className="map-control"/>
             </Row>
 
             <div className="field-content form-group">
