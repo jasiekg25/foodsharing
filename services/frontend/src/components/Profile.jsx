@@ -12,7 +12,6 @@ import "./Profile.css";
 import {EnvelopeFill, GeoAltFill, PinMapFill, TelephoneFill} from "react-bootstrap-icons";
 import OrdersHistory from "./OrdersHistory";
 import UserOffers from "./UserOffers";
-import Map from "./Map";
 import FileUplader from "./fileUplader/FileUplader";
 
 const name = {
