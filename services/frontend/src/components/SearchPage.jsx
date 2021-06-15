@@ -82,7 +82,7 @@ const SearchPage = ({ isLoggedIn }) => {
       />
 
       <Row>
-        <Col>
+        <Col md={6}>
           <Offers
             offers={offers}
             getOffers={getOffers}
