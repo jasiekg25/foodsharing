@@ -48,7 +48,6 @@ class OffersSearch(Resource):
         logger.info("Offers.get()")
         try:
             content = parser.parse_args()
-            print(content)
             user_id = current_user().id
 
             offers = Offer.get_all_active_offers_except_mine(user_id=user_id)
@@ -56,7 +55,7 @@ class OffersSearch(Resource):
             tags = list(map(int, tags)) if tags[0] != '' else []
             tagged_offers = Offer.check_tags(offers, tags)
             sorted_offers = Offer.sort_by_distance_from_user(tagged_offers, content['lon'], content['lat'])
-            paginated_offers = sorted_offers.paginate(page=1, per_page=15)
+            paginated_offers = sorted_offers.paginate(page=content['page'], per_page=15)
 
             return [offer.to_search_dict()  for offer in paginated_offers.items], 200
         except Exception as e:
