@@ -33,6 +33,12 @@ offer_search = offers_search_namespace.model(
     },
 )
 
+parser = reqparse.RequestParser()
+parser.add_argument('lon', type=float)
+parser.add_argument('lat', type=float)
+parser.add_argument('page', type=int)
+parser.add_argument('tags_ids', action='split')
+
 
 class OffersSearch(Resource):
     @auth_required
@@ -41,7 +47,7 @@ class OffersSearch(Resource):
         """Returns all offers (except created by me ones) with user info"""
         logger.info("Offers.get()")
         try:
-            content = request.get_json()
+            content = parser.parse_args()
             user_id = current_user().id
 
             # get all offers except mine

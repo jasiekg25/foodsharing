@@ -2,7 +2,7 @@ from app import db
 
 
 class OffersTags(db.Model):
-    __tablename__ = "offers_tags"
+    __tablename__ = "tags_offers"
 
     id = db.Column(db.Integer, primary_key=True)
     offer_id =  db.Column('offer_id', db.Integer, db.ForeignKey('offer.id'), nullable=False) # Many offerTags to one offer
