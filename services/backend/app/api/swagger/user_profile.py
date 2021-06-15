@@ -1,3 +1,4 @@
+import json
 from flask import request
 from flask_restx import Resource, fields, Namespace, reqparse
 from flask_praetorian import current_user, auth_required
@@ -52,7 +53,7 @@ class UserProfile(Resource):
         logger.info("UserProfile.put() user_id: %s", str(current_user().id))
         try:
             user_id = current_user().id
-            content = request.get_json()
+            content = json.loads(request.form['data'])
             photo = request.files.get('photo', None)
             photo_url = cloudinary_uploader.upload(photo)['url'] if photo else None
             User.update_user_profile_info(user_id, content, photo_url)

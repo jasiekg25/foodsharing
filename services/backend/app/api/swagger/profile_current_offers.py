@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 
 from flask import request, Response
@@ -76,7 +77,7 @@ class ProfileOffers(Resource):
         """Updates current user offer"""
         logger.info("Offers.put() user_id: %s", str(current_user().id))
         try:
-            content = request.get_json()
+            content = json.loads(request.form['data'])
             photo = request.files.get('photo', None)
             photo_url = cloudinary_uploader.upload(photo)['url'] if photo else None
             Offer.update_offer(content, photo_url)

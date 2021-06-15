@@ -12,6 +12,7 @@ import "./Profile.css";
 import {EnvelopeFill, GeoAltFill, PinMapFill, TelephoneFill} from "react-bootstrap-icons";
 import OrdersHistory from "./OrdersHistory";
 import UserOffers from "./UserOffers";
+import FileUplader from "./fileUplader/FileUplader";
 
 const name = {
     name: "name",
@@ -28,11 +29,6 @@ const description = {
     type: "textarea",
 };
 
-const localization = {
-    name: "localization",
-    type: "text",
-};
-
 const phone = {
     name: "phone",
     type: "text",
@@ -44,7 +40,6 @@ const schema = yup.object().shape({
     name: yup.string(),
     surname: yup.string(),
     description: yup.string(),
-    localization: yup.string(),
     phone: yup
         .string()
         .matches(phoneRegExp, "Phone number is invalid!")
@@ -65,6 +60,7 @@ function Profile({isLoggedIn, logoutUser}) {
     const [user, setUser] = useState({});
     const [showModal, setShowModal] = useState(false);
     const [showOrdersHistory, setShowOrdersHistory] = useState(true);
+    const [file, setFile] = useState('');
     let orderOffersPanel = showOrdersHistory ? <OrdersHistory/> : <UserOffers/>;
 
     useEffect(() => {
@@ -104,12 +100,15 @@ function Profile({isLoggedIn, logoutUser}) {
         user.name = data.name;
         user.surname = data.surname;
         user.profile_description = data.description;
-        user.localization = data.localization;
         user.phone = data.phone;
-        api.putProfile(user)
+        const formData = new FormData()
+        formData.append('photo', file);
+        formData.append('data', JSON.stringify(user));
+        api.putProfile(formData)
             .then((res) => {
                 toast.success(`Your profile has been updated!`);
                 console.log(res.data);
+                getUserInfo();
             })
             .catch((err) => {
                 getUserInfo();
@@ -125,7 +124,7 @@ function Profile({isLoggedIn, logoutUser}) {
                     <Card className="profile-card">
                         <Card.Body className="profile-top">
                             <Button className="edit-button" variant="light" onClick={(e) => handleShow()}>Edit</Button>
-                            <Card.Img className="profile-photo" variant="top" src={photo} />
+                            {user.profile_picture ? <Card.Img className="profile-photo" variant="top" src={user.profile_picture}/> : <Card.Img className="profile-photo" variant="top" src={photo} />}
                         </Card.Body>
                         <Card.Body>
                             <Card.Title className="card-title">{user.name} {user.surname}</Card.Title>
@@ -136,7 +135,6 @@ function Profile({isLoggedIn, logoutUser}) {
                         <ListGroup className="list-group-flush">
                             <ListGroupItem> <EnvelopeFill size={20}/> {user.email}</ListGroupItem>
                             <ListGroupItem> <TelephoneFill size={20}/> {user.phone}</ListGroupItem>
-                            <ListGroupItem> <GeoAltFill size={20}/> {user.localization}</ListGroupItem>
                         </ListGroup>
                         <Card.Body>
                             <Button className="cancel-order-button" variant="dark" onClick={logoutUser}>Log out</Button>
@@ -188,10 +186,7 @@ function Profile({isLoggedIn, logoutUser}) {
                             )}
                         </InputGroup>
                         <InputGroup>
-                            <InputGroup.Prepend>
-                                <InputGroup.Text><GeoAltFill /></InputGroup.Text>
-                            </InputGroup.Prepend>
-                            <Form.Control defaultValue={user.localization} {...register(localization.name)} />
+                            <FileUplader file={user.profile_picture} setFile={setFile} />
                         </InputGroup>
                         <Modal.Footer>
                             <Button className="order-button" variant="success" type="submit">
