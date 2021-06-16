@@ -81,7 +81,7 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
                                 <Row className="offers-container">
                                         <Card className="offer-card flex-row">
                                             {
-                                                offer.photo !== "null" ? <Card.Img className="meal-photo" src={offer.photo} /> : <Card.Img className="meal-photo" src={placeholder} />
+                                                offer.photo ? <Card.Img className="meal-photo" src={offer.photo} /> : <Card.Img className="meal-photo" src={placeholder} />
                                             }
                                             <Card.Body>
                                                 <Card.Title>{offer.name}</Card.Title>
