@@ -10,7 +10,7 @@ import useMap from "./maps/useMap";
 
 const SearchPage = ({ isLoggedIn }) => {
   const [tags, setTags] = useState([]);
-  const { mapRef, center, setCenter, fitPoint } = useMap({
+  const { mapRef, center, setCenter, fitPoint, panTo } = useMap({
     lat: 50.06143,
     lng: 19.93658,
   });
@@ -59,6 +59,8 @@ const SearchPage = ({ isLoggedIn }) => {
       .getOffers(1, center.lat, center.lng, queryTags)
       .then((res) => {
         setOffers(res.data);
+        setSelected(null);
+        panTo(center);
         setPageCount(1);
         if(res.data.length === 0 || res.data.length < 15)
           setHasNextPage(false)
