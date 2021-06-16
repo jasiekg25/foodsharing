@@ -283,7 +283,11 @@ function UserOffers(props) {
                                         />
                                     </InputGroup>
                                     <InputGroup>
-                                        <MapPicker mapRef={mapRef} center={center} setCenter={setCenter} className="map-control"/>
+                                        <MapPicker mapRef={mapRef} 
+                                                   center={center} 
+                                                   setCenter={setCenter} 
+                                                   geolocation={false} 
+                                                   className="map-control" />
                                     </InputGroup>
                                     <InputGroup>
                                         <FileUplader file={file} setFile={setFile} />

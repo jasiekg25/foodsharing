@@ -62,8 +62,8 @@ const api = {
   refreshToken: (body) => {
     return axios.post(`${baseUrl}/auth/refresh`, body);
   },
-  getOffers: () => {
-    return axios.get(`${baseUrl}/search_offers`);
+  getOffers: (page, lat, lon, tags) => {
+    return axios.get(`${baseUrl}/search_offers?page=${page}&lat=${lat}&lon=${lon}&tags_ids=${tags}`);
   },
   getUserCurrentOffers: () => {
     return axios.get(`${baseUrl}/current_offers`)
