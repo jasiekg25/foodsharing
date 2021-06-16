@@ -4,9 +4,14 @@ import Tag from "./Tag";
 import "./Tags.css";
 import { HiXCircle } from "react-icons/hi";
 
-const TagSearch = ({ tags, onTagToggle, close, containerStyle, searchButton }) => {
+const TagSearch = ({ tags, onTagToggle, close, containerStyle, searchButton, searchFunction }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showTags, setShowTags] = useState(false);
+
+  const handleSearchClick = () => {
+    setShowTags(false);
+    searchFunction();
+  }
 
   return (
     <Container className={containerStyle}>
@@ -21,7 +26,7 @@ const TagSearch = ({ tags, onTagToggle, close, containerStyle, searchButton }) =
         </Col>
           <Col md={3}>
               {searchButton &&(
-                  <Button className="search-button" variant="success" onClick={(e) => setShowTags(false)}>Search</Button>)
+                  <Button className="search-button" variant="success" onClick={(e) => handleSearchClick()}>Search</Button>)
               }
           </Col>
         <Col md={2} style={{ display: "inline-flex", alignItems: "center" }}>
