@@ -56,11 +56,11 @@ const SearchPage = ({ isLoggedIn }) => {
   const searchUpdate = () => {
     let queryTags = tags.filter(tag => {return tag['selected'];}).map(tag => tag.id).join(',');
     api
-      .getOffers(pageCount, center.lat, center.lng, queryTags)
+      .getOffers(1, center.lat, center.lng, queryTags)
       .then((res) => {
         setOffers(res.data);
         setPageCount(1);
-        if(res.data.length === 0)
+        if(res.data.length === 0 || res.data.length < 15)
           setHasNextPage(false)
       })
       .catch((err) => {
