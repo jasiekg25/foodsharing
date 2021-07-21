@@ -28,11 +28,6 @@ class User(db.Model):
     sharer_rattings_to = db.relationship('SharerRating', backref='sharer_ratting_to_you',
                                          foreign_keys='SharerRating.to_user_id')  # One user to many SharerRatings
 
-    messages_from = db.relationship('Message', backref='messages_from',
-                                    foreign_keys='Message.from_user_id')  # One user as author of many Messages
-    messages_to = db.relationship('Message', backref='messages_to',
-                                  foreign_keys='Message.to_user_id')  # One user as recipient of many Messages
-
     orders = db.relationship('Orders', backref='order_from',
                              foreign_keys='Orders.user_id')  # One user many Orders
 

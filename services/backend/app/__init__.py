@@ -47,7 +47,6 @@ def create_app(script_info=None):
     mail.init_app(app)
 
     from .api.models.client_rating import ClientRating
-    from .api.models.message import Message
     from .api.models.offer import Offer
     from .api.models.orders import Orders
     from .api.models.sharer_rating import SharerRating
