@@ -12,10 +12,12 @@ from app.api.models.tag import OffersTags, Tag
 offers_current_namespace = Namespace("current_offers")
 
 # doing this add description to Swagger Doc
-tags_fields = {
-    'tag_id': fields.Integer(readOnly=True),
-    'tag_name': fields.String(readOnly=True)
-}
+tags_fields = offers_current_namespace.model(
+    'Tags',
+    {
+        'tag_id': fields.Integer(readOnly=True),
+        'tag_name': fields.String(readOnly=True)
+    })
 
 offer = offers_current_namespace.model(
     "Offer",
@@ -70,7 +72,6 @@ class ProfileOffers(Resource):
             logger.exception("Offers.get(): %s", str(e))
             return "Couldn't load offers", 500
 
-
     @auth_required
     @offers_current_namespace.expect(offer)
     def put(self):
@@ -85,8 +86,6 @@ class ProfileOffers(Resource):
         except Exception as e:
             logger.exception("Offers.put(): %s", str(e))
             return "Couldn't update user's offer", 500
-
-
 
 
 offers_current_namespace.add_resource(ProfileOffers, "")
