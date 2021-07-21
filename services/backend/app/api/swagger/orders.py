@@ -79,9 +79,6 @@ class OrdersNamespace(Resource):
             if offer_dict['offer_expiry'] < datetime.now():
                 return "Offer expired", 400
 
-            new_order_portion = content['portions'] + offer_dict['used_portions']
-            Offer.update_used_portions(content['offer_id'], new_order_portion)
-
             Orders.add_order(user_id, content['offer_id'], datetime.now(), content['portions'])
             
             try:

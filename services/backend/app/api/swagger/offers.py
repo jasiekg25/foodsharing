@@ -60,7 +60,7 @@ class Offers(Resource):
                 if parameter not in content:
                     return f"{parameter} missing in request", 400
 
-            offer_id = Offer.add_offer(user_id, content['name'], True, content['portions_number'], 0,
+            offer_id = Offer.add_offer(user_id, content['name'], True, content['portions_number'],
                                        content['longitude'], content['latitude'], datetime.now(),
                                        content['pickup_times'], content['offer_expiry'],
                                        content.get('description', None), photo_url)
