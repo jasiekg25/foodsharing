@@ -14,7 +14,6 @@ class User(db.Model):
     profile_description = db.Column(db.Text, nullable=True)
     profile_picture = db.Column(db.String(255), nullable=True)
     phone = db.Column(db.String(255), nullable=False)
-    localization = db.Column(db.String(255), nullable=True)
     active = db.Column(db.Boolean(), default=True, nullable=False)
     created_date = db.Column(db.DateTime, default=func.now(), nullable=False)
 
@@ -28,11 +27,6 @@ class User(db.Model):
     sharer_rattings_to = db.relationship('SharerRating', backref='sharer_ratting_to_you',
                                          foreign_keys='SharerRating.to_user_id')  # One user to many SharerRatings
 
-    messages_from = db.relationship('Message', backref='messages_from',
-                                    foreign_keys='Message.from_user_id')  # One user as author of many Messages
-    messages_to = db.relationship('Message', backref='messages_to',
-                                  foreign_keys='Message.to_user_id')  # One user as recipient of many Messages
-
     orders = db.relationship('Orders', backref='order_from',
                              foreign_keys='Orders.user_id')  # One user many Orders
 
@@ -40,7 +34,7 @@ class User(db.Model):
                              foreign_keys='Offer.user_id')  # One user many Orders
 
     def __init__(self, username="", name="", surname="", email="", password="", profile_description="",
-                 password_salt="", profile_picture=None, phone="", localization=""):
+                 password_salt="", profile_picture=None, phone=""):
         self.username = username
         self.name = name
         self.surname = surname
@@ -49,7 +43,6 @@ class User(db.Model):
         self.password_salt = password_salt
         self.profile_picture = profile_picture
         self.phone = phone
-        self.localization = localization
         self.hashed_password = guard.hash_password(password)
 
     def encode_token(self, user_id, token_type):
@@ -137,8 +130,6 @@ class User(db.Model):
         user.profile_description = content['profile_description']
         user.profile_picture = photo_url
         user.phone = content['phone']
-        user.localization = content['localization']
         user.active = content['active']
         user.created_date = content['created_date']
         db.session.commit()
-

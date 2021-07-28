@@ -25,9 +25,6 @@ class Offer(db.Model):
     pickup_times = db.Column('pickup_times', db.String(255), nullable=False)
     offer_expiry = db.Column('offer_expiry', db.DateTime, nullable=False)
 
-    messages = db.relationship('Message', backref='offers_messages',
-                               foreign_keys='Message.offer')  # One offer to many Messages
-
     orders = db.relationship('Orders', backref='offers_orders',
                              foreign_keys='Orders.offer_id')  # One offer to many Orders
 
