@@ -51,6 +51,8 @@ def create_app(script_info=None):
     from .api.models.orders import Orders
     from .api.models.sharer_rating import SharerRating
     from .api.models.tag import Tag
+    from .api.models.chat_room import ChatRoom
+    from .api.models.chat_message import ChatMessage
 
     from .api.models.user import User
     guard.init_app(app, User)
