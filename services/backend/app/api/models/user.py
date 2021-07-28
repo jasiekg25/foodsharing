@@ -33,6 +33,12 @@ class User(db.Model):
     offers = db.relationship('Offer', backref='user',
                              foreign_keys='Offer.user_id')  # One user many Orders
 
+    chat_rooms_client = db.relationship('ChatRoom', backref='chat_rooms_client',
+                                    foreign_keys='ChatRoom.client')  # One user as client of many ChatRooms
+
+    messages_from = db.relationship('ChatMessage', backref='messages_from_user',
+                                    foreign_keys='ChatMessage.from_user_id')  # One user as author of many Messages
+
     def __init__(self, username="", name="", surname="", email="", password="", profile_description="",
                  password_salt="", profile_picture=None, phone=""):
         self.username = username
