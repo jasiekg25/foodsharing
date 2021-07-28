@@ -12,6 +12,7 @@ from app.api.swagger.offers import offers_namespace
 from app.api.swagger.offers_search import offers_search_namespace
 from app.api.swagger.profile_current_offers import offers_current_namespace
 from app.api.swagger.profile_orders import profile_orders_namespace
+from app.api.swagger.chat_rooms import chat_room_namespace
 
 
 api = Api(version="1.0", title="FRED APIs", doc="/docs/")
@@ -26,4 +27,5 @@ api.add_namespace(user_profile_namespace, path="/user_profile")
 api.add_namespace(offers_search_namespace, path="/search_offers")
 api.add_namespace(offers_current_namespace, path="/current_offers")
 api.add_namespace(profile_orders_namespace, path="/profile_orders")
+api.add_namespace(chat_room_namespace, path="/chat_rooms")
 
