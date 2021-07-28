@@ -31,7 +31,7 @@ class Offer(db.Model):
     tags = db.relationship('OffersTags', back_populates='offer')
 
     chat_rooms = db.relationship('ChatRoom', backref='offer_chat_rooms',
-                               foreign_keys='ChatRoom.offer')  # One offer to many Messages
+                               foreign_keys='ChatRoom.offer_id')  # One offer to many Messages
 
     def to_dict(self):
         data = {
