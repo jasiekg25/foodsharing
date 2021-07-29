@@ -10,7 +10,7 @@ class ChatRoom(db.Model):
 
     offer_id = db.Column(db.Integer, db.ForeignKey('offer.id'),
                       nullable=False)  # Many ChatRooms to one offer
-    # timestamp = db.Column('timestamp', db.DateTime, nullable=False, default=func.now)
+    timestamp = db.Column('timestamp', db.DateTime, nullable=False, default=db.func.current_timestamp())
 
 
 
