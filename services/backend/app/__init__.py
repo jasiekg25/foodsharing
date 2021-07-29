@@ -9,6 +9,7 @@ from flask_praetorian import Praetorian
 import logging
 from logging.handlers import RotatingFileHandler
 from flask_mail import Mail
+from flask_socketio import SocketIO, send
 import cloudinary
 import cloudinary.uploader as cloudinary_uploader
 
@@ -20,6 +21,7 @@ guard = Praetorian()
 logger = logging.getLogger(__name__)
 mail = Mail()
 
+
 cloudinary = cloudinary.config(
     cloud_name=os.environ['CLOUDINARY_CLOUD_NAME'],
     api_key=os.environ['CLOUDINARY_API_KEY'],
@@ -27,14 +29,26 @@ cloudinary = cloudinary.config(
 )
 
 
+
+
 def create_app(script_info=None):
 
     # instantiate the app
     app = Flask(__name__)
 
+    # set sockerIo
+    socketio = SocketIO(app, engineio_logger=True, logger=True, cors_allowed_origins="*")
+
     # set config
     app_settings = os.getenv("APP_SETTINGS")
     app.config.from_object(app_settings)
+
+    @socketio.on("message")
+    def handleMessage(msg):
+        print(msg)
+        send(msg, broadcast=True)
+        return None
+
 
     # set up extensions
     db.init_app(app)
