@@ -16,7 +16,21 @@ class ChatMessage(db.Model):
         data = {
             'id': self.id,
             'from_user_id': self.from_user_id,
-            'chat_room_id': self.to_user_id,
+            'chat_room_id': self.chat_room_id,
             'message': self.message
         }
         return data
+
+    @staticmethod
+    def get_all_messages(chat_room_id):
+        return ChatMessage.query.filter_by(chat_room_id=chat_room_id)
+
+    @staticmethod
+    def add_chat_message(user_id, chat_room_id, message):
+        chat_message = ChatMessage(
+            from_user_id=user_id,
+            chat_room_id=chat_room_id,
+            message=message
+        )
+        db.session.add(chat_message)
+        db.session.commit()
