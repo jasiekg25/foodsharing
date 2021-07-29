@@ -10,7 +10,7 @@ class ChatMessage(db.Model):
     chat_room_id = db.Column(db.Integer, db.ForeignKey('chat_room.id'),
                            nullable=False)  # Many masseges to one chat room
     message = db.Column('message', db.String(255), nullable=False)
-    timestamp = db.Column('timestamp', db.DateTime, nullable=False, default=func.now)
+    timestamp = db.Column('timestamp', db.DateTime, nullable=False, default=db.func.current_timestamp())
 
     def to_dict(self):
         data = {
