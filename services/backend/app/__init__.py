@@ -12,6 +12,7 @@ from flask_mail import Mail
 from flask_socketio import SocketIO, send, join_room, emit
 import cloudinary
 import cloudinary.uploader as cloudinary_uploader
+from flask import request
 
 
 # instantiate the extensions
@@ -37,6 +38,7 @@ def create_app(script_info=None):
     app = Flask(__name__)
 
     # set sockerIo
+    # socketio = SocketIO(app, engineio_logger=True, logger=True, cors_allowed_origins="*", resource="/chat")
     socketio = SocketIO(app, engineio_logger=True, logger=True, cors_allowed_origins="*")
 
     # set config
@@ -49,12 +51,17 @@ def create_app(script_info=None):
         send(msg, broadcast=True)
         return None
 
-    @socketio.on('connect', namespace='/notifs')
-    def connect_handler(socket):
-        print(socket.query)
-        user_room = 'user_{}'.format(current_user().id)
+    @socketio.on('connect', namespace="/notifs")
+    def connect_handler():
+        pass
+
+    @socketio.on('auth', namespace="/notifs")
+    def connect_handler(msg):
+        token = msg['accessToken']
+        user_id = guard.extract_jwt_token(token)["id"]
+        user_room = f'user_{user_id}'
         join_room(user_room)
-        emit('response', {'meta': 'WS connected'})
+        emit('response', {'meta': f"{user_id}"})
 
     # set up extensions
     db.init_app(app)
