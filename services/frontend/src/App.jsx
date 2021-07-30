@@ -19,6 +19,7 @@ import Profile from "./components/Profile";
 import FinalizeRegistration from "./components/FinalizeRegistration";
 import OtherUserProfile from "./components/OtherUserProfile";
 import Chat from "./components/chat";
+import Notifications from "./components/Notifications";
 
 const PageNoFound = () => (
   <section className="hero is-halfheight">
@@ -146,6 +147,11 @@ const App = () => {
             exact
             path="/chat"
             render={() => <Chat />}
+        />
+        <Route
+            exact
+            path="/notifications"
+            render={() => <Notifications />}
         />
         <Route component={PageNoFound} />
       </Switch>

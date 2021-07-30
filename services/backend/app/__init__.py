@@ -5,11 +5,11 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from flask_praetorian import Praetorian
+from flask_praetorian import Praetorian, auth_required, current_user
 import logging
 from logging.handlers import RotatingFileHandler
 from flask_mail import Mail
-from flask_socketio import SocketIO, send
+from flask_socketio import SocketIO, send, join_room, emit
 import cloudinary
 import cloudinary.uploader as cloudinary_uploader
 
@@ -49,6 +49,12 @@ def create_app(script_info=None):
         send(msg, broadcast=True)
         return None
 
+    @socketio.on('connect', namespace='/notifs')
+    def connect_handler(socket):
+        print(socket.query)
+        user_room = 'user_{}'.format(current_user().id)
+        join_room(user_room)
+        emit('response', {'meta': 'WS connected'})
 
     # set up extensions
     db.init_app(app)
