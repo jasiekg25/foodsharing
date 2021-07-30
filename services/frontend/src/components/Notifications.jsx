@@ -2,10 +2,15 @@ import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
 
 const accessToken = localStorage.getItem("accessToken")
-let socket = io.connect("http://localhost:5001/notifs", {reconnection: false, accessToken});
+let socket = io.connect(`http://localhost:5001/notifs`);
+// let socket = io("http://localhost:5001/notifs",  { query: "foo=bar" });
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    socket.emit("auth", {accessToken});
+  }, [])
 
   useEffect(() => {
     getMessages();
@@ -23,7 +28,7 @@ const Notifications = () => {
 
   return (
     <pre>
-	{notifications}
+	{JSON.stringify(notifications)}
     </pre>
   );
 };
