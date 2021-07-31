@@ -13,9 +13,13 @@ chat_room = chat_room_namespace.model(
     "ChatRoom",
     {
         "id": fields.Integer(readOnly=True),
-        "offer_owner": fields.Integer(readOnly=True),
         "client": fields.Integer(readOnly=True),
-        "offer_id": fields.Integer(readOnly=True)
+        "offer_owner": fields.Integer(readOnly=True),
+        "offer_id": fields.Integer(readOnly=True),
+        'offer_name': fields.String(readOnly=True),
+        'offer_photo': fields.String(readOnly=True),
+        'offer_owner_name': fields.String(readOnly=True),
+        'offer_owner_surname': fields.String(readOnly=True)
     }
 )
 

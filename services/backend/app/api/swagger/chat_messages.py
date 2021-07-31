@@ -12,9 +12,9 @@ chat_message_namespace = Namespace("chat_message")
 chat_message = chat_message_namespace.model(
     "ChatMessages",
     {
-        "id": fields.Integer(readOnly=True),
+        # "id": fields.Integer(readOnly=True),
         "from_user_id": fields.Integer(readOnly=True),
-        "chat_room_id": fields.Integer(readOnly=True),
+        # "chat_room_id": fields.Integer(readOnly=True),
         "message": fields.String(readOnly=True)
     }
 )

@@ -21,9 +21,13 @@ class ChatRoom(db.Model):
     def to_dict(self):
         data = {
             'id': self.id,
-            'offer_owner': self.offer_chat_rooms.user_id,
             'client': self.client,
-            'offer_id': self.offer_id
+            'offer_owner': self.offer_chat_rooms.user_id,
+            'offer_id': self.offer_id,
+            'offer_name': self.offer_chat_rooms.name,
+            'offer_photo': self.offer_chat_rooms.photo,
+            'offer_owner_name': self.offer_chat_rooms.user.name,
+            'offer_owner_surname': self.offer_chat_rooms.user.surname
         }
         return data
 
@@ -32,7 +36,6 @@ class ChatRoom(db.Model):
         chat_room = ChatRoom(
             client=client,
             offer_id=offer_id,
-
         )
         db.session.add(chat_room)
         db.session.commit()
@@ -40,3 +43,5 @@ class ChatRoom(db.Model):
     @staticmethod
     def get_all_rooms(user_id):
         return ChatRoom.query.join(Offer).filter((user_id == ChatRoom.client) | (user_id == Offer.user_id))
+
+
