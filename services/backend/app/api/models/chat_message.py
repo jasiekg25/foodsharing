@@ -14,10 +14,19 @@ class ChatMessage(db.Model):
 
     def to_dict(self):
         data = {
+            # 'id': self.id,
+            'from_user_id': self.from_user_id,
+            # 'chat_room_id': self.chat_room_id,
+            'message': self.message
+        }
+        return data
+
+    def to_dict_with_flag(self, current_user):
+        data = {
             'id': self.id,
             'from_user_id': self.from_user_id,
             'chat_room_id': self.chat_room_id,
-            'message': self.message
+            'message': self.message,
         }
         return data
 
@@ -26,9 +35,9 @@ class ChatMessage(db.Model):
         return ChatMessage.query.filter_by(chat_room_id=chat_room_id)
 
     @staticmethod
-    def add_chat_message(user_id, chat_room_id, message):
+    def add_chat_message(from_user_id, chat_room_id, message):
         chat_message = ChatMessage(
-            from_user_id=user_id,
+            from_user_id=from_user_id,
             chat_room_id=chat_room_id,
             message=message
         )
