@@ -99,6 +99,12 @@ const api = {
   },
   getOtherUserProfile: (id) => {
     return axios.get(`${baseUrl}/user_profile?user-id=${id}`)
+  },
+  getUserChatRooms: () => {
+    return axios.get(`${baseUrl}/chat_rooms`);
+  },
+  getChatMessages: (id) => {
+    return axios.get(`${baseUrl}/chat_messages?chat_room_id=${id}`);
   }
 };
 
