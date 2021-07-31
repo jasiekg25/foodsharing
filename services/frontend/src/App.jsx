@@ -18,7 +18,7 @@ import SearchPage from "./components/SearchPage";
 import Profile from "./components/Profile";
 import FinalizeRegistration from "./components/FinalizeRegistration";
 import OtherUserProfile from "./components/OtherUserProfile";
-import Chat from "./components/chat";
+import Chat from "./components/Chat";
 import Notifications from "./components/Notifications";
 
 const PageNoFound = () => (
