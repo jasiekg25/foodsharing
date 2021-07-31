@@ -20,6 +20,7 @@ import FinalizeRegistration from "./components/FinalizeRegistration";
 import OtherUserProfile from "./components/OtherUserProfile";
 import Chat from "./components/Chat";
 import Notifications from "./components/Notifications";
+import ChatRooms from "./components/ChatRooms";
 
 const PageNoFound = () => (
   <section className="hero is-halfheight">
@@ -146,8 +147,13 @@ const App = () => {
           <Route
             exact
             path="/chat"
-            render={() => <Chat />}
+            render={() => <ChatRooms />}
         />
+        <Route
+              exact
+              path="/chat/:roomId/offers/:offerId"
+              render={(props) => <Chat {...props} />}
+          />
         <Route
             exact
             path="/notifications"
