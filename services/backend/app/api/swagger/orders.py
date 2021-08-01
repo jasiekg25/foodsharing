@@ -110,7 +110,11 @@ class OrdersNamespace(Resource):
                 mail.send(msg)
             except Exception as e:
                 logger.exception("Order Email Notification: %s", str(e))
-
+            
+            from flask_socketio import emit
+            message = f"Someone just ordered {data['portions']} of {data['offer_name']}!"
+            emit('notification', {'notification': {"message": message, "url": data['order_url']}}, room=f'user_{author.id}', namespace="/notifs")
+            
             return "Order placed", 201
 
         except Exception as e:
