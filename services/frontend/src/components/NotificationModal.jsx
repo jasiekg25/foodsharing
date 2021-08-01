@@ -3,7 +3,6 @@ import {
   Badge,
   IconButton,
   Popover,
-  Typography,
   List,
   ListItem,
   ListItemText,
@@ -11,6 +10,7 @@ import {
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { useNotifications } from "../hooks/useNotifications";
 import { makeStyles } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   typography: {
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ListItemLink = (props) => {
-  return <ListItem button component="a" {...props} />;
+  return <ListItem button component={Link} {...props} />;
 }
 
 const NotificationModal = () => {
@@ -66,7 +66,7 @@ const NotificationModal = () => {
             </ListItem>
           ) : (
             notifications.map((notif) => (
-              <ListItemLink button href={notif.url}>
+              <ListItemLink button to={notif.url}>
                 <ListItemText primary={notif.message} />
               </ListItemLink>
             ))
