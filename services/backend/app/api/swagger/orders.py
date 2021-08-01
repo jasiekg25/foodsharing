@@ -113,7 +113,7 @@ class OrdersNamespace(Resource):
             
             from flask_socketio import emit
             message = f"Someone just ordered {data['portions']} of {data['offer_name']}!"
-            emit('notification', {'notification': {"message": message, "url": data['order_url']}}, room=f'user_{author.id}', namespace="/notifs")
+            emit('notification', {'notification': {"message": message, "url": "/something"}}, room=f'user_{author.id}', namespace="/notifs")
             
             return "Order placed", 201
 
