@@ -6,6 +6,7 @@ let socket = io.connect(`http://localhost:5001/notifs`);
 
 export const useNotifications = () => {
   const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0)
 
   useEffect(() => {
     socket.emit("auth", {accessToken});
@@ -20,9 +21,14 @@ export const useNotifications = () => {
       const {notification} = msg
       console.log(notification)
       setNotifications([...notifications, notification]);
+      setUnreadCount(unreadCount + 1)
     });
   };
 
-  return {notifications}
+  const clearUnreadCount = () => {
+    setUnreadCount(0)
+  }
+
+  return {notifications, unreadCount, clearUnreadCount}
 }
 
