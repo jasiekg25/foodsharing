@@ -24,8 +24,8 @@ const ListItemLink = (props) => {
 
 const NotificationModal = () => {
   const classes = useStyles();
-  const { notifications } = useNotifications();
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const { notifications, unreadCount, clearUnreadCount } = useNotifications();
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
@@ -36,12 +36,13 @@ const NotificationModal = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+    clearUnreadCount()
   };
 
   return (
     <div>
       <IconButton onClick={handleClick}>
-        <Badge badgeContent={notifications.length} color="primary">
+        <Badge badgeContent={unreadCount} color="primary">
           <NotificationsIcon />
         </Badge>
       </IconButton>
