@@ -56,7 +56,6 @@ class Orders(db.Model):
 
         db.session.commit()
 
-
     @staticmethod
     def get_all_orders():
         return Orders.query.all()
@@ -64,4 +63,8 @@ class Orders(db.Model):
     @staticmethod
     def get_orders_of_user(user_id):
         return Orders.query.filter_by(user_id=user_id).order_by(Orders.is_canceled, Orders.is_picked)
+
+    @staticmethod
+    def get_order_by_id(order_id):
+        return Orders.query.filter_by(id=order_id).first()
 
