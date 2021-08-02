@@ -39,6 +39,9 @@ class User(db.Model):
     messages_from = db.relationship('ChatMessage', backref='messages_from_user',
                                     foreign_keys='ChatMessage.from_user_id')  # One user as author of many Messages
 
+    notifications = db.relationship('UserNotification', backref='notifications',
+                                    foreign_keys='UserNotification.user_id')  # One user many Notifications
+
     def __init__(self, username="", name="", surname="", email="", password="", profile_description="",
                  password_salt="", profile_picture=None, phone=""):
         self.username = username
