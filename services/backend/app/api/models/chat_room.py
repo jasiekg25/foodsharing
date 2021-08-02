@@ -5,7 +5,7 @@ from .offer import Offer
 
 
 class ChatRoom(db.Model):
-    __tablename__ = "chat_room"
+    __tablename__ = "room_chat"
 
     id = db.Column(db.Integer, primary_key=True)
     client = db.Column(db.Integer, db.ForeignKey('user.id'),
