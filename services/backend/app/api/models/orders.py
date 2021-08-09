@@ -56,12 +56,14 @@ class Orders(db.Model):
 
         db.session.commit()
 
-
     @staticmethod
     def get_all_orders():
         return Orders.query.all()
 
     @staticmethod
+    def get_orders_by_offer_id_not_canceled(offer_id):
+        return Orders.query.filter_by(offer_id = offer_id).filter(Orders.is_canceled == False)
+
+    @staticmethod
     def get_orders_of_user(user_id):
         return Orders.query.filter_by(user_id=user_id).order_by(Orders.is_canceled, Orders.is_picked)
-

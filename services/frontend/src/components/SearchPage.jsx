@@ -36,6 +36,10 @@ const SearchPage = ({ isLoggedIn }) => {
     getOffers(pageCount);
   }, []);
 
+  useEffect(() => {
+    searchUpdate()
+  }, [center])
+
   const getOffers = () => {
     let queryTags = tags.filter(tag => {return tag['selected'];}).map(tag => tag.id).join(',');
     api
