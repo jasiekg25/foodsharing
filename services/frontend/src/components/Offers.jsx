@@ -64,6 +64,10 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
             })
     }
 
+    const sendMessage = () => {
+
+    }
+
     return (
         <div >
             <InfiniteScroll
@@ -98,8 +102,9 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
                                                     </ListGroupItem>
                                                 </ListGroup>
                                                 <div>
-                                                    <Card.Text className="view-profile-button"> <Button className="view-button" variant="secondary" onClick={(e) => handleShowUserProfile(offer.user_id)}>View user profile </Button> {offer.user_name}</Card.Text>
+                                                    <Button className="chat-button" variant="success">Send message</Button>
                                                     <Button className="order-button" variant="success" onClick={(e) => handleShow(offer)}>Make order</Button>
+                                                    <Card.Text className="view-profile-button"> <Button className="view-button" variant="secondary" onClick={(e) => handleShowUserProfile(offer.user_id)}>View user profile </Button> {offer.user_name}</Card.Text>
                                                 </div>
                                                 <Modal className="portions-modal" show={showModal} onHide={handleClose} backdrop="static">
                                                     <Modal.Header closeButton>
