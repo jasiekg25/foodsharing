@@ -19,7 +19,6 @@ import Profile from "./components/Profile";
 import FinalizeRegistration from "./components/FinalizeRegistration";
 import OtherUserProfile from "./components/OtherUserProfile";
 import Chat from "./components/Chat";
-import Notifications from "./components/Notifications";
 import ChatRooms from "./components/ChatRooms";
 
 const PageNoFound = () => (
@@ -154,11 +153,6 @@ const App = () => {
               path="/chat/:roomId/offers/:offerId"
               render={(props) => <Chat {...props} />}
           />
-        <Route
-            exact
-            path="/notifications"
-            render={() => <Notifications />}
-        />
         <Route component={PageNoFound} />
       </Switch>
       <Footer />

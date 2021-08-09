@@ -52,8 +52,6 @@ def create_app(script_info=None):
     def connect_handler():
         logger.info("CONNECTED to chat websocket")
 
-        pass
-
     @socketio.on('join_room', namespace="/chat")
     def join_room_handler(msg):
         logger.info("JOINED to room; request_body: %s", str(request.get_json()))
@@ -86,17 +84,19 @@ def create_app(script_info=None):
     # chat socket end
 
     # notification's socket start
-    @socketio.on('connect', namespace="/notifs")
-    def connect_handler():
-        pass
-
     @socketio.on('auth', namespace="/notifs")
-    def connect_handler(msg):
-        token = msg['accessToken']
-        user_id = guard.extract_jwt_token(token)["id"]
-        user_room = f'user_{user_id}'
-        join_room(user_room)
-        emit('response', {'meta': f"{user_id}"})
+    def auth_handler(msg):
+        try:
+            token = msg['accessToken']
+            user_id = guard.extract_jwt_token(token)["id"]
+            user_room = f'user_{user_id}'
+            join_room(user_room)
+            emit('response', {'meta': f"{user_id}"}, room=user_room, namespace="/notifs")
+        except Exception as e:
+            logger.error(e)
+
+    def send_notificatin(message, user_id):
+        emit('notification', {'notification': message}, room=f'user_{user_id}', namespace="/notifs")
 
     # notification's socket end
 

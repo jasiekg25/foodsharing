@@ -4,6 +4,7 @@
 from flask_restx import Api
 
 from app.api.swagger.auth import auth_namespace
+from app.api.swagger.user_notifications import user_notifications
 from app.api.swagger.user_profile import user_profile_namespace
 from app.api.swagger.tags import tags_namespace
 from app.api.swagger.users import users_namespace
@@ -30,4 +31,4 @@ api.add_namespace(offers_current_namespace, path="/current_offers")
 api.add_namespace(profile_orders_namespace, path="/profile_orders")
 api.add_namespace(chat_room_namespace, path="/chat_rooms")
 api.add_namespace(chat_message_namespace, path="/chat_messages")
-
+api.add_namespace(user_notifications, path="/user_notifications")

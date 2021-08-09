@@ -11,6 +11,7 @@ from app import logger, mail
 from app.api.models.offer import Offer
 from app.api.models.orders import Orders
 from app.api.models.user import User
+from app.api.models.user_notification import emit_and_safe_notification
 
 orders_namespace = Namespace("orders")
 offers_namespace = Namespace("offers")
@@ -108,8 +109,14 @@ class OrdersNamespace(Resource):
                     recipients=[author.email]
                 )
                 mail.send(msg)
+
             except Exception as e:
                 logger.exception("Order Email Notification: %s", str(e))
+
+            message = f"Someone just ordered {data['portions']} of {data['offer_name']}!"
+            emit_and_safe_notification(author.id, message)
+            message = f"You just ordered {data['portions']} of {data['offer_name']}!"
+            emit_and_safe_notification(user_id, message)
 
             return "Order placed", 201
 
