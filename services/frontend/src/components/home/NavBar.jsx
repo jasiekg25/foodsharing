@@ -3,6 +3,7 @@ import {Navbar, Nav} from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import './NavBar.css';
+import {Envelope} from "react-bootstrap-icons";
 
 
 function NavBar(props) {
@@ -22,6 +23,7 @@ function NavBar(props) {
                 <Link to="/profile" className="nav-link">Profile</Link>
                 <Link to="/offers" className="nav-link">Offers</Link>
                 <Link to="/add-meal" className="nav-link">Add meal</Link>
+                <Link to="/chat" className="nav-link"><Envelope size={18}/></Link>
             </Nav>
         )
     }
