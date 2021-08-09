@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import './NavBar.css';
 import NotificationModal from '../NotificationModal';
+import {Envelope} from "react-bootstrap-icons";
+
 
 function NavBar(props) {
 
@@ -27,6 +29,9 @@ function NavBar(props) {
             </Link>
             <Link to="/add-meal" className="nav-link">
               Add meal
+            </Link>
+            <Link to="/chat" className="nav-link">
+              <Envelope size={18}/>
             </Link>
             <NotificationModal />
           </Nav>

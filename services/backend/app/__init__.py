@@ -78,7 +78,7 @@ def create_app(script_info=None):
 
         ChatMessage.add_chat_message(chat_room_id=room_id, message=message, from_user_id=user_id)
 
-        send(message, namespace="/chat", to=room_id)
+        send(msg, namespace="/chat", to=room_id)
         return None
 
     # chat socket end

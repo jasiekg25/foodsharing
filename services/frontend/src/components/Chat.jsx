@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
 import api from "../api";
 import {toast} from "react-toastify";
-import {set} from "react-hook-form";
+import 'react-chat-elements/dist/main.css';
+import { Input, Button, MessageList } from 'react-chat-elements';
+import "./Chat.css"
 
 let endPoint = "http://localhost:5001/chat";
 const accessToken = localStorage.getItem("accessToken")
 let socket = io.connect(`${endPoint}`);
+let inputRef = React.createRef();
 
 function Chat(props) {
   const {roomId} = props.match.params
@@ -18,6 +21,9 @@ function Chat(props) {
   useEffect(() => {
     socket.emit("join_room", {roomId, offerId, accessToken})
     getMessages();
+      return () => {
+          socket.off("message")
+      }
   }, []);
 
   const getMessages = () => {
@@ -33,8 +39,8 @@ function Chat(props) {
             })
   };
 
-  socket.on("message", data => {
-      const mess = {message: data, from_user_id: userId}
+  socket.on("message", (data) => {
+      const mess = {message: data.message.message, from_user_id: data.userId}
       setMessages([...messages, mess]);
     });
 
@@ -47,11 +53,12 @@ function Chat(props) {
   // On Click
   const onClick = () => {
     if (message.message !== "") {
-      socket.emit("message", {roomId, accessToken, message});
+      socket.emit("message", {roomId, accessToken, message, userId});
       const mess = {from_user_id: userId, message: ""}
-      setMessage(mess)
+      setMessage(mess);
+      inputRef.clear();
     } else {
-      alert("Please Add A Message");
+      toast.info("Please add a message");
     }
   };
 
@@ -60,13 +67,32 @@ function Chat(props) {
     <div>
       {messages.map((message) => {
         return (
-            <div>
-              <p>{message.message}</p>
-            </div>
+            <MessageList
+                className={(message.from_user_id === userId) ? "message-list" : ""}
+                lockable={true}
+                toBottomHeight={'100%'}
+                dataSource={[
+                    {
+                        position: (message.from_user_id === userId) ? 'right' : 'left',
+                        text: message.message
+                    }
+                ]
+                } />
         )
       })}
-      <input value={message.message} name="message" onChange={e => onChange(e)} />
-      <button onClick={() => onClick()}>Send Message</button>
+        <Input
+            className="chat-input"
+            ref={el => (inputRef = el)}
+            onChange={(e) => onChange(e)}
+            placeholder="Type here..."
+            multipleline={true}
+            rightButtons={
+                <Button
+                    onClick={() => onClick()}
+                    color='white'
+                    backgroundColor='black'
+                    text='Send'/>
+            }/>
     </div>
   );
 }
