@@ -4,6 +4,7 @@ from sqlalchemy.dialects.postgresql import array_agg
 
 from sqlalchemy.sql import func
 from app import db
+from .orders import Orders
 from .tag import OffersTags, Tag
 
 
@@ -18,7 +19,6 @@ class Offer(db.Model):
     description = db.Column('description', db.Text, nullable=True)
     photo = db.Column('photo', db.String(255), nullable=True)
     portions_number = db.Column('portions_number', db.Integer, nullable=False)
-    used_portions = db.Column('used_portions', db.Integer, nullable=False)
     pickup_longitude = db.Column('pickup_longitude', db.Float, nullable=False)
     pickup_latitude = db.Column('pickup_latitude', db.Float, nullable=False)
     post_time = db.Column('post_time', db.DateTime, nullable=False, default=func.now)
@@ -42,7 +42,7 @@ class Offer(db.Model):
             "description": self.description,
             "photo": self.photo,
             "portions_number": self.portions_number,
-            "used_portions": self.used_portions,
+            "used_portions": sum([order.portions for order in self.orders if order.is_canceled == False]),
             "pickup_latitude": self.pickup_latitude,
             "pickup_longitude": self.pickup_longitude,
             "post_time": self.post_time,
@@ -65,7 +65,7 @@ class Offer(db.Model):
             "description": self.description,
             "photo": self.photo,
             "portions_number": self.portions_number,
-            "used_portions": self.used_portions,
+            "used_portions": sum([order.portions for order in self.orders if order.is_canceled == False]),
             "pickup_latitude": self.pickup_latitude,
             "pickup_longitude": self.pickup_longitude,
             "post_time": self.post_time,
@@ -77,7 +77,7 @@ class Offer(db.Model):
         return data
 
     @staticmethod
-    def add_offer(user_id, name, active, portions_number, used_portions, pickup_long, pickup_lat, post_time,
+    def add_offer(user_id, name, active, portions_number, pickup_long, pickup_lat, post_time,
                   pickup_times,
                   offer_expiry, description=None, photo=None):
         offer = Offer(
@@ -85,7 +85,6 @@ class Offer(db.Model):
             name=name,
             active=active,
             portions_number=portions_number,
-            used_portions=used_portions,
             pickup_longitude=pickup_long,
             pickup_latitude=pickup_lat,
             post_time=post_time,
@@ -124,13 +123,8 @@ class Offer(db.Model):
     @staticmethod
     def get_active_offers():
         return Offer.query.filter_by(active=True) \
-            .filter(Offer.used_portions < Offer.portions_number) \
+            .filter(Offer.portions_number > sum([order.portions for order in Orders.get_orders_by_offer_id_not_canceled(Offer.id)])) \
             .filter(Offer.offer_expiry >= datetime.now())
-
-    @staticmethod
-    def update_used_portions(offer_id, new_order_portions):
-        Offer.query.filter_by(id=offer_id).first().used_portions = new_order_portions
-        db.session.commit()
 
     @staticmethod
     def get_offer_by_id(offer_id):
@@ -140,14 +134,14 @@ class Offer(db.Model):
     def get_current_offers_of_user(user_id):
         return Offer.query.filter_by(user_id=user_id) \
             .filter(Offer.active == True) \
-            .filter(Offer.used_portions < Offer.portions_number) \
+            .filter(Offer.portions_number > sum([order.portions for order in Orders.get_orders_by_offer_id_not_canceled(Offer.id)])) \
             .filter(Offer.offer_expiry >= datetime.now())
 
     @staticmethod
     def get_all_active_offers_except_mine(user_id):
         return Offer.query.filter_by(active=True) \
             .filter(Offer.user_id != user_id) \
-            .filter(Offer.used_portions < Offer.portions_number) \
+            .filter(Offer.portions_number > sum([order.portions for order in Orders.get_orders_by_offer_id_not_canceled(Offer.id)])) \
             .filter(Offer.offer_expiry >= datetime.now())
 
     @staticmethod
