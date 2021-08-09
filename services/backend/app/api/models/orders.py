@@ -56,7 +56,6 @@ class Orders(db.Model):
 
         db.session.commit()
 
-
     @staticmethod
     def get_all_orders():
         return Orders.query.all()
