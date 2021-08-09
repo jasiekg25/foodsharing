@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import api from "../api.js";
 import {toast} from "react-toastify";
-import {Card, Col, ListGroup, ListGroupItem, Row} from "react-bootstrap";
-import {CalendarFill, EnvelopeFill, TelephoneFill} from "react-bootstrap-icons";
+import 'react-chat-elements/dist/main.css';
+import { ChatItem } from 'react-chat-elements';
 import {history} from "../index";
 
-function ChatRooms(props) {
+function ChatRooms() {
 
     const [chatRooms, setChatRooms] = useState([]);
 
@@ -26,11 +26,13 @@ function ChatRooms(props) {
             {chatRooms.map((chat) => {
                 return (
                     <div key={chat.id}>
-                        <Card>
-                            <ListGroup className="list-group-flush">
-                                <ListGroupItem onClick={ (e) => handleShowChat(chat.id, chat.offer_id)}> <EnvelopeFill size={20} /> {chat.id}</ListGroupItem>
-                             </ListGroup>
-                        </Card>
+                        <ChatItem
+                            onClick={(e) => handleShowChat(chat.id, chat.offer_id)}
+                            avatar={chat.offer_photo}
+                            title={chat.offer_name}
+                            subtitle={chat.offer_owner_name}
+                            date={new Date()}
+                             />
                     </div>
                     )
             })}

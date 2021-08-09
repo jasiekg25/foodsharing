@@ -3,6 +3,8 @@ import {Navbar, Nav} from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import './NavBar.css';
+import {Envelope} from "react-bootstrap-icons";
+
 import NotificationModal from '../NotificationModal';
 
 function NavBar(props) {
@@ -10,7 +12,7 @@ function NavBar(props) {
     let menu = (
         <Nav className="mr-auto">
             <Link
-              className="nav-link">About us
+              className="nav-link"> About us
             </Link>
             <Link className="nav-link">Trust & safety</Link>
         </Nav>
@@ -27,6 +29,9 @@ function NavBar(props) {
             </Link>
             <Link to="/add-meal" className="nav-link">
               Add meal
+            </Link>
+            <Link to="/chat" className="nav-link">
+                <Envelope size={18} />
             </Link>
             <NotificationModal />
           </Nav>
