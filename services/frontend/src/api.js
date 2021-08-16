@@ -63,7 +63,7 @@ const api = {
     return axios.post(`${baseUrl}/auth/refresh`, body);
   },
   getOffers: (page, lat, lon, tags) => {
-    return axios.get(`${baseUrl}/offers?page=${page}&lat=${lat}&lon=${lon}&tags_ids=${tags}`);
+    return axios.get(`${baseUrl}/offers?page=${page}&lat=${lat}&lon=${lon}&tags_ids=${tags}&sorted_by=localization`);
   },
   getUserCurrentOffers: () => {
     return axios.get(`${baseUrl}/current_offers`)
