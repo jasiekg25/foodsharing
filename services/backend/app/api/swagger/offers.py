@@ -58,6 +58,8 @@ parser.add_argument('lon', type=float)
 parser.add_argument('lat', type=float)
 parser.add_argument('page', type=int)
 parser.add_argument('tags_ids', action='split')
+parser.add_argument('sorted_by', required=True)
+# parser.add_argument('descending', type=bool, required=True)
 
 class Offers(Resource):
     @auth_required
@@ -68,12 +70,21 @@ class Offers(Resource):
         try:
             content = parser.parse_args()
             user_id = current_user().id
-
+             # get all offers
             offers = Offer.get_all_active_offers_except_mine(user_id=user_id)
+
+            # get offers which contains all selected tags
             tags = content['tags_ids']
             tags = list(map(int, tags)) if tags[0] != '' else []
             tagged_offers = Offer.check_tags(offers, tags)
-            sorted_offers = Offer.sort_by_distance_from_user(tagged_offers, content['lon'], content['lat'])
+
+            # sort by chosen parameter (by localization - ascending; by rating - descending)
+            sorted_offers = []
+            if content['sorted_by'] == "localization":
+                sorted_offers = Offer.sort_by_distance_from_user(tagged_offers, content['lon'], content['lat'])
+            if content['sorted_by'] == "rating":
+                sorted_offers = Offer.sort_by_owner_ranking(tagged_offers)
+
             paginated_offers = sorted_offers.paginate(page=content['page'], per_page=15)
 
             return [offer.to_search_dict() for offer in paginated_offers.items], 200
