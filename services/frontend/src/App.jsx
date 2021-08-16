@@ -18,6 +18,8 @@ import SearchPage from "./components/SearchPage";
 import Profile from "./components/Profile";
 import FinalizeRegistration from "./components/FinalizeRegistration";
 import OtherUserProfile from "./components/OtherUserProfile";
+import Chat from "./components/Chat";
+import ChatRooms from "./components/ChatRooms";
 
 const PageNoFound = () => (
   <section className="hero is-halfheight">
@@ -140,6 +142,16 @@ const App = () => {
               exact
               path="/users/:id"
               render={(props) => <OtherUserProfile {...props} />}
+          />
+          <Route
+            exact
+            path="/chat"
+            render={() => <ChatRooms />}
+        />
+        <Route
+              exact
+              path="/chat/:roomId/offers/:offerId"
+              render={(props) => <Chat {...props} />}
           />
         <Route component={PageNoFound} />
       </Switch>
