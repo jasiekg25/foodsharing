@@ -31,6 +31,13 @@ You need to install the followings:
 - Node.js
 - Docker
 
+We also use additional platform accounts/apikeys in application:
+- Gmail account (to send mail notifications to our users)
+- Claudinary (to manage load/download photos)
+- Google Cloud Account (to use google's map)
+- GEOAPIFY (to geo search using their api)
+
+
 ## Load Mock Data
 To load mock data from csv files you need to be in `foodsharing` directory. We prepare some csv files in directory `app_dev` (which is also database name) \
 After running up docker containers check **3 first letter of db container hash**.
@@ -41,9 +48,17 @@ Right after use command `./import_data.sh <3 first letter of db container hash> 
 ## Run
 
 1. Clone the repo: `git clone https://github.com/jasiekg25/foodsharing.git`
-2. Switch to `foodsharing` folder and run `docker-compose up -d` (on linux add `sudo` before the command)
-3. Visit http://localhost:3007 to check the app (you can register a new user or use the sample testing user account username: test, email: test@test.com, password: test)
-4. Visit http://127.0.0.1:5001/docs/ to check API docs. 
+2. Use `.env-template` file to create your own `.env` file. To run our application localy you need to fill these environments:
+    - MAIL_USERNAME
+    - MAIL_PASSWORD
+    - CLOUDINARY_CLOUD_NAME
+    - CLOUDINARY_API_KEY
+    - CLOUDINARY_API_SECRET 
+    - REACT_APP_GOOGLE_API_KEY
+    - REACT_APP_GEOAPIFY_API_KEY
+3. Switch to `foodsharing` folder and run `docker-compose up -d` (on linux add `sudo` before the command)
+4. Visit http://localhost:3007 to check the app (you can register a new user or use the sample testing user account username: test, email: test@test.com, password: test)
+5. Visit http://127.0.0.1:5001/docs/ to check API docs. 
 
 
 Other useful commands (on linux add `sudo` before the command):
