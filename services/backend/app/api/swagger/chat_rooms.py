@@ -9,6 +9,14 @@ from app.api.models.chat_room import ChatRoom
 
 chat_room_namespace = Namespace("chat_room")
 
+message_fields = chat_room_namespace.model(
+    'Message',
+    {
+        'from_user_id': fields.Integer(readOnly=True),
+        'message': fields.String(readOnly=True),
+        'timestamp': fields.DateTime(readOnly=True)
+    })
+
 chat_room = chat_room_namespace.model(
     "ChatRoom",
     {
@@ -19,7 +27,8 @@ chat_room = chat_room_namespace.model(
         'offer_name': fields.String(readOnly=True),
         'offer_photo': fields.String(readOnly=True),
         'offer_owner_name': fields.String(readOnly=True),
-        'offer_owner_surname': fields.String(readOnly=True)
+        'offer_owner_surname': fields.String(readOnly=True),
+        'last_message': fields.List(fields.Nested(message_fields))
     }
 )
 
