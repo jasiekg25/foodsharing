@@ -203,6 +203,14 @@ export default function PrimarySearchAppBar(props) {
         <Button className={classes.menuButton}>Trust & safety</Button>
       </div>
       <div className={classes.grow} />
+      <Button
+        className={classes.menuButton}
+        onClick={() => {
+          history.push("/login");
+        }}
+      >
+        Log in
+      </Button>
     </>
   );
 
