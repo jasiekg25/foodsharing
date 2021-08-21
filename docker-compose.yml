@@ -13,11 +13,23 @@ services:
     ports:
       - 5001:5000
     environment:
-      - FLASK_ENV=development
-      - APP_SETTINGS=app.config.DevelopmentConfig
+      - DEFAULT_COMPANY_NAME
+      - FLASK_ENV=${ENVIRONMENT}
+
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/app_dev
       - DATABASE_TEST_URL=postgresql://postgres:postgres@db:5432/app_test
-      - SECRET_KEY=change_this_to_some_random_key
+
+      - MAIL_SERVER
+      - MAIL_USERNAME
+      - MAIL_PASSWORD
+
+      - CLOUDINARY_CLOUD_NAME
+      - CLOUDINARY_API_KEY
+      - CLOUDINARY_API_SECRET
+
+      - SECRET_KEY
+
+      - APP_SETTINGS=app.config.DevelopmentConfig
     depends_on:
       - db
 
@@ -30,8 +42,8 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
 
   frontend:
     build:
@@ -44,8 +56,11 @@ services:
     ports:
       - 3007:3000
     environment:
-      - NODE_ENV=development
-      - REACT_APP_BACKEND_SERVICE_URL=http://localhost:5001
+      - NODE_ENV=${ENVIRONMENT}
       - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_BACKEND_SERVICE_URL
+
+      - REACT_APP_GOOGLE_API_KEY
+      - REACT_APP_GEOAPIFY_API_KEY
     depends_on:
       - backend
