@@ -1,4 +1,4 @@
-from sqlalchemy.sql import func, desc
+from sqlalchemy.sql import func, desc, and_
 from app import db, guard
 
 from .offer import Offer
@@ -46,9 +46,14 @@ class ChatRoom(db.Model):
         db.session.commit()
 
     @staticmethod
+    def exists(client, offer_id):
+        return ChatRoom.query \
+            .filer(and_(ChatRoom.client == client, ChatRoom.offer_id == offer_id))\
+            .exists()
+
+    @staticmethod
     def get_all_rooms(user_id):
         return ChatRoom.query \
             .join(Offer) \
             .filter((user_id == ChatRoom.client) | (user_id == Offer.user_id)) \
             .group_by(ChatRoom.id)
-

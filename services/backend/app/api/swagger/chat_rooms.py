@@ -69,4 +69,27 @@ class ChatRooms(Resource):
             logger.exception("ChatRoom.post(): %s", str(e))
             return "Couldn't add chat room", 500
 
+    @auth_required
+    @chat_room_namespace.expect(chat_room)
+    def put(self):
+        """Place new chat room"""
+        logger.info("ChatRoom.post() requested_body: %s", str(request.get_json()))
+        try:
+            content = request.get_json()
+            client = current_user().id
+
+            for parameter in ['offer_id']:
+                if parameter not in content:
+                    return f"{parameter} missing in request", 400
+
+            if ChatRoom.exists(client, content['offer_id']):
+                return "Chat Room already exist", 200
+
+            ChatRoom.add_chat_room(client, content['offer_id'])
+            return "Chat Room has been added", 201
+
+        except Exception as e:
+            logger.exception("ChatRoom.post(): %s", str(e))
+            return "Couldn't add chat room", 500
+
 chat_room_namespace.add_resource(ChatRooms, "")
