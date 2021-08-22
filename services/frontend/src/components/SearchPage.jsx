@@ -7,6 +7,7 @@ import { Redirect } from "react-router-dom";
 import api from "../api";
 import OfferMap from "./maps/OfferMap"
 import useMap from "./maps/useMap";
+import SortSelect from "./sortSelect/sortSelect";
 
 const SearchPage = ({ isLoggedIn }) => {
   const [tags, setTags] = useState([]);
@@ -18,6 +19,7 @@ const SearchPage = ({ isLoggedIn }) => {
   const [selected, setSelected] = useState(null);
   const [pageCount, setPageCount] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(true);
+  const [sortBy, setSortBy] = useState('localization');
 
   useEffect(() => {
     api
@@ -43,7 +45,7 @@ const SearchPage = ({ isLoggedIn }) => {
   const getOffers = () => {
     let queryTags = tags.filter(tag => {return tag['selected'];}).map(tag => tag.id).join(',');
     api
-      .getOffers(pageCount, center.lat, center.lng, queryTags)
+      .getOffers(pageCount, center.lat, center.lng, queryTags, sortBy)
       .then((res) => {
         setOffers([...offers, ...res.data]);
         let newPageCount = pageCount + 1
@@ -57,10 +59,10 @@ const SearchPage = ({ isLoggedIn }) => {
       });
   };
 
-  const searchUpdate = () => {
+  const searchUpdate = (sortByUpdated = sortBy) => {
     let queryTags = tags.filter(tag => {return tag['selected'];}).map(tag => tag.id).join(',');
     api
-      .getOffers(1, center.lat, center.lng, queryTags)
+      .getOffers(1, center.lat, center.lng, queryTags, sortByUpdated)
       .then((res) => {
         setOffers(res.data);
         setSelected(null);
@@ -102,15 +104,23 @@ const SearchPage = ({ isLoggedIn }) => {
         {/*      return <Tag key={tag.id} tag={tag} toggle={onTagToggle} />;*/}
         {/*    })}*/}
         {/*</Row>*/}
+        
       </Container>
-      <TagSearch
-        tags={tags}
-        onTagToggle={onTagToggle}
-        searchButton={true}
-        containerStyle="col-md-6 search-container"
-        searchFunction={searchUpdate}
-      />
-
+      <Row>
+        <SortSelect 
+          sortBy={sortBy} 
+          setSortBy={setSortBy}
+          searchFunction={searchUpdate}
+        />
+        <TagSearch
+          tags={tags}
+          onTagToggle={onTagToggle}
+          searchButton={true}
+          containerStyle="col-md-6 search-container"
+          searchFunction={searchUpdate}
+        />
+      </Row>
+      
       <Row>
         <Col md={6}>
           <Offers
