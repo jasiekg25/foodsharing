@@ -11,9 +11,10 @@ export default function SortSelect({sortBy, setSortBy, searchFunction}) {
   const [open, setOpen] = React.useState(false);
 
   const handleChange = (event) => {
-    updatedValue = event.target.value
+    const updatedValue = event.target.value
+    console.log(updatedValue)
     setSortBy(updatedValue);
-    searchFunction(eupdatedValue);
+    searchFunction(updatedValue);
   };
 
   const handleClose = () => {
