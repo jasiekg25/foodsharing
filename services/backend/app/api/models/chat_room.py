@@ -46,10 +46,16 @@ class ChatRoom(db.Model):
         db.session.commit()
 
     @staticmethod
+    def get_chat_room(client, offer_id):
+        return ChatRoom.query\
+            .filter(and_(ChatRoom.client == client, ChatRoom.offer_id == offer_id))\
+            .first()
+
+    @staticmethod
     def exists(client, offer_id):
         return ChatRoom.query \
-            .filer(and_(ChatRoom.client == client, ChatRoom.offer_id == offer_id))\
-            .exists()
+            .filter(and_(ChatRoom.client == client, ChatRoom.offer_id == offer_id))\
+            .first() is not None
 
     @staticmethod
     def get_all_rooms(user_id):
