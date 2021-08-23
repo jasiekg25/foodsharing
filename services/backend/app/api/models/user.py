@@ -17,11 +17,6 @@ class User(db.Model):
     active = db.Column(db.Boolean(), default=True, nullable=False)
     created_date = db.Column(db.DateTime, default=func.now(), nullable=False)
 
-    client_rattings_from = db.relationship('ClientRating', backref='client_ratting_from_you',
-                                           foreign_keys='ClientRating.from_user_id')  # One user to many ClientRatings
-    client_rattings_to = db.relationship('ClientRating', backref='client_ratting_to_you',
-                                         foreign_keys='ClientRating.to_user_id')  # One user to many ClientRatings
-
     sharer_rattings_from = db.relationship('SharerRating', backref='sharer_ratting_form_you',
                                            foreign_keys='SharerRating.from_user_id')  # One user to many SharerRatings
     sharer_rattings_to = db.relationship('SharerRating', backref='sharer_ratting_to_you',

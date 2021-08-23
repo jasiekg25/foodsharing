@@ -110,7 +110,6 @@ def create_app(script_info=None):
     app.logger.addHandler(handler)
     mail.init_app(app)
 
-    from .api.models.client_rating import ClientRating
     from .api.models.offer import Offer
     from .api.models.orders import Orders
     from .api.models.sharer_rating import SharerRating
