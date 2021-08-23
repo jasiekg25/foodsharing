@@ -42,8 +42,8 @@ const NotificationModal = () => {
 
   return (
     <div>
-      <IconButton onClick={handleClick}>
-        <Badge badgeContent={unreadCount} color="primary">
+      <IconButton onClick={handleClick} color="inherit">
+        <Badge badgeContent={unreadCount} >
           <NotificationsIcon />
         </Badge>
       </IconButton>
