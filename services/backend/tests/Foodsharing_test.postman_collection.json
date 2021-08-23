@@ -258,7 +258,7 @@
 								"{{baseUrl}}"
 							],
 							"path": [
-								"offers"
+								"search_offers"
 							],
 							"query": [
 								{
