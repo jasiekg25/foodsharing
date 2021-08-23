@@ -2,10 +2,12 @@ import math
 from datetime import datetime
 from sqlalchemy.dialects.postgresql import array_agg
 
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, desc
 from app import db
 from .orders import Orders
 from .tag import OffersTags, Tag
+from .sharer_rating import SharerRating
+from .user import User
 
 
 class Offer(db.Model):
@@ -172,3 +174,10 @@ class Offer(db.Model):
                 )
             ) * 60 * 1.1515 * 1.609344))
 
+    @staticmethod
+    def sort_by_owner_ranking(offers):
+        return offers\
+            .join(User, Offer.user_id == User.id)\
+            .join(SharerRating, SharerRating.to_user_id == User.id)\
+            .group_by(SharerRating.to_user_id, Offer.id)\
+            .order_by(desc(func.avg(SharerRating.rating)))

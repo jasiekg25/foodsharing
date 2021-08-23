@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Badge,
   IconButton,
@@ -11,6 +11,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import { useNotifications } from "../hooks/useNotifications";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
+import api from "../api";
 
 const useStyles = makeStyles((theme) => ({
   typography: {
@@ -41,8 +42,8 @@ const NotificationModal = () => {
 
   return (
     <div>
-      <IconButton onClick={handleClick}>
-        <Badge badgeContent={unreadCount} color="primary">
+      <IconButton onClick={handleClick} color="inherit">
+        <Badge badgeContent={unreadCount} >
           <NotificationsIcon />
         </Badge>
       </IconButton>

@@ -1,7 +1,8 @@
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, desc, and_
 from app import db, guard
 
 from .offer import Offer
+from .chat_message import ChatMessage
 
 
 class ChatRoom(db.Model):
@@ -15,7 +16,10 @@ class ChatRoom(db.Model):
                          nullable=False)  # Many ChatRooms to one offer
     timestamp = db.Column('timestamp', db.DateTime, nullable=False, default=db.func.current_timestamp())
 
-    messages = db.relationship('ChatMessage', backref='chat_room_messages',
+    messages = db.relationship('ChatMessage',
+                               order_by='desc(ChatMessage.timestamp)',
+                               lazy='dynamic',
+                               backref='chat_room_messages',
                                foreign_keys='ChatMessage.chat_room_id')  # One chatroom has many ChatMasseges
 
     def to_dict(self):
@@ -27,7 +31,8 @@ class ChatRoom(db.Model):
             'offer_name': self.offer_chat_rooms.name,
             'offer_photo': self.offer_chat_rooms.photo,
             'offer_owner_name': self.offer_chat_rooms.user.name,
-            'offer_owner_surname': self.offer_chat_rooms.user.surname
+            'offer_owner_surname': self.offer_chat_rooms.user.surname,
+            'last_message': [offer_tag.to_dict() for offer_tag in self.messages.limit(1)]
         }
         return data
 
@@ -41,7 +46,20 @@ class ChatRoom(db.Model):
         db.session.commit()
 
     @staticmethod
+    def get_chat_room(client, offer_id):
+        return ChatRoom.query\
+            .filter(and_(ChatRoom.client == client, ChatRoom.offer_id == offer_id))\
+            .first()
+
+    @staticmethod
+    def exists(client, offer_id):
+        return ChatRoom.query \
+            .filter(and_(ChatRoom.client == client, ChatRoom.offer_id == offer_id))\
+            .first() is not None
+
+    @staticmethod
     def get_all_rooms(user_id):
-        return ChatRoom.query.join(Offer).filter((user_id == ChatRoom.client) | (user_id == Offer.user_id))
-
-
+        return ChatRoom.query \
+            .join(Offer) \
+            .filter((user_id == ChatRoom.client) | (user_id == Offer.user_id)) \
+            .group_by(ChatRoom.id)

@@ -77,7 +77,7 @@ const App = () => {
 
   return (
     <div>
-      <NavBar isLoggedIn={isLoggedIn} />
+      <NavBar isLoggedIn={isLoggedIn} logoutUser={logoutUser} />
 
       <ToastContainer position="top-center"/>
 
