@@ -1,0 +1,757 @@
+{
+	"info": {
+		"_postman_id": "7b5de454-68dc-4b0d-8a29-1d7b946ec273",
+		"name": "Foodsharing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Tags",
+			"item": [
+				{
+					"name": "GET",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson).length.to.have.greaterThan(50);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/tags",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tags"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chat Messages",
+			"item": [
+				{
+					"name": "GET",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson).length.to.be.an('Array');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/chat_messages",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chat_messages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status\", function(){\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"chat_room_id\": 102,\r\n    \"message\": \"Test message\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chat_messages",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chat_messages"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chat Rooms",
+			"item": [
+				{
+					"name": "GET",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson).length.to.be.an('Array');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/chat_rooms",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chat_rooms"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status\", function(){\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"client\": 6,\r\n    \"offer_id\": 102\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chat_rooms",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chat_rooms"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Offers",
+			"item": [
+				{
+					"name": "GET ALL OFFERS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson).to.be.an('Array');\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MjA2NDA3NTksImV4cCI6MTYyMDY0MTY1OSwianRpIjoiMDQxZWI0ODUtZjIzZC00MWNlLWE1Y2EtMWJmOWZkYjBhYzRhIiwiaWQiOjEsInJscyI6IiIsInJmX2V4cCI6MTYyMzIzMjc1OX0.Nkx_IPca52j2TuJqRgDeGSAMqfEfzirftQeqkTjiZuQ",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/search_offers?tags_ids=154&sorted_by=localization&page=1&lat=50.2&lon=49.2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"search_offers"
+							],
+							"query": [
+								{
+									"key": "tags_ids",
+									"value": "154"
+								},
+								{
+									"key": "sorted_by",
+									"value": "localization"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "lat",
+									"value": "50.2"
+								},
+								{
+									"key": "lon",
+									"value": "49.2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "GET ALL ORDERS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson).to.be.an('Array');\r",
+									"    firstItem = responseJson[0];\r",
+									"    pm.expect(firstItem.email).not.to.be.null;\r",
+									"    pm.expect(firstItem.id).not.to.be.null;\r",
+									"    pm.expect(firstItem.offer_id).not.to.be.null;\r",
+									"    pm.expect(firstItem.is_canceled).to.be.false;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MAKE ORDER",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status\", function(){\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"offer_id\": 102,\r\n    \"portions\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MAKE BAD ORDER",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status\", function(){\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"offer_id\": 105,\r\n    \"portions\": 13\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Profile Current Offers",
+			"item": [
+				{
+					"name": "GET",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson).to.be.an('Array');\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/current_offers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"current_offers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Profile Orders",
+			"item": [
+				{
+					"name": "GET",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson).to.be.an('Array');\r",
+									"})\r",
+									"    "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/profile_orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"profile_orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"id\": 105,\r\n        \"user_id\": 5,\r\n        \"fromUser_photo\": null,\r\n        \"fromUser_name\": \"Michał\",\r\n        \"fromUser_surname\": \"Kurleto\",\r\n        \"fromUser_id\": 7,\r\n        \"offer_id\": 103,\r\n        \"offer_description\": \"Kotlet + Ziemniaczki + Modra Kapusta\",\r\n        \"offer_name\": \"polski obiag\",\r\n        \"portions\": 3,\r\n        \"is_canceled\": true,\r\n        \"is_picked\": false,\r\n        \"offer_photo\": null\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/profile_orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"profile_orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT BAD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status\", function(){\r",
+									"    pm.response.to.have.status(500);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"id\": 105,\r\n        \"user_id\": 5,\r\n        \"fromUser_photo\": null,\r\n        \"fromUser_name\": \"Michał\",\r\n        \"fromUser_surname\": \"Kurleto\",\r\n        \"fromUser_id\": 7,\r\n        \"offer_description\": \"Kotlet + Ziemniaczki + Modra Kapusta\",\r\n        \"offer_name\": \"polski obiag\",\r\n        \"portions\": 3,\r\n        \"is_canceled\": true,\r\n        \"is_picked\": false,\r\n        \"offer_photo\": null\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/profile_orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"profile_orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT BAD 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status\", function(){\r",
+									"    pm.response.to.have.status(500);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    {\r\n        \"id\": 105,\r\n        \"user_id\": 5,\r\n        \"fromUser_photo\": null,\r\n        \"fromUser_name\": \"Michał\",\r\n        \"fromUser_surname\": \"Kurleto\",\r\n        \"fromUser_id\": 7,\r\n        \"offer_description\": \"Kotlet + Ziemniaczki + Modra Kapusta\",\r\n        \"offer_name\": \"polski obiag\",\r\n        \"portions\": 3,\r\n        \"is_canceled\": true,\r\n        \"offer_photo\": null\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/profile_orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"profile_orders"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Profile",
+			"item": [
+				{
+					"name": "GET",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson).to.be.an('Object');\r",
+									"    pm.expect(responseJson.email).not.to.be.null;\r",
+									"    pm.expect(responseJson.id).not.to.be.null;\r",
+									"    pm.expect(responseJson.name).not.to.be.null;\r",
+									"    pm.expect(responseJson.surname).not.to.be.null;\r",
+									"    pm.expect(responseJson.created_date).not.to.be.null;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/user_profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user_profile"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Notifications",
+			"item": [
+				{
+					"name": "GET",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status\", function(){\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response body\", function(){\r",
+									"    pm.response.to.be.json;\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson).length.to.be.an('Array');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/user_notifications",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user_notifications"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MjkzMTU3NzksImV4cCI6MTYyOTMxNjY3OSwianRpIjoiMjRjZDhiZjktMjYyMS00ZmIyLWIxZWEtYTI0YzA2ODA1ZWFhIiwiaWQiOjUsInJscyI6IiIsInJmX2V4cCI6MTYzMTkwNzc3OX0.OZLTB--qwS2JEn5PuAKTPOm5hYW01MOwwMZHRKnZMx0"
+		},
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5001"
+		}
+	]
+}

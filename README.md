@@ -100,3 +100,8 @@ SSH to containers:
 $ docker-compose exec backend /bin/sh
 $ docker-compose exec backend-db /bin/sh
 ```
+
+## Tests
+
+To run test you need to import json file from backends/tests to postman. Then find your collection, click 3 dots and 'Run collection'. There you can choose which endpoints you want to test and run.
+All the endpoints require logged in user so you need to provide valid user token in collection variables.
