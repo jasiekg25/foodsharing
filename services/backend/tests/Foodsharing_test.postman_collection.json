@@ -253,7 +253,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/offers?tags_ids=154&sorted_by=localization&page=1&lat=50.2&lon=49.2",
+							"raw": "{{baseUrl}}/search_offers?tags_ids=154&sorted_by=localization&page=1&lat=50.2&lon=49.2",
 							"host": [
 								"{{baseUrl}}"
 							],
