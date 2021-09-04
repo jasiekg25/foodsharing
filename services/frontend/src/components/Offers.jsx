@@ -1,19 +1,128 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import api from "../api.js";
-import {Col, Card, Row, Button, Form, Modal, ListGroupItem, ListGroup} from "react-bootstrap";
-import "./Offers.css";
-import { toast } from 'react-toastify';
+// import "./Offers.css";
+import {toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import {AlarmFill, BucketFill, ClockFill, DistributeHorizontal, GeoAltFill, TagFill} from "react-bootstrap-icons";
-import { history } from "../index";
+import {history} from "../index";
 import placeholder from "../img/placeholder.jpg";
 import InfiniteScroll from 'react-infinite-scroll-component';
+import {makeStyles} from "@material-ui/core/styles";
+import {useFadedShadowStyles} from '@mui-treasury/styles/shadow/faded';
+import cx from "clsx";
+import IconButton from "@material-ui/core/IconButton";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogActions from "@material-ui/core/DialogActions";
+import Avatar from "@material-ui/core/Avatar";
+import CardActions from "@material-ui/core/CardActions";
+import Button from "@material-ui/core/Button";
+import Card from "@material-ui/core/Card";
+import ChatIcon from '@material-ui/icons/Chat';
+import Box from "@material-ui/core/Box";
+import TextField from "@material-ui/core/TextField";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import LinearProgress from "@material-ui/core/LinearProgress";
+
+
+const useStyles = makeStyles(({palette}) => ({
+    card: {
+        maxWidth: "100%",
+        marginTop: 5,
+        overflow: 'auto',
+        overflowY: "scroll",
+        scrollbarWidth: "none" /* Firefox */,
+        "&::-webkit-scrollbar": {
+            display: "none"
+        },
+    },
+    itemsCard: {
+        flexGrow: 1,
+        marginTop: 10,
+        marginLeft: 20,
+        marginRight: 20,
+        borderRadius: 12,
+        maxWidth: 700,
+        textAlign: 'center',
+        overflow: 'auto',
+        scrollbarWidth: "none" /* Firefox */,
+        maxHeight: 200,
+        "&::-webkit-scrollbar": {
+            display: "none"
+        },
+
+    },
+    avatar: {
+        float: "right",
+    },
+    heading: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        letterSpacing: '0.5px',
+        marginTop: 8,
+        marginRight: -100
+    },
+    photo: {
+        float: "left",
+        height: "40%",
+        width: "40%",
+    },
+    header: {
+        height: 10,
+    },
+    buttons: {
+        float: "right"
+    },
+    icons: {
+        marginTop: 10,
+        marginBottom: 10,
+        color: "textSecondary",
+        display: "flex",
+        alignItems: "right",
+        justifyContent: "center",
+    },
+    statLabel: {
+        fontSize: 12,
+        color: palette.grey[500],
+        fontWeight: 100,
+        fontFamily:
+            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+        margin: 0,
+    },
+    confirmLabel: {
+        fontSize: 15,
+        fontWeight: '700',
+        color: "#016f4a",
+    },
+    cancelLabel: {
+        fontSize: 15,
+        fontWeight: '700',
+        color: "#F50057",
+    },
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    paper: {
+        backgroundColor: "white",
+        border: '2px solid #000',
+        boxShadow: palette.grey[500],
+        // padding: palette.spacing(2, 4, 3),
+    },
+}));
 
 const portions = {
     name: "portions",
+    label: "Portions number",
     type: "number",
 };
 
@@ -32,6 +141,9 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
     } = useForm({
         resolver: yupResolver(schema),
     });
+
+    const styles = useStyles();
+    const shadowStyles = useFadedShadowStyles();
 
     const [chosenOffer, setChosenOffer] = useState({})
     const [showModal, setShowModal] = useState(false);
@@ -52,6 +164,7 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
     const orderMeal = (data) => {
         handleClose();
         data['offer_id'] = chosenOffer.id;
+        console.log(data)
         api.postOrder(data)
             .then((res) => {
                 getOffers();
@@ -64,78 +177,113 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
             })
     }
 
-    const sendMessage = () => {
-
+    const sendMessage = (offer) => {
+        offer.offer_id = offer.id
+        api.putUserChatRoom(offer)
+            .then((res) => {
+                console.log(res)
+            history.push(`/chat/${res.data.id}/offers/${res.data.offer_id}`)
+        }).catch((err) => {
+            console.log("Failed to redirect to chat room" + err)
+            toast.error(`Failed to redirect to chat room`);
+        })
     }
 
     return (
-        <div >
             <InfiniteScroll
                 dataLength={offers.length} //This is important field to render the next data
                 next={getOffers}
                 hasMore={hasNextPage}
                 height='1000px'
-                loader={<h4>Loading...</h4>}
+                loader={<LinearProgress />}
+                className={cx(styles.card)}
                 >
-                <div>
+                <Box>
                     {offers.map((offer) => {
                         return (
-                            <div key={offer.id} onClick={() => {
-                                onOfferSelect(offer)}}>
-                                <Row className="offers-container">
-                                        <Card className="offer-card flex-row">
-                                            {
-                                                offer.photo ? <Card.Img className="meal-photo" src={offer.photo} /> : <Card.Img className="meal-photo" src={placeholder} />
-                                            }
-                                            <Card.Body>
-                                                <Card.Title>{offer.name}</Card.Title>
-                                                <Card.Text>
-                                                    {offer.description}
-                                                </Card.Text>
-                                                <ListGroup className="list-group-flush">
-                                                    <ListGroupItem> <ClockFill size={15}/> <strong> Pick-up times: </strong> {offer.pickup_times}</ListGroupItem>
-                                                    <ListGroupItem> <AlarmFill size={15}/> <strong> Expire date: </strong> {offer.offer_expiry}</ListGroupItem>
-                                                    <ListGroupItem> <BucketFill size={15}/>  <strong>Remaining portions: </strong> {offer.portions_number - offer.used_portions} </ListGroupItem>
-                                                    <ListGroupItem> <TagFill size={15}/> <strong>Tags: </strong> {Array.from(offer.tags).map((tag, index) => {
-                                                        return (<small key={index}>{tag}, </small>);
-                                                    })}
-                                                    </ListGroupItem>
-                                                </ListGroup>
-                                                <div>
-                                                    <Button className="chat-button" variant="success">Send message</Button>
-                                                    <Button className="order-button" variant="success" onClick={(e) => handleShow(offer)}>Make order</Button>
-                                                    <Card.Text className="view-profile-button"> <Button className="view-button" variant="secondary" onClick={(e) => handleShowUserProfile(offer.user_id)}>View user profile </Button> {offer.user_name}</Card.Text>
-                                                </div>
-                                                <Modal className="portions-modal" show={showModal} onHide={handleClose} backdrop="static">
-                                                    <Modal.Header closeButton>
-                                                        <Modal.Title>Choose number of portions</Modal.Title>
-                                                    </Modal.Header>
-                                                    <Modal.Body>
-                                                        <form onSubmit={handleSubmit((data) => {orderMeal(data)})}>
-                                                            <Form.Control min="0" max={chosenOffer.portions_number - chosenOffer.used_portions} defaultValue='0' {...register(portions.name)} type={portions.type}/>
-                                                            {errors[portions.name] && (
-                                                                <p className="error login-error">{errors[portions.name].message}</p>
-                                                            )}
-                                                            <Modal.Footer>
-                                                                <Button className="order-button" variant="success" type="submit">
-                                                                    Order
-                                                                </Button>
-                                                                <Button className="cancel-order-button" variant="dark" onClick={handleClose}>
-                                                                    Cancel
-                                                                </Button>
-                                                            </Modal.Footer>
-                                                        </form>
-                                                    </Modal.Body>
-                                                </Modal>
-                                            </Card.Body>
-                                        </Card>
-                                </Row>
-                            </div>
+                            <Card key={offer.id} className={cx(styles.itemsCard, shadowStyles.root)}>
+                                <CardContent>
+                                    {
+                                        offer.photo ?
+                                            <CardMedia className={styles.photo}
+                                                       src={offer.photo}
+                                                       component="img"
+                                            /> :
+                                            <CardMedia className={styles.photo}
+                                                       src={placeholder}
+                                                       component="img"
+                                            />
+                                    }
+                                    <Avatar onClick={(e) => handleShowUserProfile(offer.user_id)} className={styles.avatar} src={offer.photo}/>
+                                    <CardContent>
+                                        <h3 className={styles.heading}>{offer.name}</h3>
+                                    </CardContent>
+                                    <Grid className={styles.icons}>
+                                        <Typography variant="body2" color="textSecondary" component="p"> Pick-up times: {offer.pickup_times}</Typography>
+                                    </Grid>
+                                    <Grid className={styles.icons}>
+                                        <Typography variant="body2" color="textSecondary" component="p"> Expire date: {offer.offer_expiry}</Typography>
+                                    </Grid>
+                                    <Grid className={styles.icons}>
+                                        <Typography variant="body2" color="textSecondary" component="p"> Remaining portions: {offer.portions_number - offer.used_portions}</Typography>
+                                    </Grid>
+                                        <Typography variant="subtitle1" component="p">
+                                            {offer.description}
+                                        </Typography>
+                                </CardContent>
+                                <CardContent>
+                                    <CardActions className={styles.buttons}>
+                                        <Button color="primary" onClick={(e) => sendMessage(offer)} startIcon={<ChatIcon />}>
+                                            Chat
+                                        </Button>
+                                        <Button size="medium" color="primary" onClick={(e) => handleShow(offer)}>
+                                            Make order
+                                        </Button>
+                                    </CardActions>
+                                </CardContent>
+                                <Dialog
+                                    open={showModal}
+                                    onClose={(e) => handleClose()}
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                    fullWidth={true}
+                                >
+                                    <DialogTitle id="alert-dialog-title">{`Choose number of ${offer.name} portions:`}</DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText>
+                                            <form
+                                                onSubmit={handleSubmit((data) => {orderMeal(data)})}
+                                                noValidate>
+                                                <TextField
+                                                    variant="outlined"
+                                                    fullWidth
+                                                    InputProps={{
+                                                        inputProps: {
+                                                            max: 10, min: 1, defaultValue: 1
+                                                        }
+                                                    }}
+                                                    {...register(portions.name)}
+                                                    error={!!errors.portions}
+                                                    type={portions.type}
+                                                />
+                                                />
+                                                <DialogActions>
+                                                    <Button color="primary" type="submit">
+                                                        Order
+                                                    </Button>
+                                                    <Button onClick={(e) => handleClose()} color="primary" autoFocus>
+                                                        Cancel
+                                                    </Button>
+                                                </DialogActions>
+                                            </form>
+                                        </DialogContentText>
+                                    </DialogContent>
+                                </Dialog>
+                            </Card>
                         )
                     })}
-                </div>
+                </Box>
             </InfiniteScroll>
-        </div>
     )
 }
 
