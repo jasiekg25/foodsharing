@@ -38,11 +38,11 @@ class Rating(Resource):
 
     @auth_required
     def post(self):
+        logger.info("Rating.post() request_body: %s", str(request.get_json()))
         try:
             user_id = current_user().id
-            logger.info("Rating.post() user_id: %s", str(user_id))
             content = request.get_json()
-            SharerRating.add_rating(date=datetime.utcnow(), from_user_id=user_id, **content)
+            SharerRating.add_rating(user_id, content)
             return "Rating added", 201
         except Exception as e:
             logger.exception("Rating.post(): %s", str(e))

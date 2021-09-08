@@ -23,6 +23,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import {history} from "../index";
 import {toast} from "react-toastify";
 import placeholder from "../img/placeholder.jpg";
+import Rating from "@material-ui/lab/Rating";
 
 
 const useStyles = makeStyles(({palette}) => ({
@@ -91,6 +92,7 @@ function Order(props) {
     const [chosenOrder, setChosenOrder] = useState({});
     const [showCancelOrderModal, setShowCancelOrderModal] = useState(false);
     const [showConfirmPickupModal, setShowConfirmPickupModal] = useState(false);
+    const [rating, setRating] = useState(0);
 
     useEffect(() => {
         getOrders();
@@ -142,9 +144,19 @@ function Order(props) {
             })
     }
 
-    const confirmPickup = () => {
+    const confirmPickup = (offer_author) => {
         handleConfirmPickupClose();
         chosenOrder.is_picked = true;
+        if (rating > 0)
+            api.postSharerRating({'to_user_id': offer_author,'rating': rating})
+                .then((res) => {
+                    console.log(res.data);
+                })
+                .catch((err) => {
+                    toast.error(err);
+                    console.error(err);
+                    return;
+                })
         api.putUserOrdersHistory(chosenOrder)
             .then((res) => {
                 toast.success(`Your order pick up has been confirmed!`);
@@ -221,9 +233,18 @@ function Order(props) {
                                 <DialogContentText id="alert-dialog-description">
                                     Are you sure you want to confirm that {order.offer_name} pick up?
                                 </DialogContentText>
+                                <Rating
+                                onChange={(event, newValue) => {
+                                    setRating(newValue);
+                                }}
+                                name="half-rating"
+                                value={rating}
+                                precision={0.5}
+                                size="large"
+                             />
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={(e) => confirmPickup()} color="primary">
+                                <Button onClick={(e) => confirmPickup(order.fromUser_id)} color="primary">
                                     Confirm
                                 </Button>
                                 <Button onClick={(e) =>handleConfirmPickupClose()} color="primary" autoFocus>

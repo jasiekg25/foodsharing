@@ -29,12 +29,11 @@ class SharerRating(db.Model):
         return SharerRating.query.filter_by(to_user_id=user_id)
 
     @staticmethod
-    def add_rating(to_user_id, from_user_id, date, rating):
+    def add_rating(from_user_id, content):
         rating = SharerRating(
-            to_user_id=to_user_id,
+            to_user_id=content['to_user_id'],
             from_user_id=from_user_id,
-            date=date,
-            rating=rating,
+            rating=content['rating'],
         )
         db.session.add(rating)
         db.session.commit()

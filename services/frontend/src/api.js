@@ -111,6 +111,9 @@ const api = {
   },
   getUserNotifications: () => {
     return axios.get(`${baseUrl}/user_notifications`)
+  },
+  postSharerRating: (body) => {
+    return axios.post(`${baseUrl}/rating`, body)
   }
 };
 
