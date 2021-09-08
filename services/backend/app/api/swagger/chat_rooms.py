@@ -13,6 +13,8 @@ message_fields = chat_room_namespace.model(
     'Message',
     {
         'from_user_id': fields.Integer(readOnly=True),
+        'from_user_name': fields.String(readOnly=True),
+        'from_user_surname': fields.String(readOnly=True),
         'message': fields.String(readOnly=True),
         'timestamp': fields.DateTime(readOnly=True)
     })

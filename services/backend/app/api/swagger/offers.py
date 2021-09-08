@@ -38,6 +38,7 @@ offer_search = offers_namespace.model(
         "user_id": fields.String(readOnly=True),
         "user_name": fields.String(readOnly=True),
         "user_surname": fields.String(readOnly=True),
+        "user_photo": fields.String(readOnly=True),
         "name": fields.String(readOnly=True),
         "active": fields.Boolean(readOnly=True),
         "description": fields.String(readOnly=True),

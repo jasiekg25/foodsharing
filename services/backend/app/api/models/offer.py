@@ -65,6 +65,7 @@ class Offer(db.Model):
             'user_username': self.user.username,
             'user_name': self.user.name,
             'user_surname': self.user.surname,
+            'user_photo': self.user.profile_picture,
             'name': self.name,
             'active': self.active,
             "description": self.description,
