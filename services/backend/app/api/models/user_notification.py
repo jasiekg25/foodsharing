@@ -13,6 +13,7 @@ class UserNotification(db.Model):
 
     def to_dict(self):
         data = {
+            'id': self.id,
             'user_id': self.user_id,
             'timestamp': self.timestamp,
             'message': self.message

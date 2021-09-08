@@ -21,6 +21,7 @@ chat_message = chat_message_namespace.model(
 
 parser = reqparse.RequestParser()
 parser.add_argument('chat_room_id', type=int)
+parser.add_argument('page', type=int)
 
 class ChatMessages(Resource):
     @auth_required
@@ -34,7 +35,9 @@ class ChatMessages(Resource):
 
             messages = ChatMessage.get_all_messages(chat_room_id)
 
-            return [message.to_dict() for message in messages]
+            paginated_messages = messages.paginate(page=content['page'], per_page=15)
+
+            return [message.to_dict() for message in paginated_messages.items]
 
         except Exception as e:
             logger.exception("ChatMessage.get(): %s", str(e))

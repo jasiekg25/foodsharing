@@ -1,6 +1,6 @@
 import json
 from flask import request
-from flask_restx import Resource, fields, Namespace
+from flask_restx import Resource, fields, Namespace, reqparse
 from flask_praetorian import current_user, auth_required
 from app.api.models.user_notification import UserNotification
 from app import logger
@@ -18,6 +18,8 @@ user_notification = user_notifications.model(
     }
 )
 
+parser = reqparse.RequestParser()
+parser.add_argument('page', type=int)
 
 class UserNotifications(Resource):
 
@@ -26,10 +28,13 @@ class UserNotifications(Resource):
     def get(self):
         """Returns user profile info"""
         try:
+            content = parser.parse_args()
+
             user_id = current_user().id
             logger.info("UserNotifications.get() user_id: %s", str(user_id))
             notifications = UserNotification.get_notifications(user_id)
-            return [notif.to_dict() for notif in notifications], 200
+            paginated_notifications = notifications.paginate(page=content['page'], per_page=15)
+            return [notif.to_dict() for notif in paginated_notifications.items], 200
         except Exception as e:
             logger.exception("UserNotifications.get(): %s", str(e))
             return "Couldn't load user notifications", 500

@@ -33,7 +33,9 @@ class ChatMessage(db.Model):
 
     @staticmethod
     def get_all_messages(chat_room_id):
-        return ChatMessage.query.filter_by(chat_room_id=chat_room_id)
+        return ChatMessage.query\
+            .filter_by(chat_room_id=chat_room_id)\
+            .order_by(ChatMessage.timestamp.desc())
 
     @staticmethod
     def add_chat_message(from_user_id, chat_room_id, message):
