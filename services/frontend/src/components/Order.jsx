@@ -154,8 +154,7 @@ function Order(props) {
                 })
                 .catch((err) => {
                     toast.error(err);
-                    console.error(err);
-                    return;
+                    console.error("Could not rate user.");
                 })
         api.putUserOrdersHistory(chosenOrder)
             .then((res) => {
