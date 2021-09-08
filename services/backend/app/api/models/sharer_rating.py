@@ -1,6 +1,8 @@
 
 from sqlalchemy.sql import func
 from app import db, guard
+from datetime import datetime
+
 
 
 class SharerRating(db.Model):
@@ -34,6 +36,7 @@ class SharerRating(db.Model):
             to_user_id=content['to_user_id'],
             from_user_id=from_user_id,
             rating=content['rating'],
+            date=datetime.now()
         )
         db.session.add(rating)
         db.session.commit()

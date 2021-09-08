@@ -10,7 +10,7 @@ from app.api.models.sharer_rating import SharerRating
 rating_namespace = Namespace("rating_namespace")
 
 # doing this add description to Swagger Doc
-rating = rating_namespace.model(
+rating_model = rating_namespace.model(
     "Sharer_rating",
     {
         'id': fields.Integer(readOnly=True),
@@ -24,7 +24,7 @@ rating = rating_namespace.model(
 
 class Rating(Resource):
     @auth_required
-    @rating_namespace.marshal_with(rating)
+    @rating_namespace.marshal_with(rating_model)
     def get(self):
         """Returns sharer rating info"""
         try:
@@ -37,6 +37,7 @@ class Rating(Resource):
             return "Couldn't load user rating", 500
 
     @auth_required
+    @rating_namespace.expect(rating_model)
     def post(self):
         logger.info("Rating.post() request_body: %s", str(request.get_json()))
         try:
@@ -47,3 +48,5 @@ class Rating(Resource):
         except Exception as e:
             logger.exception("Rating.post(): %s", str(e))
             return "Couldn't load user ratings", 500
+
+rating_namespace.add_resource(Rating, "")
