@@ -49,6 +49,6 @@ def emit_and_safe_notification(user_id, message, offer_id):
         ChatRoom.add_chat_room(user_id, offer_id)
         chat = ChatRoom.get_chat_room(user_id, offer_id)
     url = f"/chat/{chat.id}/offers/{offer_id}"
-    emit('notification', {'notification': {"message": message, "url": url}}, room=f'user_{user_id}', #TODO url
+    emit('notification', {'notification': {"message": message, "url": url}}, room=f'user_{user_id}',
          namespace="/notifs")
     UserNotification.add_user_notification(user_id, message, url)
