@@ -14,7 +14,8 @@ user_notification = user_notifications.model(
         "id": fields.Integer(readOnly=True),
         "user_id": fields.Integer(readOnly=True),
         "message": fields.String(readOnly=True),
-        "timestamp": fields.DateTime(readOnly=True)
+        "timestamp": fields.DateTime(readOnly=True),
+        "chat_url": fields.String(readOnly=True)
     }
 )
 
@@ -24,7 +25,7 @@ class UserNotifications(Resource):
     @auth_required
     @user_notifications.marshal_with(user_notification)
     def get(self):
-        """Returns user profile info"""
+        """Returns use notifications"""
         try:
             user_id = current_user().id
             logger.info("UserNotifications.get() user_id: %s", str(user_id))

@@ -77,15 +77,15 @@ class OrdersNamespace(Resource):
 
             if content['is_canceled'] and not current_order['is_canceled']:
                 message = f'Your order for {offer_title} has been canceled'
-                emit_and_safe_notification(author_id, message)
+                emit_and_safe_notification(author_id, message, content['offer_id'])
                 message = f'You canceled order for {offer_title}'
-                emit_and_safe_notification(user_id, message)
+                emit_and_safe_notification(user_id, message, content['offer_id'])
 
             if content['is_picked'] and not current_order['is_picked']:
                 message = f'Your order for {offer_title} has been picked'
-                emit_and_safe_notification(author_id, message)
+                emit_and_safe_notification(author_id, message, content['offer_id'])
                 message = f'You picked your order {offer_title}'
-                emit_and_safe_notification(user_id, message)
+                emit_and_safe_notification(user_id, message, content['offer_id'])
             return 'User order has been updated', 200
         except Exception as e:
             logger.exception("Order.put(): %s", str(e))
