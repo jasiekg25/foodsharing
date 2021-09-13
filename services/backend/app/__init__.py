@@ -6,6 +6,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_praetorian import Praetorian, auth_required, current_user
+from flask_praetorian.exceptions import ExpiredAccessError
 import logging
 from logging.handlers import RotatingFileHandler
 from flask_mail import Mail
@@ -86,14 +87,19 @@ def create_app(script_info=None):
     # notification's socket start
     @socketio.on('auth', namespace="/notifs")
     def auth_handler(msg):
+        token = msg['accessToken']
+        user_id = None
+        user_room = None
         try:
-            token = msg['accessToken']
             user_id = guard.extract_jwt_token(token)["id"]
             user_room = f'user_{user_id}'
             join_room(user_room)
-            emit('response', {'meta': f"{user_id}"}, room=user_room, namespace="/notifs")
+        except ExpiredAccessError:
+            print('DUPA')
         except Exception as e:
             logger.error(e)
+        finally:
+            emit('response', {'meta': f"{user_id}"}, room=user_room, namespace="/notifs")
 
     def send_notificatin(message, user_id):
         emit('notification', {'notification': message}, room=f'user_{user_id}', namespace="/notifs")
