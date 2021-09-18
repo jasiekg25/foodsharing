@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import * as yup from "yup";
 import "./FormStyles.css";
 import { Row, Col } from "react-bootstrap";
-import { Redirect, Route } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Form } from "react-bootstrap";
 import api from '../api.js';
 import DatePicker from "react-date-picker";
-import TagSearch from "./tags/TagSearch";
 import MapPicker from "./maps/MapPicker";
 import useMap from "./maps/useMap"
 import FileUplader from './fileUplader/FileUplader';
-import Dropzone from 'react-dropzone'
+import { useTags } from "../hooks/useTags";
+import TagSearch from './TagSearch'
 
 const name = {
     name: "name",
@@ -60,13 +60,13 @@ const redirectToMainPage= (mealClosed) => {
     mealClosed(true);
 }
 
-const handleAddMealSubmit = (data, expireDate, mealAdded, tags, coordinates, photo) => {
+const handleAddMealSubmit = (data, expireDate, mealAdded, selectedTags, coordinates, photo) => {
     console.log(photo);
     const formData = new FormData()
     formData.append('photo', photo)
     expireDate.setHours(23, 59, 59);
     data['offer_expiry'] = expireDate.toLocaleString('en-US');
-    data['tags'] = tags.filter(tag => tag.selected).map(tag => tag.id)
+    data['tags'] = selectedTags.map(tag => tag.id)
     data['latitude'] = coordinates.lat;
     data['longitude'] = coordinates.lng;
 
@@ -100,35 +100,13 @@ const AddMeal = ({isLoggedIn}) => {
     const [expireDate, expireDateChange] = useState(new Date());
     const [isMealAdded, isMealAddedChange] = useState(false);
     const [isMealClosed, isMealClosedChange] = useState(false);
-    const [tags, setTags] = useState([]);
+    const { tags, selectedTags, setSelectedTags } = useTags();
 
     const {mapRef, center, setCenter} = useMap({
         lat: 50.06143,
         lng: 19.93658,
     })
 
-    const onTagToggle = (tag) => {
-        const index = tags.findIndex((el) => el.id === tag.id);
-        let newTags = [...tags];
-        newTags[index] = { ...tag, selected: !tag.selected };
-    
-        setTags(newTags);
-      };
-
-    useEffect(() => {
-        api.getTags()
-            .then((res) => {
-                let tagsData = res.data;
-                for(let tag of tagsData){
-                    tag['selected'] = false;
-                }
-                setTags(tagsData);
-            })
-            .catch((err) => {
-                console.log("Could not get any tags " + err.message);
-            })
-    }, [])
-    
     if (isMealAdded || isMealClosed) {
         return <Redirect to="/" />;
     }
@@ -139,7 +117,7 @@ const AddMeal = ({isLoggedIn}) => {
 
     return (
         <div className="form-container form-group">
-            <form onSubmit={handleSubmit((data) => handleAddMealSubmit(data, expireDate, isMealAddedChange, tags, center, file))}>
+            <form onSubmit={handleSubmit((data) => handleAddMealSubmit(data, expireDate, isMealAddedChange, selectedTags, center, file))}>
 
             <Form.Label className="login-title">Add meal</Form.Label>
 
@@ -197,11 +175,11 @@ const AddMeal = ({isLoggedIn}) => {
              </div>
 
             <div className="field-content form-group">
-                <TagSearch className="col-3"
-                    tags={tags}
-                    onTagToggle={onTagToggle}
-                    containerStyle="search-container"
-                />
+              <TagSearch
+                tags={tags}
+                selectedTags={selectedTags}
+                setSelectedTags={setSelectedTags}
+              />
             </div>
 
 

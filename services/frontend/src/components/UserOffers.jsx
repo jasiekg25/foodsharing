@@ -10,10 +10,10 @@ import FileUplader from "./fileUplader/FileUplader";
 import placeholder from "../img/placeholder.jpg";
 import MapPicker from "./maps/MapPicker";
 import useMap from "./maps/useMap";
-import TagSearch from "./tags/TagSearch";
 import DatePicker from "react-date-picker";
 import "./OrderHistory.css";
-
+import { useTags } from "../hooks/useTags";
+import TagSearch from './TagSearch'
 
 const name = {
     name: "name",
@@ -70,7 +70,7 @@ function UserOffers(props) {
     })
 
     const [expireDate, setExpireDate] = useState(new Date());
-    const [tags, setTags] = useState([]);
+    const { tags, selectedTags, setSelectedTags, refetchTags } = useTags();
 
     const setOfferTags = (offerTags) => {
         offerTags.forEach(tag => {
@@ -79,17 +79,8 @@ function UserOffers(props) {
         })
     };
 
-    const onTagToggle = (tag) => {
-        const index = tags.findIndex((el) => el.tag_id === tag.tag_id);
-        let newTags = [...tags];
-        newTags[index] = { ...tag, selected: !tag.selected };
-
-        setTags(newTags);
-    };
-
     useEffect(() => {
         getOffers();
-        getTags();
     }, [])
 
     const getOffers = () => {
@@ -100,23 +91,6 @@ function UserOffers(props) {
                 console.log("Could not get current user " + err.message);
             })
     }
-
-    const getTags = () => {
-        api.getTags()
-            .then((res) => {
-                let tagsData = res.data;
-                tagsData.map(tag => {
-                    tag.selected = false;
-                    tag.tag_id = tag.id;
-                    delete tag.id;
-                });
-                setTags(tagsData);
-            })
-            .catch((err) => {
-                console.log("Could not get any tags " + err.message);
-            });
-    }
-
 
     const deleteOffer = () => {
         handleDeleteOfferClose();
@@ -143,7 +117,7 @@ function UserOffers(props) {
         offer.photo = file;
         expireDate.setHours(23, 59, 59);
         offer.offer_expiry = expireDate.toLocaleString('en-US');
-        offer.tags = tags.filter(tag => tag.selected);
+        offer.tags = selectedTags;
         const formData = new FormData()
         formData.append('photo', file);
         formData.append('data', JSON.stringify(offer));
@@ -176,7 +150,7 @@ function UserOffers(props) {
             lng: 19.93658,
         });
         setExpireDate(new Date());
-        getTags();
+        refetchTags();
         reset({
             name: offer.name,
             description: offer.description,
@@ -294,7 +268,8 @@ function UserOffers(props) {
                                     </InputGroup>
                                     <div className="field-content form-group">
                                         <TagSearch tags={tags}
-                                                   onTagToggle={onTagToggle}
+                                                   selectedTags={selectedTags}
+                                                   setSelectedTags={setSelectedTags}
                                         />
                                     </div>
                                     <Modal.Footer>

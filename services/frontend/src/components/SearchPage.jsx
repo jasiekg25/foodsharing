@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
-import TagSearch from "./tags/TagSearch";
-import { Row, Container, Button, Col } from "react-bootstrap";
-import Tag from "./tags/Tag";
+import { Row, Col } from "react-bootstrap";
 import Offers from "./Offers";
 import { Redirect } from "react-router-dom";
 import api from "../api";
 import OfferMap from "./maps/OfferMap"
 import useMap from "./maps/useMap";
 import SortSelect from "./sortSelect/sortSelect";
+import { useTags } from "../hooks/useTags";
+import TagSearch from './TagSearch'
 
 const SearchPage = ({ isLoggedIn }) => {
-  const [tags, setTags] = useState([]);
-  const { mapRef, center, setCenter, fitPoint, panTo } = useMap({
+  const { tags, selectedTags, setSelectedTags } = useTags();
+  const { mapRef, center, setCenter, fitPoint } = useMap({
     lat: 50.06143,
     lng: 19.93658,
   });
@@ -22,25 +22,12 @@ const SearchPage = ({ isLoggedIn }) => {
   const [sortBy, setSortBy] = useState('localization');
 
   useEffect(() => {
-    api
-      .getTags()
-      .then((res) => {
-        let tagsData = res.data;
-        for (let tag of tagsData) {
-          tag["selected"] = false;
-        }
-        setTags(tagsData);
-      })
-      .catch((err) => {
-        console.log("Could not get any tags " + err.message);
-      });
-
     getOffers(pageCount);
   }, []);
 
   useEffect(() => {
     searchUpdate()
-  }, [center])
+  }, [center, selectedTags]) // TODO: debounce instead of fetching on every change
 
   const getOffers = () => {
     let queryTags = tags.filter(tag => {return tag['selected'];}).map(tag => tag.id).join(',');
@@ -60,7 +47,7 @@ const SearchPage = ({ isLoggedIn }) => {
   };
 
   const searchUpdate = (sortByUpdated = sortBy) => {
-    let queryTags = tags.filter(tag => {return tag['selected'];}).map(tag => tag.id).join(',');
+    let queryTags = selectedTags.map(tag => tag.id).join(',');
     api
       .getOffers(1, center.lat, center.lng, queryTags, sortByUpdated)
       .then((res) => {
@@ -76,14 +63,6 @@ const SearchPage = ({ isLoggedIn }) => {
       });
   }
 
-  const onTagToggle = (tag) => {
-    const index = tags.findIndex((el) => el.id === tag.id);
-    let newTags = [...tags];
-    newTags[index] = { ...tag, selected: !tag.selected };
-
-    setTags(newTags);
-  };
-
   const onOfferSelect = (offer) => {
     setSelected(offer);
     fitPoint({ lat: offer.pickup_latitude, lng: offer.pickup_longitude });
@@ -95,31 +74,20 @@ const SearchPage = ({ isLoggedIn }) => {
 
   return (
     <div>
-      <Container>
-        {/*<Row>*/}
-        {/*  {tags*/}
-        {/*    .filter((tag) => tag.selected)*/}
-        {/*    .map((tag) => {*/}
-        {/*      return <Tag key={tag.id} tag={tag} toggle={onTagToggle} />;*/}
-        {/*    })}*/}
-        {/*</Row>*/}
-        
-      </Container>
+      <TagSearch
+        tags={tags}
+        selectedTags={selectedTags}
+        setSelectedTags={setSelectedTags}
+      />
+
       <Row>
-        <SortSelect 
-          sortBy={sortBy} 
+        <SortSelect
+          sortBy={sortBy}
           setSortBy={setSortBy}
           searchFunction={searchUpdate}
         />
-        <TagSearch
-          tags={tags}
-          onTagToggle={onTagToggle}
-          searchButton={true}
-          containerStyle="col-md-6 search-container"
-          searchFunction={searchUpdate}
-        />
       </Row>
-      
+
       <Row>
         <Col md={6}>
           <Offers
