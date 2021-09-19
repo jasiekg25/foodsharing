@@ -22,6 +22,7 @@ import Chat from "./components/Chat";
 import ChatRooms from "./components/ChatRooms";
 import MediaCard from "./components/MediaCard";
 import ProfileCard from "./components/MediaCard";
+import { CssBaseline } from "@material-ui/core";
 
 const PageNoFound = () => (
   <section className="hero is-halfheight">
@@ -79,6 +80,7 @@ const App = () => {
 
   return (
     <div>
+      <CssBaseline />
       <NavBar isLoggedIn={isLoggedIn} logoutUser={logoutUser} />
 
       <ToastContainer position="top-center"/>
