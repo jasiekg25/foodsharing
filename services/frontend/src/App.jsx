@@ -20,6 +20,8 @@ import FinalizeRegistration from "./components/FinalizeRegistration";
 import OtherUserProfile from "./components/OtherUserProfile";
 import Chat from "./components/Chat";
 import ChatRooms from "./components/ChatRooms";
+import MediaCard from "./components/MediaCard";
+import ProfileCard from "./components/MediaCard";
 
 const PageNoFound = () => (
   <section className="hero is-halfheight">
@@ -133,11 +135,6 @@ const App = () => {
           path="/add-meal"
           render={() => <AddMeal isLoggedIn={isLoggedIn} />}
         />
-        <Route
-            exact
-            path="/profile"
-            render={() => <Profile isLoggedIn={isLoggedIn} logoutUser={logoutUser} />}
-        />
           <Route
               exact
               path="/users/:id"
@@ -148,6 +145,11 @@ const App = () => {
             path="/chat"
             render={() => <ChatRooms />}
         />
+          <Route
+              exact
+              path="/profile"
+              render={() => <ProfileCard isLoggedIn={isLoggedIn} logoutUser={logoutUser} />}
+          />
         <Route
               exact
               path="/chat/:roomId/offers/:offerId"

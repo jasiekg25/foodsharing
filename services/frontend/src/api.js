@@ -103,11 +103,17 @@ const api = {
   getUserChatRooms: () => {
     return axios.get(`${baseUrl}/chat_rooms`);
   },
+  putUserChatRoom: (body) => {
+    return axios.put(`${baseUrl}/chat_rooms`, body);
+  },
   getChatMessages: (id) => {
     return axios.get(`${baseUrl}/chat_messages?chat_room_id=${id}`);
   },
   getUserNotifications: () => {
     return axios.get(`${baseUrl}/user_notifications`)
+  },
+  postSharerRating: (body) => {
+    return axios.post(`${baseUrl}/rating`, body)
   }
 };
 

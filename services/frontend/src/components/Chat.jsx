@@ -5,6 +5,8 @@ import {toast} from "react-toastify";
 import 'react-chat-elements/dist/main.css';
 import { Input, Button, MessageList } from 'react-chat-elements';
 import "./Chat.css"
+import SendIcon from '@material-ui/icons/Send';
+import IconButton from "@material-ui/core/IconButton";
 
 let endPoint = "http://localhost:5001/chat";
 const accessToken = localStorage.getItem("accessToken")
@@ -51,7 +53,7 @@ function Chat(props) {
   };
 
   // On Click
-  const onClick = () => {
+  const sendMessage = () => {
     if (message.message !== "") {
       socket.emit("message", {roomId, accessToken, message, userId});
       const mess = {from_user_id: userId, message: ""}
@@ -62,9 +64,15 @@ function Chat(props) {
     }
   };
 
+   const handleKeyPress = (e) => {
+        if(e.key === 'Enter'){
+            sendMessage()
+        }
+    }
+
 
   return (
-    <div>
+    <div onKeyPress={handleKeyPress}>
       {messages.map((message) => {
         return (
             <MessageList
@@ -87,11 +95,9 @@ function Chat(props) {
             placeholder="Type here..."
             multipleline={true}
             rightButtons={
-                <Button
-                    onClick={() => onClick()}
-                    color='white'
-                    backgroundColor='black'
-                    text='Send'/>
+                <IconButton color="primary" onClick={() => sendMessage()}>
+                    <SendIcon/>
+                </IconButton>
             }/>
     </div>
   );

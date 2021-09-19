@@ -65,6 +65,7 @@ class Offer(db.Model):
             'user_username': self.user.username,
             'user_name': self.user.name,
             'user_surname': self.user.surname,
+            'user_photo': self.user.profile_picture,
             'name': self.name,
             'active': self.active,
             "description": self.description,
@@ -128,7 +129,6 @@ class Offer(db.Model):
     @staticmethod
     def get_active_offers():
         return Offer.query.filter_by(active=True) \
-            .filter(Offer.portions_number > sum([order.portions for order in Orders.get_orders_by_offer_id_not_canceled(Offer.id)])) \
             .filter(Offer.offer_expiry >= datetime.now())
 
     @staticmethod
@@ -139,14 +139,12 @@ class Offer(db.Model):
     def get_current_offers_of_user(user_id):
         return Offer.query.filter_by(user_id=user_id) \
             .filter(Offer.active == True) \
-            .filter(Offer.portions_number > sum([order.portions for order in Orders.get_orders_by_offer_id_not_canceled(Offer.id)])) \
             .filter(Offer.offer_expiry >= datetime.now())
 
     @staticmethod
     def get_all_active_offers_except_mine(user_id):
         return Offer.query.filter_by(active=True) \
             .filter(Offer.user_id != user_id) \
-            .filter(Offer.portions_number > sum([order.portions for order in Orders.get_orders_by_offer_id_not_canceled(Offer.id)])) \
             .filter(Offer.offer_expiry >= datetime.now())
 
     @staticmethod

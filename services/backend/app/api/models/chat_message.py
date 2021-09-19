@@ -16,7 +16,8 @@ class ChatMessage(db.Model):
         data = {
             # 'id': self.id,
             'from_user_id': self.from_user_id,
-            # 'chat_room_id': self.chat_room_id,
+            'from_user_name': self.messages_from_user.name,
+            'from_user_surname': self.messages_from_user.surname,
             'message': self.message,
             'timestamp': self.timestamp
         }
