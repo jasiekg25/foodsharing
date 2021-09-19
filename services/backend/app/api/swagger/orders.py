@@ -6,7 +6,6 @@ from flask_praetorian import current_user, auth_required
 from flask_mail import Message
 import jinja2
 
-
 from app import logger, mail
 from app.api.models.offer import Offer
 from app.api.models.orders import Orders
@@ -111,9 +110,9 @@ class OrdersNamespace(Resource):
                 logger.exception("Order Email Notification: %s", str(e))
 
             message = f"Someone just ordered {data['portions']} of {data['offer_name']}!"
-            emit_and_safe_notification(author.id, message)
+            emit_and_safe_notification(author.id, message, content['offer_id'])
             message = f"You just ordered {data['portions']} of {data['offer_name']}!"
-            emit_and_safe_notification(user_id, message)
+            emit_and_safe_notification(user_id, message, content['offer_id'])
 
             return "Order placed", 201
 
