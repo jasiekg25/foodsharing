@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - master
+      - quick_fix
 
 
 jobs:
@@ -16,4 +16,4 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "engineer-the-foodsharing"
           heroku_email: ${{secrets.HEROKU_EMAIL}}
-          branch: "master"
+          branch: "quick_fix"
