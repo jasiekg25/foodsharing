@@ -3,13 +3,19 @@
 ###########
 
 # base image
-FROM node:13.10.1-alpine as builder
+FROM node:13.5.0-alpine as builder
 
 # set working directory
 WORKDIR /usr/src/app
 
 # add `/usr/src/app/node_modules/.bin` to $PATH
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
+
+RUN apk update
+RUN apk --no-cache --virtual build-dependencies add \
+    python \
+    make \
+    g++
 
 # install and cache app dependencies
 COPY package.json /usr/src/app/package.json

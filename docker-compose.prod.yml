@@ -47,7 +47,7 @@ services:
       context: ./services/frontend
       dockerfile: Dockerfile.prod
       args:
-        - NODE_ENV=${ENVIRONMENT}
+        - NODE_ENV=production
         - CHOKIDAR_USEPOLLING=true
         - REACT_APP_BACKEND_SERVICE_URL
 
