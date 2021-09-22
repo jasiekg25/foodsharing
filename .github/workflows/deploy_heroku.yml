@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - quick_fix
+      - master
 
 jobs:
   build:
