@@ -1,0 +1,4 @@
+build:
+  docker:
+    server: services/backend/Dockerfile.prod
+    web: services/frontend/Dockerfile.prod
