@@ -6,14 +6,27 @@ services:
     build:
       context: ./services/backend
       dockerfile: Dockerfile.prod
+    restart: always
     ports:
       - 5001:5000
     environment:
-      - FLASK_ENV=production
-      - APP_SETTINGS=app.config.ProductionConfig
+      - DEFAULT_COMPANY_NAME
+      - FLASK_ENV=${ENVIRONMENT}
+
       - DATABASE_URL=postgres://postgres:postgres@db:5432/app_prod
       - DATABASE_TEST_URL=postgres://postgres:postgres@db:5432/app_test
-      - SECRET_KEY=change_this_to_some_random_key
+
+      - MAIL_SERVER
+      - MAIL_USERNAME
+      - MAIL_PASSWORD
+
+      - CLOUDINARY_CLOUD_NAME
+      - CLOUDINARY_API_KEY
+      - CLOUDINARY_API_SECRET
+
+      - SECRET_KEY
+
+      - APP_SETTINGS=app.config.ProductionConfig
     depends_on:
       - db
 
@@ -26,16 +39,22 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
 
   frontend:
     build:
       context: ./services/frontend
       dockerfile: Dockerfile.prod
       args:
-        - NODE_ENV=production
+        - NODE_ENV=${ENVIRONMENT}
+        - CHOKIDAR_USEPOLLING=true
+        - REACT_APP_BACKEND_SERVICE_URL
+
+        - REACT_APP_GOOGLE_API_KEY
+        - REACT_APP_GEOAPIFY_API_KEY
         - REACT_APP_BACKEND_SERVICE_URL=http://localhost:5001
+    restart: always
     ports:
       - 3007:80
     depends_on:
