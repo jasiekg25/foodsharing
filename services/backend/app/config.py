@@ -8,7 +8,7 @@ class BaseConfig:
     TESTING = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = os.environ.get("SECRET_KEY")
-    JWT_ACCESS_LIFESPAN = {'minutes': 15}
+    JWT_ACCESS_LIFESPAN = {'minutes': 150}
     JWT_REFRESH_LIFESPAN = {'days': 30}
     
     MAIL_SERVER = os.environ.get("MAIL_SERVER")
