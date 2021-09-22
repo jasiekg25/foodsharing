@@ -1,3 +1,3 @@
 build:
   docker:
-    worker: services/backend/Dockerfile.prod
+    worker: Dockerfile.prod
