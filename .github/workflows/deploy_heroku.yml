@@ -13,6 +13,6 @@ jobs:
       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "engineer_the_foodsharing"
+          heroku_app_name: "engineer-the-foodsharing"
           heroku_email: ${{secrets.HEROKU_EMAIL}}
           branch: "quick_fix"
