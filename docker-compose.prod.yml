@@ -13,8 +13,8 @@ services:
       - DEFAULT_COMPANY_NAME
       - FLASK_ENV=${ENVIRONMENT}
 
-      - DATABASE_URL=postgres://postgres:postgres@db:5432/app_prod
-      - DATABASE_TEST_URL=postgres://postgres:postgres@db:5432/app_test
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/app_prod
+      - DATABASE_TEST_URL=postgresql://postgres:postgres@db:5432/app_test
 
       - MAIL_SERVER
       - MAIL_USERNAME
