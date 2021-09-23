@@ -8,7 +8,7 @@ import "./Chat.css"
 import SendIcon from '@material-ui/icons/Send';
 import IconButton from "@material-ui/core/IconButton";
 
-let endPoint = "http://localhost:5001/chat";
+let endPoint = `${process.env.REACT_APP_BACKEND_SERVICE_URL}/chat`;
 const accessToken = localStorage.getItem("accessToken")
 let socket = io.connect(`${endPoint}`);
 let inputRef = React.createRef();

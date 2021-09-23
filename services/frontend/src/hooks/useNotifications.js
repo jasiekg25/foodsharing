@@ -3,7 +3,7 @@ import io from "socket.io-client";
 import api from "../api";
 
 const accessToken = localStorage.getItem("accessToken");
-let socket = io.connect(`http://localhost:5001/notifs`);
+let socket = io.connect(`${process.env.REACT_APP_BACKEND_SERVICE_URL}/notifs`);
 
 export const useNotifications = () => {
   const [notifications, setNotifications] = useState([]);
