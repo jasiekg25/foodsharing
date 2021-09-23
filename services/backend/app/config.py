@@ -36,3 +36,5 @@ class TestingConfig(BaseConfig):
 
 class ProductionConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
+    JWT_ACCESS_LIFESPAN = {'days': 150}
+    JWT_REFRESH_LIFESPAN = {'days': 30}
