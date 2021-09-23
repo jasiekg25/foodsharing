@@ -15,10 +15,12 @@ from app.api.swagger.profile_current_offers import offers_current_namespace
 from app.api.swagger.profile_orders import profile_orders_namespace
 from app.api.swagger.chat_rooms import chat_room_namespace
 from app.api.swagger.chat_messages import chat_message_namespace
+from app.api.swagger.ping import ping_namespace
 
 
 api = Api(version="1.0", title="FRED APIs", doc="/docs/")
 
+api.add_namespace(ping_namespace, path='/ping')
 api.add_namespace(auth_namespace, path="/auth")
 api.add_namespace(users_namespace, path="/users")
 
