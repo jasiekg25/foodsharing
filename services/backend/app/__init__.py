@@ -39,7 +39,7 @@ def create_app(script_info=None):
 
     # set sockerIo
     # socketio = SocketIO(app, engineio_logger=True, logger=True, cors_allowed_origins="*", resource="/chat")
-    socketio = SocketIO(app, engineio_logger=True, logger=True, cors_allowed_origins="*")
+    socketio = SocketIO(app, engineio_logger=True, logger=True, cors_allowed_origins="*", transport="websocket")
 
     # set config
     app_settings = os.getenv("APP_SETTINGS")
@@ -58,8 +58,6 @@ def create_app(script_info=None):
 
         room_id = msg['roomId']
         join_room(room_id)
-
-        emit('response', {'meta': f"{room_id}"})
 
     @socketio.on('leave_room', namespace="/chat")
     def leave_room_handler(msg):
@@ -91,7 +89,6 @@ def create_app(script_info=None):
             user_id = guard.extract_jwt_token(token)["id"]
             user_room = f'user_{user_id}'
             join_room(user_room)
-            emit('response', {'meta': f"{user_id}"}, room=user_room, namespace="/notifs")
         except Exception as e:
             logger.error(e)
 
