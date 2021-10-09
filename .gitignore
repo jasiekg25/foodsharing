@@ -13,3 +13,9 @@
 .idea/workspace.xml
 
 .env
+
+.vscode
+
+/services/backend/logs/aplication.logs
+
+services/backend/logs/application.log

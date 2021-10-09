@@ -6,7 +6,7 @@ import { GoogleMap, useLoadScript } from "@react-google-maps/api";
 
 const mapContainerStyle = {
   width: "100%",
-  height: "600px",
+  height: "90vh",
   borderRadius: 10,
 };
 
@@ -56,7 +56,7 @@ const Map = ({
     <Container className="map sticky-top">
       <Search panTo={setCenter} />
 
-      <GoogleMap
+    <div style={{height: '100%'}}> <GoogleMap
         mapContainerStyle={mapContainerStyle}
         zoom={15}
         center={center}
@@ -65,7 +65,8 @@ const Map = ({
         onClick={onClick}
       >
         {children}
-      </GoogleMap>
+      </GoogleMap></div>
+     
     </Container>
   );
 };
