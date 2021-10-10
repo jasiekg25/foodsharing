@@ -15,12 +15,10 @@ import Rules from "./components/home/Rules";
 import Footer from "./components/home/Footer";
 import AddMeal from "./components/AddMeal";
 import SearchPage from "./components/SearchPage";
-import Profile from "./components/Profile";
 import FinalizeRegistration from "./components/FinalizeRegistration";
 import OtherUserProfile from "./components/OtherUserProfile";
 import Chat from "./components/Chat";
 import ChatRooms from "./components/ChatRooms";
-import MediaCard from "./components/MediaCard";
 import ProfileCard from "./components/MediaCard";
 import { CssBaseline } from "@material-ui/core";
 

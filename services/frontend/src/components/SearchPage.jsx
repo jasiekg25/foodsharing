@@ -3,13 +3,29 @@ import { Row, Col } from "react-bootstrap";
 import Offers from "./Offers";
 import { Redirect } from "react-router-dom";
 import api from "../api";
-import OfferMap from "./maps/OfferMap"
+import OfferMap from "./maps/OfferMap";
 import useMap from "./maps/useMap";
 import SortSelect from "./sortSelect/sortSelect";
 import { useTags } from "../hooks/useTags";
-import TagSearch from './TagSearch'
+import TagSearch from "./TagSearch";
+import Grid from "@material-ui/core/Grid";
+import Toolbar from "@material-ui/core/Toolbar";
+import Container from "@material-ui/core/Container";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: "center",
+  },
+}));
 
 const SearchPage = ({ isLoggedIn }) => {
+  const classes = useStyles();
+
   const { tags, selectedTags, setSelectedTags } = useTags();
   const { mapRef, center, setCenter, fitPoint } = useMap({
     lat: 50.06143,
@@ -19,26 +35,31 @@ const SearchPage = ({ isLoggedIn }) => {
   const [selected, setSelected] = useState(null);
   const [pageCount, setPageCount] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(true);
-  const [sortBy, setSortBy] = useState('localization');
+  const [sortBy, setSortBy] = useState("localization");
 
   useEffect(() => {
     getOffers(pageCount);
   }, []);
 
   useEffect(() => {
-    searchUpdate()
-  }, [center, selectedTags]) // TODO: debounce instead of fetching on every change
+    searchUpdate();
+  }, [center, selectedTags]); // TODO: debounce instead of fetching on every change
 
   const getOffers = () => {
-    let queryTags = tags.filter(tag => {return tag['selected'];}).map(tag => tag.id).join(',');
+    let queryTags = tags
+      .filter((tag) => {
+        return tag["selected"];
+      })
+      .map((tag) => tag.id)
+      .join(",");
     api
       .getOffers(pageCount, center.lat, center.lng, queryTags, sortBy)
       .then((res) => {
         setOffers([...offers, ...res.data]);
-        let newPageCount = pageCount + 1
+        let newPageCount = pageCount + 1;
         setPageCount(newPageCount);
-        if(res.data.length === 0 || res.data.length < 15)
-          setHasNextPage(false)
+        if (res.data.length === 0 || res.data.length < 15)
+          setHasNextPage(false);
       })
       .catch((err) => {
         console.log("Could not get any offers " + err.message);
@@ -47,21 +68,21 @@ const SearchPage = ({ isLoggedIn }) => {
   };
 
   const searchUpdate = (sortByUpdated = sortBy) => {
-    let queryTags = selectedTags.map(tag => tag.id).join(',');
+    let queryTags = selectedTags.map((tag) => tag.id).join(",");
     api
       .getOffers(1, center.lat, center.lng, queryTags, sortByUpdated)
       .then((res) => {
         setOffers(res.data);
         setSelected(null);
         setPageCount(1);
-        if(res.data.length === 0 || res.data.length < 15)
-          setHasNextPage(false)
+        if (res.data.length === 0 || res.data.length < 15)
+          setHasNextPage(false);
       })
       .catch((err) => {
         console.log("Could not get any offers " + err.message);
         setHasNextPage(false);
       });
-  }
+  };
 
   const onOfferSelect = (offer) => {
     setSelected(offer);
@@ -73,40 +94,50 @@ const SearchPage = ({ isLoggedIn }) => {
   }
 
   return (
-    <div>
-      <TagSearch
-        tags={tags}
-        selectedTags={selectedTags}
-        setSelectedTags={setSelectedTags}
-      />
-
-      <Row>
-        <SortSelect
-          sortBy={sortBy}
-          setSortBy={setSortBy}
-          searchFunction={searchUpdate}
-        />
-      </Row>
-
-      <Row>
-        <Col md={6}>
-          <Offers
-            offers={offers}
-            getOffers={getOffers}
-            onOfferSelect={onOfferSelect}
-            hasNextPage={hasNextPage}
-          />
-        </Col>
-        <Col md={6}>
-          <OfferMap
-            mapRef={mapRef}
-            center={center}
-            setCenter={setCenter}
-            offers={offers}
-            selected={selected}
-          />
-        </Col>
-      </Row>
+    <div className={classes.root}>
+      <Grid container>
+        <Grid item xs={6}>
+          <Container style={{paddingRight: 0}}>
+            <Toolbar
+              variant="regular"
+              style={{
+                paddingTop: "20px",
+              }}
+            >
+              <SortSelect
+                sortBy={sortBy}
+                setSortBy={setSortBy}
+                searchFunction={searchUpdate}
+              />
+              <TagSearch
+                tags={tags}
+                selectedTags={selectedTags}
+                setSelectedTags={setSelectedTags}
+              />
+            </Toolbar>
+            <Offers
+              offers={offers}
+              getOffers={getOffers}
+              onOfferSelect={onOfferSelect}
+              hasNextPage={hasNextPage}
+            />
+          </Container>
+        </Grid>
+        <Grid item xs={6}>
+          <Container style={{
+                paddingTop: "20px",
+                paddingLeft: 0
+              }}>
+            <OfferMap
+              mapRef={mapRef}
+              center={center}
+              setCenter={setCenter}
+              offers={offers}
+              selected={selected}
+            />
+          </Container>
+        </Grid>
+      </Grid>
     </div>
   );
 };

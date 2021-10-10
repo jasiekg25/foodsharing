@@ -12,7 +12,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import {makeStyles} from "@material-ui/core/styles";
 import {useFadedShadowStyles} from '@mui-treasury/styles/shadow/faded';
 import cx from "clsx";
-import IconButton from "@material-ui/core/IconButton";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Grid from "@material-ui/core/Grid";
@@ -29,11 +28,11 @@ import Card from "@material-ui/core/Card";
 import ChatIcon from '@material-ui/icons/Chat';
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import Chip from "@material-ui/core/Chip";
 
 
-const useStyles = makeStyles(({palette}) => ({
+const useStyles = makeStyles((theme) => ({
     card: {
         maxWidth: "100%",
         marginTop: 5,
@@ -91,7 +90,7 @@ const useStyles = makeStyles(({palette}) => ({
     },
     statLabel: {
         fontSize: 12,
-        color: palette.grey[500],
+        color: theme.palette.grey[500],
         fontWeight: 100,
         fontFamily:
             '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
@@ -115,8 +114,11 @@ const useStyles = makeStyles(({palette}) => ({
     paper: {
         backgroundColor: "white",
         border: '2px solid #000',
-        boxShadow: palette.grey[500],
+        boxShadow: theme.palette.grey[500],
         // padding: palette.spacing(2, 4, 3),
+    },
+    tag: {
+        margin: '1px',
     },
 }));
 
@@ -218,6 +220,11 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
                                     <CardContent>
                                         <h3 className={styles.heading}>{offer.name}</h3>
                                     </CardContent>
+                                    <ul>
+                                        {offer.tags.map((tag) => 
+                                            <Chip className={styles.tag} size="small" label={`#${tag}`} />
+                                        )}
+                                    </ul>
                                     <Grid className={styles.icons}>
                                         <Typography variant="body2" color="textSecondary" component="p"> Pick-up times: {offer.pickup_times}</Typography>
                                     </Grid>
@@ -265,7 +272,6 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
                                                     {...register(portions.name)}
                                                     error={!!errors.portions}
                                                     type={portions.type}
-                                                />
                                                 />
                                                 <DialogActions>
                                                     <Button color="primary" type="submit">
