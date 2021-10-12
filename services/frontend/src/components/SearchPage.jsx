@@ -45,20 +45,23 @@ const SearchPage = ({ isLoggedIn }) => {
     searchUpdate();
   }, [center, selectedTags]); // TODO: debounce instead of fetching on every change
 
-  const getOffers = () => {
+  const getOffers = (afterSuccessfulOrder = false) => {
     let queryTags = tags
       .filter((tag) => {
         return tag["selected"];
       })
       .map((tag) => tag.id)
       .join(",");
+      let pageNumber = afterSuccessfulOrder ? 1 : (pageCount + 1)
+      setPageCount(pageNumber);
     api
-      .getOffers(pageCount, center.lat, center.lng, queryTags, sortBy)
+      .getOffers(pageNumber, center.lat, center.lng, queryTags, sortBy)
       .then((res) => {
-        setOffers([...offers, ...res.data]);
-        let newPageCount = pageCount + 1;
-        setPageCount(newPageCount);
-        if (res.data.length === 0 || res.data.length < 15)
+        if (afterSuccessfulOrder)
+          setOffers(res.data);
+        else
+          setOffers([...offers, ...res.data]);
+        if (res.data.length < 15)
           setHasNextPage(false);
       })
       .catch((err) => {

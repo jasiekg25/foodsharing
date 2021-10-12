@@ -88,7 +88,7 @@ class Offers(Resource):
 
             paginated_offers = sorted_offers.paginate(page=content['page'], per_page=15)
 
-            return [offer.to_search_dict() for offer in paginated_offers.items], 200
+            return [offer.to_search_dict() for offer in paginated_offers.items if offer.to_search_dict()['portions_number'] > offer.to_search_dict()['used_portions']], 200
         except Exception as e:
             logger.exception("Offers.get(): %s", str(e))
             return "Couldn't load offers", 500
