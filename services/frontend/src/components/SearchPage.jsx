@@ -33,13 +33,9 @@ const SearchPage = ({ isLoggedIn }) => {
   });
   const [offers, setOffers] = useState([]);
   const [selected, setSelected] = useState(null);
-  const [pageCount, setPageCount] = useState(1);
+  const [pageCount, setPageCount] = useState(0);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [sortBy, setSortBy] = useState("localization");
-
-  useEffect(() => {
-    getOffers(pageCount);
-  }, []);
 
   useEffect(() => {
     searchUpdate();
@@ -70,7 +66,7 @@ const SearchPage = ({ isLoggedIn }) => {
       });
   };
 
-  const searchUpdate = (sortByUpdated = sortBy) => {
+  const searchUpdate = (sortByUpdated = sortBy) => { // Try to use just getOffers
     let queryTags = selectedTags.map((tag) => tag.id).join(",");
     api
       .getOffers(1, center.lat, center.lng, queryTags, sortByUpdated)
