@@ -39,7 +39,7 @@ const SearchPage = ({ isLoggedIn }) => {
 
   useEffect(() => {
     getOffers();
-  }, []);
+  }, [center, selectedTags]); // TODO: debounce instead of fetching on every change
 
   const getOffers = (afterSuccessfulOrder = false, sortByUpdated = sortBy) => {
     let queryTags = tags
