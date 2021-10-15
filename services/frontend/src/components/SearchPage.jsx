@@ -38,10 +38,10 @@ const SearchPage = ({ isLoggedIn }) => {
   const [sortBy, setSortBy] = useState("localization");
 
   useEffect(() => {
-    searchUpdate();
-  }, [center, selectedTags]); // TODO: debounce instead of fetching on every change
+    getOffers();
+  }, []);
 
-  const getOffers = (afterSuccessfulOrder = false) => {
+  const getOffers = (afterSuccessfulOrder = false, sortByUpdated = sortBy) => {
     let queryTags = tags
       .filter((tag) => {
         return tag["selected"];
@@ -51,10 +51,12 @@ const SearchPage = ({ isLoggedIn }) => {
       let pageNumber = afterSuccessfulOrder ? 1 : (pageCount + 1)
       setPageCount(pageNumber);
     api
-      .getOffers(pageNumber, center.lat, center.lng, queryTags, sortBy)
+      .getOffers(pageNumber, center.lat, center.lng, queryTags, sortByUpdated)
       .then((res) => {
-        if (afterSuccessfulOrder)
+        if (afterSuccessfulOrder){
           setOffers(res.data);
+          setHasNextPage(true);
+        }
         else
           setOffers([...offers, ...res.data]);
         if (res.data.length < 15)
@@ -66,21 +68,9 @@ const SearchPage = ({ isLoggedIn }) => {
       });
   };
 
-  const searchUpdate = (sortByUpdated = sortBy) => { // Try to use just getOffers
-    let queryTags = selectedTags.map((tag) => tag.id).join(",");
-    api
-      .getOffers(1, center.lat, center.lng, queryTags, sortByUpdated)
-      .then((res) => {
-        setOffers(res.data);
-        setSelected(null);
-        setPageCount(1);
-        if (res.data.length === 0 || res.data.length < 15)
-          setHasNextPage(false);
-      })
-      .catch((err) => {
-        console.log("Could not get any offers " + err.message);
-        setHasNextPage(false);
-      });
+  const searchUpdate = (sortByUpdated) => {
+    getOffers(true, sortByUpdated)
+    setSortBy(sortByUpdated);
   };
 
   const onOfferSelect = (offer) => {
@@ -105,7 +95,6 @@ const SearchPage = ({ isLoggedIn }) => {
             >
               <SortSelect
                 sortBy={sortBy}
-                setSortBy={setSortBy}
                 searchFunction={searchUpdate}
               />
               <TagSearch
