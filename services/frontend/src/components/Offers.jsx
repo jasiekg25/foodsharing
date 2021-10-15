@@ -30,6 +30,8 @@ import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Chip from "@material-ui/core/Chip";
+import {Collapse} from "@material-ui/core";
+import Star from '@material-ui/icons/Star';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -53,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         overflow: 'auto',
         scrollbarWidth: "none" /* Firefox */,
-        maxHeight: 200,
+        maxHeight: 300,
         "&::-webkit-scrollbar": {
             display: "none"
         },
@@ -66,8 +68,8 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 18,
         fontWeight: 'bold',
         letterSpacing: '0.5px',
-        marginTop: 8,
-        marginRight: -100
+        marginTop: 30,
+        marginLeft: "40%"
     },
     photo: {
         float: "left",
@@ -116,6 +118,13 @@ const useStyles = makeStyles((theme) => ({
         border: '2px solid #000',
         boxShadow: theme.palette.grey[500],
         // padding: palette.spacing(2, 4, 3),
+    },
+    info: {
+        marginLeft: 70
+    },
+    description: {
+        marginLeft: 0,
+        margin: "auto"
     },
     tag: {
         margin: '1px',
@@ -203,7 +212,9 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
                 <Box>
                     {offers.map((offer) => {
                         return (
-                            <Card key={offer.id} className={cx(styles.itemsCard, shadowStyles.root)}>
+                            <Card key={offer.id} className={cx(styles.itemsCard, shadowStyles.root)} onClick={() => {
+                                onOfferSelect(offer)
+                            }}>
                                 <CardContent>
                                     {
                                         offer.photo ?
@@ -216,7 +227,10 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
                                                        component="img"
                                             />
                                     }
-                                    <Avatar onClick={(e) => handleShowUserProfile(offer.user_id)} className={styles.avatar} src={offer.photo}/>
+                                    <ul className={styles.avatar}>
+                                        <Chip avatar={<Avatar onClick={(e) => handleShowUserProfile(offer.user_id)} className={styles.avatar} src={offer.photo}/>} label={offer.user_name} variant="outlined"/>
+                                        <Chip avatar={<Star fontSize="inherit" style={{color:'#ffc107'}}/>} label="4" variant="outlined"/>
+                                    </ul>
                                     <CardContent>
                                         <h3 className={styles.heading}>{offer.name}</h3>
                                     </CardContent>
@@ -225,28 +239,32 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
                                             <Chip className={styles.tag} size="small" label={`#${tag}`} />
                                         )}
                                     </ul>
-                                    <Grid className={styles.icons}>
-                                        <Typography variant="body2" color="textSecondary" component="p"> Pick-up times: {offer.pickup_times}</Typography>
-                                    </Grid>
-                                    <Grid className={styles.icons}>
-                                        <Typography variant="body2" color="textSecondary" component="p"> Expire date: {offer.offer_expiry}</Typography>
-                                    </Grid>
-                                    <Grid className={styles.icons}>
-                                        <Typography variant="body2" color="textSecondary" component="p"> Remaining portions: {offer.portions_number - offer.used_portions}</Typography>
-                                    </Grid>
-                                        <Typography variant="subtitle1" component="p">
-                                            {offer.description}
-                                        </Typography>
-                                </CardContent>
-                                <CardContent>
-                                    <CardActions className={styles.buttons}>
-                                        <Button color="primary" onClick={(e) => sendMessage(offer)} startIcon={<ChatIcon />}>
-                                            Chat
-                                        </Button>
-                                        <Button size="medium" color="primary" onClick={(e) => handleShow(offer)}>
-                                            Make order
-                                        </Button>
-                                    </CardActions>
+                                    <CardContent>
+                                        <CardActions className={styles.buttons}>
+                                            <Button color="primary" onClick={(e) => sendMessage(offer)} startIcon={<ChatIcon />}>
+                                                Chat
+                                            </Button>
+                                            <Button size="medium" color="primary" onClick={(e) => handleShow(offer)}>
+                                                Make order
+                                            </Button>
+                                        </CardActions>
+                                    </CardContent>
+                                    <Collapse in={offer.expanded} timeout="auto" unmountOnExit>
+                                        <Box display={'flex'} className={styles.info} >
+                                            <Box p={5} flex={'auto'} >
+                                                <p className={styles.statLabel}>Pick-up times: </p>
+                                                <Typography variant="body2" color="textSecondary" component="p"> {offer.pickup_times}</Typography>
+                                            </Box>
+                                            <Box p={5} flex={'auto'} >
+                                                <p className={styles.statLabel}>Expire date: </p>
+                                                <Typography variant="body2" color="textSecondary" component="p"> {offer.offer_expiry}</Typography>
+                                            </Box>
+                                            <Box p={5} flex={'auto'} >
+                                                <p className={styles.statLabel}>Remaining portions: </p>
+                                                <Typography variant="body2" color="textSecondary" component="p"> {offer.portions_number - offer.used_portions}</Typography>
+                                            </Box>
+                                        </Box>
+                                    </Collapse>
                                 </CardContent>
                                 <Dialog
                                     open={showModal}

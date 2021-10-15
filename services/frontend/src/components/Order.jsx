@@ -24,6 +24,8 @@ import {history} from "../index";
 import {toast} from "react-toastify";
 import placeholder from "../img/placeholder.jpg";
 import Rating from "@material-ui/lab/Rating";
+import Chip from "@material-ui/core/Chip";
+import Star from "@material-ui/icons/Star";
 
 
 const useStyles = makeStyles(({palette}) => ({
@@ -187,14 +189,14 @@ function Order(props) {
                                                component="img"
                                     />
                             }
-                            <Avatar onClick={(e) => handleShowUserProfile(order.fromUser_id)} className={styles.avatar} src={order.fromUser_photo}/>
+                            <ul className={styles.avatar}>
+                                <Chip avatar={<Avatar onClick={(e) => handleShowUserProfile(order.fromUser_id)} className={styles.avatar} src={order.fromUser_photo}/>} label={order.fromUser_name} variant="outlined"/>
+                                <Chip avatar={<Star fontSize="inherit" style={{color:'#ffc107'}}/>} label="4" variant="outlined"/>
+                            </ul>
                             <h3 className={styles.heading}>{order.offer_name}</h3>
                             <Grid className={styles.icons}>
                                 <Typography variant="body2" color="textSecondary" component="p"> Ordered portions: {order.portions}</Typography>
                             </Grid>
-                            <Typography variant="body2" color="textSecondary" component="p">
-                                {order.offer_description}
-                            </Typography>
                         </CardContent>
                         {(!order.is_picked && !order.is_canceled) ?
                             <CardContent>

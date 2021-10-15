@@ -85,7 +85,9 @@ const SearchPage = ({ isLoggedIn }) => {
   };
 
   const onOfferSelect = (offer) => {
+    if(selected) selected.expanded = !selected.expanded
     setSelected(offer);
+    offer.expanded = true
     fitPoint({ lat: offer.pickup_latitude, lng: offer.pickup_longitude });
   };
 
