@@ -124,4 +124,21 @@ class Offers(Resource):
             return "Couldn't add offers", 500
 
 
+class OffersIndividual(Resource):
+    @auth_required
+    @offers_namespace.marshal_with(offer_search)
+    def get(self, offer_id):
+        """Returns offer with specific id"""
+        logger.info("Offer.get() offer_id: %s", str(offer_id))
+        try:
+            individual_offer = Offer.get_offer_by_id(offer_id)
+
+            return individual_offer.to_search_dict(), 200
+        except Exception as e:
+            logger.exception("Offers.get(): %s", str(e))
+            return "Couldn't load offers", 500
+
+
 offers_namespace.add_resource(Offers, "")
+offers_namespace.add_resource(OffersIndividual, "/<int:offer_id>")
+
