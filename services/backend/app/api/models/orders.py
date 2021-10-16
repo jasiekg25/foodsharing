@@ -31,7 +31,9 @@ class Orders(db.Model):
             'portions': self.portions,
             'is_canceled': self.is_canceled,
             'is_picked': self.is_picked,
-            'offer_photo': self.offers_orders.photo
+            'offer_photo': self.offers_orders.photo,
+            "tags": [offer_tag.tag.to_dict() for offer_tag in self.offers_orders.tags]
+
         }
         return data
 
