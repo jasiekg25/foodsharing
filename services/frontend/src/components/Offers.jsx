@@ -32,6 +32,7 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Chip from "@material-ui/core/Chip";
 import {Collapse} from "@material-ui/core";
 import Star from '@material-ui/icons/Star';
+import {Form} from "react-bootstrap";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -131,7 +132,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const portions = {
+let portions = {
     name: "portions",
     label: "Portions number",
     type: "number",
@@ -147,8 +148,7 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
     const {
         register,
         handleSubmit,
-        formState: { errors },
-        reset
+        formState: { errors }
     } = useForm({
         resolver: yupResolver(schema),
     });
@@ -160,7 +160,6 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
     const [showModal, setShowModal] = useState(false);
 
     const handleClose = () => {
-        reset();
         setShowModal(false);
     }
     const handleShow = (offer) => {
@@ -175,7 +174,6 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
     const orderMeal = (data) => {
         handleClose();
         data['offer_id'] = chosenOffer.id;
-        console.log(data)
         api.postOrder(data)
             .then((res) => {
                 getOffers();
@@ -186,6 +184,7 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
                 console.log("Could not order meal " + err)
                 toast.error(`Could not order ${chosenOffer.name}`);
             })
+        document.getElementById("create-course-form").reset();
     }
 
     const sendMessage = (offer) => {
@@ -244,7 +243,7 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
                                             <Button color="primary" onClick={(e) => sendMessage(offer)} startIcon={<ChatIcon />}>
                                                 Chat
                                             </Button>
-                                            <Button size="medium" color="primary" onClick={(e) => handleShow(offer)}>
+                                            <Button size="medium" color="primary" onClick={() => handleShow(offer)}>
                                                 Make order
                                             </Button>
                                         </CardActions>
@@ -273,24 +272,13 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
                                     aria-describedby="alert-dialog-description"
                                     fullWidth={true}
                                 >
-                                    <DialogTitle id="alert-dialog-title">{`Choose number of ${offer.name} portions:`}</DialogTitle>
+                                    <DialogTitle id="alert-dialog-title">{`Choose number of ${chosenOffer.name} portions:`}</DialogTitle>
                                     <DialogContent>
                                         <DialogContentText>
-                                            <form
+                                            <form id="create-course-form"
                                                 onSubmit={handleSubmit((data) => {orderMeal(data)})}
                                                 noValidate>
-                                                <TextField
-                                                    variant="outlined"
-                                                    fullWidth
-                                                    InputProps={{
-                                                        inputProps: {
-                                                            max: 10, min: 1, defaultValue: 1
-                                                        }
-                                                    }}
-                                                    {...register(portions.name)}
-                                                    error={!!errors.portions}
-                                                    type={portions.type}
-                                                />
+                                                <Form.Control size="lg" {...register(portions.name)} type={portions.type} min="0" max={chosenOffer.portions_number - chosenOffer.used_portions} defaultValue='0'/>
                                                 <DialogActions>
                                                     <Button color="primary" type="submit">
                                                         Order
