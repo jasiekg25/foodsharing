@@ -31,21 +31,12 @@ class SharerRating(db.Model):
 
     @staticmethod
     def get_user_rating_aggregated(user_id):
-        value = db\
+        rating = db\
             .session\
             .query(func.sum(SharerRating.rating))\
             .filter(SharerRating.to_user_id==user_id)\
             .scalar()
-
-
-        # value = SharerRating\
-        #     .query(func.avg(SharerRating.rating))\
-        #     .filter_by(to_user_id=user_id)\
-        #     .group_by(SharerRating.to_user_id, user_id)\
-        #     .first()
-
-            # .query(func.sum(SharerRating.rating)).filter(SharerRating.to_user_id==user_id).first()
-        return value
+        return rating
 
     @staticmethod
     def add_rating(from_user_id, content):
