@@ -26,6 +26,7 @@ offer = offers_current_namespace.model(
         "user_id": fields.String(readOnly=True),
         "user_name": fields.String(readOnly=True),
         "user_surname": fields.String(readOnly=True),
+        "user_rating": fields.Integer(readOnly=True),
         "name": fields.String(readOnly=True),
         "active": fields.Boolean(readOnly=True),
         "description": fields.String(readOnly=True),

@@ -4,7 +4,6 @@ from app import db, guard
 from datetime import datetime
 
 
-
 class SharerRating(db.Model):
     __tablename__ = "sharer_rating"
 
@@ -29,6 +28,24 @@ class SharerRating(db.Model):
     @staticmethod
     def get_ratings(user_id):
         return SharerRating.query.filter_by(to_user_id=user_id)
+
+    @staticmethod
+    def get_user_rating_aggregated(user_id):
+        value = db\
+            .session\
+            .query(func.sum(SharerRating.rating))\
+            .filter(SharerRating.to_user_id==user_id)\
+            .scalar()
+
+
+        # value = SharerRating\
+        #     .query(func.avg(SharerRating.rating))\
+        #     .filter_by(to_user_id=user_id)\
+        #     .group_by(SharerRating.to_user_id, user_id)\
+        #     .first()
+
+            # .query(func.sum(SharerRating.rating)).filter(SharerRating.to_user_id==user_id).first()
+        return value
 
     @staticmethod
     def add_rating(from_user_id, content):

@@ -7,6 +7,7 @@ from flask_praetorian import current_user, auth_required
 from app import logger, cloudinary_uploader
 from app.api.models.offer import Offer
 from app.api.models.tag import OffersTags, Tag
+from app.api.models.sharer_rating import SharerRating
 
 offers_namespace = Namespace("offers")
 
@@ -39,6 +40,7 @@ offer_search = offers_namespace.model(
         "user_name": fields.String(readOnly=True),
         "user_surname": fields.String(readOnly=True),
         "user_photo": fields.String(readOnly=True),
+        "user_rating": fields.Integer(readOnly=True),
         "name": fields.String(readOnly=True),
         "active": fields.Boolean(readOnly=True),
         "description": fields.String(readOnly=True),

@@ -1,5 +1,6 @@
 from app import db
 from sqlalchemy import desc
+from .sharer_rating import SharerRating
 
 
 class Orders(db.Model):
@@ -23,6 +24,7 @@ class Orders(db.Model):
             'fromUser_name': self.offers_orders.user.name,
             'fromUser_surname': self.offers_orders.user.surname,
             'fromUser_id': self.offers_orders.user.id,
+            "fromUser_rating": SharerRating.get_user_rating_aggregated(self.offers_orders.user.id),
             'offer_id': self.offer_id,
             'offer_description': self.offers_orders.description,
             'offer_name': self.offers_orders.name,

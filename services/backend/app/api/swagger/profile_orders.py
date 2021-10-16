@@ -22,6 +22,26 @@ order = profile_orders_namespace.model(
         "fromUser_name": fields.String(readOnly=True),
         "fromUser_surname": fields.String(readOnly=True),
         "fromUser_id": fields.Integer(readOnly=True),
+        "fromUser_rating": fields.Integer(readOnly=True),
+        "offer_id": fields.Integer(readOnly=True),
+        "offer_description": fields.String(readOnly=True),
+        "offer_name": fields.String(readOnly=True),
+        "portions": fields.Integer(readOnly=True),
+        "is_canceled": fields.Boolean(readOnly=True),
+        "is_picked": fields.Boolean(readOnly=True),
+        "offer_photo": fields.String(readOnly=True),
+    },
+)
+
+order_post = profile_orders_namespace.model(
+    "Order",
+    {
+        "id": fields.Integer(readOnly=True),
+        "user_id": fields.Integer(readOnly=True),
+        "fromUser_photo": fields.String(readOnly=True),
+        "fromUser_name": fields.String(readOnly=True),
+        "fromUser_surname": fields.String(readOnly=True),
+        "fromUser_id": fields.Integer(readOnly=True),
         "offer_id": fields.Integer(readOnly=True),
         "offer_description": fields.String(readOnly=True),
         "offer_name": fields.String(readOnly=True),
@@ -62,7 +82,7 @@ class OrdersNamespace(Resource):
             return "Couldn't load orders", 500
 
     @auth_required
-    @profile_orders_namespace.expect(order)
+    @profile_orders_namespace.expect(order_post)
     def put(self):
         """Updates current user order"""
         logger.info("Orders.put() user_id: %s", str(current_user().id))
