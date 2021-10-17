@@ -33,10 +33,10 @@ class SharerRating(db.Model):
     def get_user_rating_aggregated(user_id):
         rating = db\
             .session\
-            .query(func.sum(SharerRating.rating))\
+            .query(func.avg(SharerRating.rating))\
             .filter(SharerRating.to_user_id==user_id)\
             .scalar()
-        return rating
+        return float("{:.2f}".format(rating))
 
     @staticmethod
     def add_rating(from_user_id, content):

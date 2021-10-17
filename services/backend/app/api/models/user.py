@@ -1,5 +1,6 @@
 from sqlalchemy.sql import func
 from app import db, guard
+from .sharer_rating import SharerRating
 
 class User(db.Model):
     __tablename__ = "user"
@@ -51,6 +52,22 @@ class User(db.Model):
 
     def encode_token(self, user_id, token_type):
         pass
+
+    def to_dict(self):
+        data = {
+            "id": self.id,
+            "username": self.username,
+            "name": self.name,
+            "surname": self.surname,
+            "email": self.email,
+            "profile_description": self.profile_description,
+            "profile_picture": self.profile_picture,
+            "phone": self.phone,
+            "rating": SharerRating.get_user_rating_aggregated(self.id),
+            "active": self.active,
+            "created_date": self.created_date
+            }
+        return data
 
     @staticmethod
     def decode_token(token):

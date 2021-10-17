@@ -20,6 +20,7 @@ user_profile = user_profile_namespace.model(
         "profile_description": fields.String(readOnly=True),
         "profile_picture": fields.String(readOnly=True),
         "phone": fields.String(readOnly=True),
+        "rating": fields.Float(readOnly=True),
         "localization": fields.String(readOnly=True),
         "active": fields.Boolean(readOnly=True),
         "created_date": fields.DateTime(readOnly=True)
@@ -42,7 +43,8 @@ class UserProfile(Resource):
             if not user_id:
                 user_id = current_user().id
             logger.info("UserProfile.get() user_id: %s", str(user_id))
-            return User.get_user_profile_info(user_id), 200
+            user = User.get_user_profile_info(user_id)
+            return user.to_dict(), 200
         except Exception as e:
             logger.exception("UserProfile.get(): %s", str(e))
             return "Couldn't load user profile info", 500
