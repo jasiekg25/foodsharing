@@ -78,6 +78,7 @@ const SearchPage = ({ isLoggedIn }) => {
         setOffers(res.data);
         setSelected(null);
         setSortBy(sortByUpdated);
+        setHasNextPage(true);
         if (res.data.length < 15)
           setHasNextPage(false);
       })
