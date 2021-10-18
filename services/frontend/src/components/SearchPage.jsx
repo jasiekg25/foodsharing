@@ -38,10 +38,10 @@ const SearchPage = ({ isLoggedIn }) => {
   const [sortBy, setSortBy] = useState("localization");
 
   useEffect(() => {
-    getOffers();
+    searchUpdate();
   }, [center, selectedTags]); // TODO: debounce instead of fetching on every change
 
-  const getOffers = (afterSuccessfulOrder = false, sortByUpdated = sortBy) => {
+  const getOffers = (afterSuccessfulOrder = false) => {
     let queryTags = tags
       .filter((tag) => {
         return tag["selected"];
@@ -51,7 +51,7 @@ const SearchPage = ({ isLoggedIn }) => {
       let pageNumber = afterSuccessfulOrder ? 1 : (pageCount + 1)
       setPageCount(pageNumber);
     api
-      .getOffers(pageNumber, center.lat, center.lng, queryTags, sortByUpdated)
+      .getOffers(pageNumber, center.lat, center.lng, queryTags, sortBy)
       .then((res) => {
         if (afterSuccessfulOrder){
           setOffers(res.data);
@@ -68,9 +68,23 @@ const SearchPage = ({ isLoggedIn }) => {
       });
   };
 
-  const searchUpdate = (sortByUpdated) => {
-    getOffers(true, sortByUpdated)
-    setSortBy(sortByUpdated);
+  const searchUpdate = (sortByUpdated=sortBy) => {
+    let queryTags = selectedTags.map((tag) => tag.id).join(",");
+    let pageNumber = 1;
+    setPageCount(pageNumber);
+    api
+      .getOffers(pageNumber, center.lat, center.lng, queryTags, sortByUpdated)
+      .then((res) => {
+        setOffers(res.data);
+        setSelected(null);
+        setSortBy(sortByUpdated);
+        if (res.data.length < 15)
+          setHasNextPage(false);
+      })
+      .catch((err) => {
+        console.log("Could not get any offers " + err.message);
+        setHasNextPage(false);
+      });
   };
 
   const onOfferSelect = (offer) => {
