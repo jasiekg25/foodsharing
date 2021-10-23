@@ -2,6 +2,12 @@ import React, { useCallback } from "react";
 import Map from "./Map";
 import { Marker } from "@react-google-maps/api";
 
+const mapContainerStyle = {
+  width: "100%",
+  height: "65vh",
+  borderRadius: 10,
+};
+
 const MapPicker = ({center, setCenter, ...rest}) => {
   const onMapClick = useCallback((e) => {
     setCenter({
@@ -23,6 +29,7 @@ const MapPicker = ({center, setCenter, ...rest}) => {
      setCenter={setCenter}
      onClick={onMapClick}
      {...rest}
+     mapStyle={mapContainerStyle}
     >
       <Marker
         position={center}

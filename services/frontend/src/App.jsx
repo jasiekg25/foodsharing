@@ -14,6 +14,7 @@ import About from "./components/home/About";
 import Rules from "./components/home/Rules";
 import Footer from "./components/home/Footer";
 import AddMeal from "./components/AddMeal";
+import NewAddMeal from "./components/addMeal/NewAddMeal";
 import SearchPage from "./components/SearchPage";
 import FinalizeRegistration from "./components/FinalizeRegistration";
 import OtherUserProfile from "./components/OtherUserProfile";
@@ -133,7 +134,7 @@ const App = () => {
         <Route
           exact
           path="/add-meal"
-          render={() => <AddMeal isLoggedIn={isLoggedIn} />}
+          render={() => <NewAddMeal isLoggedIn={isLoggedIn} />}
         />
           <Route
               exact
