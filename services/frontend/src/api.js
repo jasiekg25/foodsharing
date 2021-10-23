@@ -65,8 +65,8 @@ const api = {
   getOffers: (page, lat, lon, tags, sortBy) => {
     return axios.get(`${baseUrl}/offers?page=${page}&lat=${lat}&lon=${lon}&tags_ids=${tags}&sorted_by=${sortBy}`);
   },
-  getOffer: (user_id) => {
-    return axios.get(`${baseUrl}/offers/${user_id}`)
+  getOffer: (offer_id) => {
+    return axios.get(`${baseUrl}/offers/${offer_id}`)
   },
   getUserCurrentOffers: () => {
     return axios.get(`${baseUrl}/current_offers`)

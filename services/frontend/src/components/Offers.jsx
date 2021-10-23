@@ -228,7 +228,7 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
                                     }
                                     <ul className={styles.avatar}>
                                         <Chip avatar={<Avatar onClick={(e) => handleShowUserProfile(offer.user_id)} className={styles.avatar} src={offer.photo}/>} label={offer.user_name} variant="outlined"/>
-                                        <Chip avatar={<Star fontSize="inherit" style={{color:'#ffc107'}}/>} label="4" variant="outlined"/>
+                                        <Chip avatar={<Star fontSize="inherit" style={{color:'#ffc107'}}/>} label={offer.user_rating} variant="outlined"/>
                                     </ul>
                                     <CardContent>
                                         <h3 className={styles.heading}>{offer.name}</h3>

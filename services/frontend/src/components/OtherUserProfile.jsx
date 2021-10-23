@@ -101,8 +101,9 @@ function OtherUserProfile(props) {
                     <Box p={2} flex={'auto'} className={borderedGridStyles.item}>
                         <p className={styles.statLabel}>Rating: </p>
                         <Rating
-                            name="simple-controlled"
-                            value={3}
+                            precision={0.01}
+                            value={user.rating || 0}
+                            readOnly
                         />
                     </Box>
                 </Box>

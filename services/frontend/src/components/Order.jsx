@@ -191,7 +191,7 @@ function Order(props) {
                             }
                             <ul className={styles.avatar}>
                                 <Chip avatar={<Avatar onClick={(e) => handleShowUserProfile(order.fromUser_id)} className={styles.avatar} src={order.fromUser_photo}/>} label={order.fromUser_name} variant="outlined"/>
-                                <Chip avatar={<Star fontSize="inherit" style={{color:'#ffc107'}}/>} label="4" variant="outlined"/>
+                                <Chip avatar={<Star fontSize="inherit" style={{color:'#ffc107'}}/>} label={order.fromUser_rating} variant="outlined"/>
                             </ul>
                             <h3 className={styles.heading}>{order.offer_name}</h3>
                             <Grid className={styles.icons}>
