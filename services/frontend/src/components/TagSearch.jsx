@@ -1,13 +1,24 @@
-import React from "react";
-import TextField from "@material-ui/core/TextField";
-import Chip from "@material-ui/core/Chip";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import React from 'react';
+import TextField from '@material-ui/core/TextField';
+import Chip from '@material-ui/core/Chip';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
-const TagSearch = ({ tags, selectedTags, setSelectedTags }) => {
+const defaultStyle = {
+  marginLeft: '10px',
+  width: '75%',
+};
+
+const TagSearch = ({
+  tags,
+  selectedTags,
+  setSelectedTags,
+  style = defaultStyle,
+}) => {
   return (
     <Autocomplete
+      fullWidth 
       multiple
-      id="tags-standard"
+      id='tags-standard'
       value={selectedTags}
       onChange={(event, newValue) => {
         setSelectedTags(newValue);
@@ -15,20 +26,14 @@ const TagSearch = ({ tags, selectedTags, setSelectedTags }) => {
       options={tags}
       getOptionLabel={(tag) => `#${tag.tag_name}`}
       renderInput={(params) => (
-        <TextField {...params} variant="outlined" placeholder="Select Tags" />
+        <TextField {...params} placeholder='Select Tags' variant='outlined' />
       )}
       renderTags={(value, getTagProps) =>
         value.map((tag, index) => (
-          <Chip
-            label={`#${tag.tag_name}`}
-            {...getTagProps({ index })}
-          />
+          <Chip label={`#${tag.tag_name}`} {...getTagProps({ index })} />
         ))
       }
-      style={{
-        marginLeft: "10px",
-        width: "75%",
-      }}
+      style={style}
     />
   );
 };
