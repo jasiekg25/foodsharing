@@ -7,11 +7,30 @@ import { Input, Button, MessageList } from 'react-chat-elements';
 import "./Chat.css"
 import SendIcon from '@material-ui/icons/Send';
 import IconButton from "@material-ui/core/IconButton";
+import ChatOffer from "./ChatOffer";
+import {Card} from "@material-ui/core";
+import {makeStyles} from "@material-ui/core/styles";
 
 let endPoint = `${process.env.REACT_APP_BACKEND_SERVICE_URL}/chat`;
 const accessToken = localStorage.getItem("accessToken")
 let socket = io.connect(`${endPoint}`);
 let inputRef = React.createRef();
+const useStyles = makeStyles(({ palette }) => ({
+    card: {
+        marginTop: 10,
+        margin:"auto",
+        borderRadius: 12,
+        width: 700,
+        textAlign: 'center',
+        overflow: 'auto',
+        scrollbarWidth: "none" /* Firefox */,
+        maxHeight: 200,
+        "&::-webkit-scrollbar": {
+            display: "none"
+        }
+    }
+}));
+
 
 function Chat(props) {
   const {roomId} = props.match.params
@@ -27,6 +46,8 @@ function Chat(props) {
           socket.off("message")
       }
   }, []);
+
+    const styles = useStyles();
 
   const getMessages = () => {
     api.getChatMessages(roomId)
@@ -72,34 +93,39 @@ function Chat(props) {
 
 
   return (
-    <div onKeyPress={handleKeyPress}>
-      {messages.map((message) => {
-        return (
-            <MessageList
-                className={(message.from_user_id === userId) ? "message-list" : ""}
-                lockable={true}
-                toBottomHeight={'100%'}
-                dataSource={[
-                    {
-                        position: (message.from_user_id === userId) ? 'right' : 'left',
-                        text: message.message
-                    }
-                ]
-                } />
-        )
-      })}
-        <Input
-            className="chat-input"
-            ref={el => (inputRef = el)}
-            onChange={(e) => onChange(e)}
-            placeholder="Type here..."
-            multipleline={true}
-            rightButtons={
-                <IconButton color="primary" onClick={() => sendMessage()}>
-                    <SendIcon/>
-                </IconButton>
-            }/>
-    </div>
+      <div>
+          <Card className={styles.card}>
+              <ChatOffer offerId={offerId}/>
+          </Card>
+          <div onKeyPress={handleKeyPress}>
+              {messages.map((message) => {
+                  return (
+                      <MessageList
+                          className={(message.from_user_id === userId) ? "message-list" : ""}
+                          lockable={true}
+                          toBottomHeight={'100%'}
+                          dataSource={[
+                              {
+                                  position: (message.from_user_id === userId) ? 'right' : 'left',
+                                  text: message.message
+                              }
+                          ]
+                          } />
+                  )
+              })}
+              <Input
+                  className="chat-input"
+                  ref={el => (inputRef = el)}
+                  onChange={(e) => onChange(e)}
+                  placeholder="Type here..."
+                  multipleline={true}
+                  rightButtons={
+                      <IconButton color="primary" onClick={() => sendMessage()}>
+                          <SendIcon/>
+                      </IconButton>
+                  }/>
+          </div>
+      </div>
   );
 }
 
