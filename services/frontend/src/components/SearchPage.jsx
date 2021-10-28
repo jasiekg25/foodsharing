@@ -33,56 +33,49 @@ const SearchPage = ({ isLoggedIn }) => {
   });
   const [offers, setOffers] = useState([]);
   const [selected, setSelected] = useState(null);
-  const [pageCount, setPageCount] = useState(1);
+  const [pageCount, setPageCount] = useState(0);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [sortBy, setSortBy] = useState("localization");
-
-  useEffect(() => {
-    getOffers(pageCount);
-  }, []);
 
   useEffect(() => {
     searchUpdate();
   }, [center, selectedTags]); // TODO: debounce instead of fetching on every change
 
-  const getOffers = () => {
+  const getOffers = (afterSuccessfulOrder = false) => {
     let queryTags = tags
       .filter((tag) => {
         return tag["selected"];
       })
       .map((tag) => tag.id)
       .join(",");
-    api
-      .getOffers(pageCount, center.lat, center.lng, queryTags, sortBy)
-      .then((res) => {
-        setOffers([...offers, ...res.data]);
-        let newPageCount = pageCount + 1;
-        setPageCount(newPageCount);
-        if (res.data.length === 0 || res.data.length < 15)
-          setHasNextPage(false);
-      })
-      .catch((err) => {
-        console.log("Could not get any offers " + err.message);
-        setHasNextPage(false);
-      });
+    let pageNumber = afterSuccessfulOrder ? 1 : (pageCount + 1)
+    setPageCount(pageNumber);
+    queryOffers(queryTags, pageNumber)
   };
 
-  const searchUpdate = (sortByUpdated = sortBy) => {
+  const searchUpdate = (sortByUpdated=sortBy) => {
     let queryTags = selectedTags.map((tag) => tag.id).join(",");
-    api
-      .getOffers(1, center.lat, center.lng, queryTags, sortByUpdated)
-      .then((res) => {
-        setOffers(res.data);
-        setSelected(null);
-        setPageCount(1);
-        if (res.data.length === 0 || res.data.length < 15)
-          setHasNextPage(false);
-      })
-      .catch((err) => {
-        console.log("Could not get any offers " + err.message);
-        setHasNextPage(false);
-      });
+    let pageNumber = 1;
+    setPageCount(pageNumber);
+    queryOffers(queryTags, pageNumber, sortByUpdated);
   };
+
+  const queryOffers = (queryTags, pageNumber, sortByUpdated=sortBy) => {
+    api
+    .getOffers(pageNumber, center.lat, center.lng, queryTags, sortByUpdated)
+    .then((res) => {
+      setOffers(res.data);
+      setSelected(null);
+      setSortBy(sortByUpdated);
+      setHasNextPage(true);
+      if (res.data.length < 15)
+        setHasNextPage(false);
+    })
+    .catch((err) => {
+      console.log("Could not get any offers " + err.message);
+      setHasNextPage(false);
+    });
+  }
 
   const onOfferSelect = (offer) => {
     setSelected(offer);
@@ -106,7 +99,6 @@ const SearchPage = ({ isLoggedIn }) => {
             >
               <SortSelect
                 sortBy={sortBy}
-                setSortBy={setSortBy}
                 searchFunction={searchUpdate}
               />
               <TagSearch

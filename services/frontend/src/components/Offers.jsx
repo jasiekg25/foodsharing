@@ -169,7 +169,7 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
         console.log(data)
         api.postOrder(data)
             .then((res) => {
-                getOffers();
+                getOffers(true);
                 toast.success(`${chosenOffer.name} order was successful.`);
                 console.log(res.data);
             })
