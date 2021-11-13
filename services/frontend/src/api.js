@@ -69,19 +69,19 @@ const api = {
     return axios.get(`${baseUrl}/offers/${offer_id}`)
   },
   getUserCurrentOffers: () => {
-    return axios.get(`${baseUrl}/current_offers`)
+    return axios.get(`${baseUrl}/user/profile/offers`)
   },
   putUserCurrentOffers: (body) => {
-    return axios.put(`${baseUrl}/current_offers`, body)
+    return axios.put(`${baseUrl}/user/profile/offers`, body)
   },
   postOffers: (body) => {
     return axios.post(`${baseUrl}/offers`, body);
   },
   getUserOrdersHistory: () => {
-    return axios.get(`${baseUrl}/profile_orders`)
+    return axios.get(`${baseUrl}/user/profile/orders`)
   },
   putUserOrdersHistory: (body) => {
-    return axios.put(`${baseUrl}/profile_orders`, body)
+    return axios.put(`${baseUrl}/user/profile/orders`, body)
   },
   postOrder: (body) => {
     return axios.post(`${baseUrl}/orders`, body);
@@ -90,31 +90,31 @@ const api = {
     return axios.get(`${baseUrl}/tags`);
   },
   getProfile: () => {
-    return axios.get(`${baseUrl}/user_profile`)
+    return axios.get(`${baseUrl}/user/profile`)
   },
   putProfile: (body) => {
-    return axios.put(`${baseUrl}/user_profile`, body);
+    return axios.put(`${baseUrl}/user/profile`, body);
   },
   finalizeRegistration: () => {
     return axios.get(`${baseUrl}/auth/finalize`);
   },
   getOtherUserProfile: (id) => {
-    return axios.get(`${baseUrl}/user_profile?user-id=${id}`)
+    return axios.get(`${baseUrl}/user/profile?user-id=${id}`)
   },
   getUserChatRooms: () => {
-    return axios.get(`${baseUrl}/chat_rooms`);
+    return axios.get(`${baseUrl}/user/chat_rooms`);
   },
   putUserChatRoom: (body) => {
-    return axios.put(`${baseUrl}/chat_rooms`, body);
+    return axios.put(`${baseUrl}/user/chat_rooms`, body);
   },
   getChatMessages: (id) => {
-    return axios.get(`${baseUrl}/chat_messages?chat_room_id=${id}`);
+    return axios.get(`${baseUrl}/user/chat_rooms/chat_messages?chat_room_id=${id}`);
   },
   getUserNotifications: () => {
-    return axios.get(`${baseUrl}/user_notifications`)
+    return axios.get(`${baseUrl}/user/notifications`)
   },
   postSharerRating: (body) => {
-    return axios.post(`${baseUrl}/rating`, body)
+    return axios.post(`${baseUrl}/user/rating`, body)
   }
 };
 
