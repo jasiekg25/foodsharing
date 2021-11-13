@@ -159,8 +159,8 @@ class Offer(db.Model):
             return offers\
                 .join(OffersTags)\
                 .filter(OffersTags.tag_id.in_(tags_ids))\
-                .group_by(Offer.id)\
-                .having(array_agg(OffersTags.tag_id).contains(tags_ids))
+                .group_by(Offer.id)
+                # .having(array_agg(OffersTags.tag_id).contains(tags_ids))
 
 
     @staticmethod
