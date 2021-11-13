@@ -92,7 +92,7 @@ class ChatIndividual(Resource):
     @individual_chat_namespace.marshal_with(chat)
     def get(self, chat_room_id):
         """Returns all messages in chat room (from both users)"""
-        logger.info("ChatMessage.get()")
+        logger.info("Chat.get() chat_room_id: %s", str(chat_room_id))
         try:
             chat_room = ChatRoom.get_chat_room_by_id(chat_room_id)
 
@@ -115,7 +115,7 @@ class ChatIndividual(Resource):
     @individual_chat_namespace.expect(chat_message)
     def post(self):
         """Place new message in chat room"""
-        logger.info("ChatMessage.post() requested_body: %s", str(request.get_json()))
+        logger.info("Chat.post() requested_body: %s", str(request.get_json()))
         try:
             content = request.get_json()
             user_id = current_user().id

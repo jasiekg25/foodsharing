@@ -14,7 +14,7 @@ from app.api.swagger.offers import offers_namespace
 from app.api.swagger.profile_current_offers import offers_current_namespace
 from app.api.swagger.profile_orders import profile_orders_namespace
 from app.api.swagger.chat_rooms import chat_room_namespace
-from app.api.swagger.chat_messages import individual_chat_namespace
+from app.api.swagger.chat import individual_chat_namespace
 from app.api.swagger.ping import ping_namespace
 
 
