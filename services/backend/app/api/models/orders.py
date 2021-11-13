@@ -65,6 +65,10 @@ class Orders(db.Model):
         return Orders.query.all()
 
     @staticmethod
+    def get_orders_by_offer_id(offer_id):
+        return Orders.query.filter_by(offer_id = offer_id)
+
+    @staticmethod
     def get_orders_by_offer_id_not_canceled(offer_id):
         return Orders.query.filter_by(offer_id = offer_id).filter(Orders.is_canceled == False)
 

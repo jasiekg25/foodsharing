@@ -107,8 +107,8 @@ const api = {
   putUserChatRoom: (body) => {
     return axios.put(`${baseUrl}/user/chat_rooms`, body);
   },
-  getChatMessages: (id) => {
-    return axios.get(`${baseUrl}/user/chat_rooms/chat_messages?chat_room_id=${id}`);
+  getChatMessages: (chat_room_id) => {
+    return axios.get(`${baseUrl}/user/chat_rooms/${chat_room_id}`);
   },
   getUserNotifications: () => {
     return axios.get(`${baseUrl}/user/notifications`)

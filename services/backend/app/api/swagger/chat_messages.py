@@ -5,11 +5,67 @@ from flask_restx import Resource, fields, Namespace, reqparse, inputs
 from flask_praetorian import current_user, auth_required
 
 from app import logger
+from app.api.models.offer import Offer
+from app.api.models.orders import Orders
 from app.api.models.chat_message import ChatMessage
+from app.api.models.chat_room import ChatRoom
+# from app.api.swagger.chat_rooms import chat_room_namespace
 
-chat_message_namespace = Namespace("chat_message")
+individual_chat_namespace = Namespace("chat_rooms")
+tags_fields = individual_chat_namespace.model(
+    'Tags',
+    {
+        'tag_id': fields.Integer(readOnly=True),
+        'tag_name': fields.String(readOnly=True)
+    })
 
-chat_message = chat_message_namespace.model(
+offer_search = individual_chat_namespace.model(
+    "Offer",
+    {
+        "id": fields.Integer(readOnly=True),
+        "user_id": fields.String(readOnly=True),
+        "user_name": fields.String(readOnly=True),
+        "user_surname": fields.String(readOnly=True),
+        "user_photo": fields.String(readOnly=True),
+        "user_rating": fields.Float(readOnly=True),
+        "name": fields.String(readOnly=True),
+        "active": fields.Boolean(readOnly=True),
+        "description": fields.String(readOnly=True),
+        "photo": fields.String(readOnly=True),
+        "portions_number": fields.Integer(readOnly=True),
+        "used_portions": fields.Integer(readOnly=True),
+        "pickup_longitude": fields.Float(readOnly=True),
+        "pickup_latitude": fields.Float(readOnly=True),
+        "post_time": fields.DateTime(readOnly=True),
+        "pickup_times": fields.String(readOnly=True),
+        "offer_expiry": fields.DateTime(readOnly=True),
+        "tags": fields.List(fields.String(readOnly=True))
+    },
+)
+
+order = individual_chat_namespace.model(
+    "Order",
+    {
+        "id": fields.Integer(readOnly=True),
+        "user_id": fields.Integer(readOnly=True),
+        "fromUser_photo": fields.String(readOnly=True),
+        "fromUser_name": fields.String(readOnly=True),
+        "fromUser_surname": fields.String(readOnly=True),
+        "fromUser_id": fields.Integer(readOnly=True),
+        "fromUser_rating": fields.Float(readOnly=True),
+        "offer_id": fields.Integer(readOnly=True),
+        "offer_description": fields.String(readOnly=True),
+        "offer_name": fields.String(readOnly=True),
+        "portions": fields.Integer(readOnly=True),
+        "is_canceled": fields.Boolean(readOnly=True),
+        "is_picked": fields.Boolean(readOnly=True),
+        "offer_photo": fields.String(readOnly=True),
+        "tags": fields.List(fields.Nested(tags_fields))
+
+    },
+)
+
+chat_message = individual_chat_namespace.model(
     "ChatMessages",
     {
         # "id": fields.Integer(readOnly=True),
@@ -19,29 +75,44 @@ chat_message = chat_message_namespace.model(
     }
 )
 
+chat = individual_chat_namespace.model(
+    "Chat",
+    {
+        'offer' : fields.Nested(offer_search),
+        'orders' : fields.List(fields.Nested(order)),
+        'chat_messages' : fields.List(fields.Nested(chat_message))
+    }
+)
+
 parser = reqparse.RequestParser()
 parser.add_argument('chat_room_id', type=int)
 
-class ChatMessages(Resource):
+class ChatIndividual(Resource):
     @auth_required
-    @chat_message_namespace.marshal_with(chat_message)
-    def get(self):
+    @individual_chat_namespace.marshal_with(chat)
+    def get(self, chat_room_id):
         """Returns all messages in chat room (from both users)"""
         logger.info("ChatMessage.get()")
         try:
-            content = parser.parse_args()
-            chat_room_id = content['chat_room_id']
+            chat_room = ChatRoom.get_chat_room_by_id(chat_room_id)
 
             messages = ChatMessage.get_all_messages(chat_room_id)
+            offer = Offer.get_offer_by_id(chat_room.offer_id)
+            orders = Orders.get_orders_by_offer_id(chat_room.offer_id)
 
-            return [message.to_dict() for message in messages]
+            chat = {
+                'offer' : offer.to_search_dict(),
+                'chat_messages' : [message.to_dict() for message in messages],
+                'orders' : [order.to_dict() for order in orders]
+            }
+            return chat
 
         except Exception as e:
             logger.exception("ChatMessage.get(): %s", str(e))
             return "Couldn't load chat messages", 500
 
     @auth_required
-    @chat_message_namespace.expect(chat_message)
+    @individual_chat_namespace.expect(chat_message)
     def post(self):
         """Place new message in chat room"""
         logger.info("ChatMessage.post() requested_body: %s", str(request.get_json()))
@@ -61,4 +132,4 @@ class ChatMessages(Resource):
             logger.exception("ChatMessage.post(): %s", str(e))
             return "Couldn't add chat room", 500
 
-chat_message_namespace.add_resource(ChatMessages, "")
+individual_chat_namespace.add_resource(ChatIndividual, "/<int:chat_room_id>")

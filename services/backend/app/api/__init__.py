@@ -14,11 +14,11 @@ from app.api.swagger.offers import offers_namespace
 from app.api.swagger.profile_current_offers import offers_current_namespace
 from app.api.swagger.profile_orders import profile_orders_namespace
 from app.api.swagger.chat_rooms import chat_room_namespace
-from app.api.swagger.chat_messages import chat_message_namespace
+from app.api.swagger.chat_messages import individual_chat_namespace
 from app.api.swagger.ping import ping_namespace
 
 
-api = Api(version="1.0", title="FRED APIs", doc="/docs/")
+api = Api(version="1.0", title="FOODSHARING APIs", doc="/docs/")
 
 api.add_namespace(ping_namespace, path='/ping')
 api.add_namespace(auth_namespace, path="/auth")
@@ -28,9 +28,9 @@ api.add_namespace(offers_namespace, path="/offers")
 api.add_namespace(tags_namespace, path="/tags")
 
 api.add_namespace(user_profile_namespace, path="/user/profile")
-api.add_namespace(user_notifications, path="/user/notifications")
 api.add_namespace(profile_orders_namespace, path="/user/profile/orders")
 api.add_namespace(offers_current_namespace, path="/user/profile/offers")
 api.add_namespace(chat_room_namespace, path="/user/chat_rooms")
-api.add_namespace(chat_message_namespace, path="/user/chat_rooms/chat_messages")
+api.add_namespace(individual_chat_namespace, path="/user/chat_rooms") # individual chat data
+api.add_namespace(user_notifications, path="/user/notifications")
 api.add_namespace(rating_namespace, path="/user/rating")
