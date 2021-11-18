@@ -36,7 +36,9 @@ class SharerRating(db.Model):
             .query(func.avg(SharerRating.rating))\
             .filter(SharerRating.to_user_id==user_id)\
             .scalar()
-        return float("{:.2f}".format(rating))
+        if rating:
+            return float("{:.2f}".format(rating))
+        return 0
 
     @staticmethod
     def add_rating(from_user_id, content):
