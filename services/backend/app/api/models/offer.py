@@ -38,7 +38,6 @@ class Offer(db.Model):
         data = {
             'id': self.id,
             'user_id': self.user.id,
-            'user_username': self.user.username,
             'user_name': self.user.name,
             'user_surname': self.user.surname,
             'user_rating': SharerRating.get_user_rating_aggregated(self.user.id),
@@ -63,7 +62,6 @@ class Offer(db.Model):
         data = {
             'id': self.id,
             'user_id': self.user.id,
-            'user_username': self.user.username,
             'user_name': self.user.name,
             'user_surname': self.user.surname,
             'user_photo': self.user.profile_picture,

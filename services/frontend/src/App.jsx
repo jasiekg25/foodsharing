@@ -3,7 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import api from "./api";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { history } from "./index";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 import NavBar from "./components/home/NavBar";
 import Login from "./components/Login";
@@ -13,15 +13,18 @@ import Home from "./components/home/Home";
 import About from "./components/home/About";
 import Rules from "./components/home/Rules";
 import Footer from "./components/home/Footer";
-import AddMeal from "./components/AddMeal";
 import NewAddMeal from "./components/addMeal/NewAddMeal";
 import SearchPage from "./components/SearchPage";
 import FinalizeRegistration from "./components/FinalizeRegistration";
 import OtherUserProfile from "./components/OtherUserProfile";
 import Chat from "./components/Chat";
 import ChatRooms from "./components/ChatRooms";
+import PrivateRoutes from "./components/PrivateRoutes";
 import ProfileCard from "./components/MediaCard";
+import Auth, { useAuth } from "./components/IsLoggedIn";
 import { CssBaseline } from "@material-ui/core";
+import { toast } from "./utils/toastWrapper";
+import TimeOut from "./components/TimeOut";
 
 const PageNoFound = () => (
   <section className="hero is-halfheight">
@@ -38,128 +41,49 @@ const PageNoFound = () => (
 );
 
 const App = () => {
-  const [isLoggedIn, setLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    setLoggedIn(token ? true : false);
-
-    api.refreshToken();
-  }, []);
-
-  const handleLoginFormSubmit = (data) => {
-    api
-      .login(data)
-      .then((res) => {
-        window.localStorage.setItem("accessToken", res.data.access_token);
-        toast.success("You have logged in successfully.")
-        setLoggedIn(true);
-        return true;
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error("Incorrect email and/or password.")
-        return false;
-      });
-  };
-
-  const logoutUser = () => {
-    window.localStorage.removeItem("accessToken");
-    setLoggedIn(false);
-    toast.success("You have logged out.")
-  };
-
-  const tokenTimeout = () => {
-    localStorage.removeItem("accessToken");
-    console.log("Elapsed token removed!");
-    toast.error("Session elapsed. You need to log in again")
-    setLoggedIn(false);
-    history.push("/login");
-  };
-
   return (
-    <div>
+    <Auth>
       <CssBaseline />
-      <NavBar isLoggedIn={isLoggedIn} logoutUser={logoutUser} />
+      <NavBar />
 
       <ToastContainer position="top-center"/>
 
       <Switch>
         <Route
           exact
-          path="/"
+          path='/'
           render={() => (
             <div>
-              <Home isLoggedIn={isLoggedIn} />
+              <Home />
               <About />
               <Rules />
             </div>
           )}
         />
-        <Route
-          exact
-          path="/register"
-          render={() => (
-            <Register
-              isLoggedIn={isLoggedIn}
-            />
-          )}
-        />
-        <Route
-          path="/finalize"
-          component={FinalizeRegistration}
-        />
-        <Route
-          exact
-          path="/login"
-          render={() => (
-            <Login
-              // eslint-disable-next-line react/jsx-handler-names
-              onSubmit={handleLoginFormSubmit}
-              isLoggedIn={isLoggedIn}
-            />
-          )}
-        />
-        <Route exact path="/timeout" render={() => tokenTimeout()} />
-        {/* <Route
-          exact
-          path="/offers"
-          render={() => <Offers isLoggedIn={isLoggedIn} />}
-        /> */}
-        <Route
-          exact
-          path="/offers"
-          render={() => <SearchPage isLoggedIn={isLoggedIn} />}
-        />
-        <Route
-          exact
-          path="/add-meal"
-          render={() => <NewAddMeal isLoggedIn={isLoggedIn} />}
-        />
-          <Route
-              exact
-              path="/users/:id"
-              render={(props) => <OtherUserProfile {...props} />}
-          />
+        <Route exact path='/login' render={() => <Login />} />
+        <Route exact path='/register' render={() => <Register />} />
+        <Route path='/finalize' component={FinalizeRegistration} />
+        <Route exact path='/timeout' component={TimeOut} />
+        <PrivateRoutes>
+          <Route exact path='/offers' render={() => <SearchPage />} />
+          <Route exact path='/add-meal' render={() => <NewAddMeal />} />
           <Route
             exact
-            path="/chat"
-            render={() => <ChatRooms />}
-        />
+            path='/users/:id'
+            render={(props) => <OtherUserProfile {...props} />}
+          />
+          <Route exact path='/chat' render={() => <ChatRooms />} />
+          <Route exact path='/profile' render={() => <ProfileCard />} />
           <Route
-              exact
-              path="/profile"
-              render={() => <ProfileCard isLoggedIn={isLoggedIn} logoutUser={logoutUser} />}
+            exact
+            path='/chat/:roomId/offers/:offerId'
+            render={(props) => <Chat {...props} />}
           />
-        <Route
-              exact
-              path="/chat/:roomId/offers/:offerId"
-              render={(props) => <Chat {...props} />}
-          />
+        </PrivateRoutes>
         <Route component={PageNoFound} />
       </Switch>
       <Footer />
-    </div>
+    </Auth>
   );
 };
 

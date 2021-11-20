@@ -11,7 +11,6 @@ class User(db.Model):
     surname = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), nullable=False)
     hashed_password = db.Column(db.String(255), nullable=False)
-    password_salt = db.Column(db.String(255), nullable=False)
     profile_description = db.Column(db.Text, nullable=True)
     profile_picture = db.Column(db.String(255), nullable=True)
     phone = db.Column(db.String(255), nullable=False)
@@ -39,13 +38,12 @@ class User(db.Model):
                                     foreign_keys='UserNotification.user_id')  # One user many Notifications
 
     def __init__(self, username="", name="", surname="", email="", password="", profile_description="",
-                 password_salt="", profile_picture=None, phone=""):
+                profile_picture=None, phone=""):
         self.username = username
         self.name = name
         self.surname = surname
         self.email = email
         self.profile_description = profile_description
-        self.password_salt = password_salt
         self.profile_picture = profile_picture
         self.phone = phone
         self.hashed_password = guard.hash_password(password)
@@ -144,13 +142,8 @@ class User(db.Model):
     @staticmethod
     def update_user_profile_info(user_id, content, photo_url):
         user = User.query.filter_by(id=user_id).first()
-        user.username = content['username']
-        user.name = content['name']
-        user.surname = content['surname']
         user.email = content['email']
         user.profile_description = content['profile_description']
         user.profile_picture = photo_url
         user.phone = content['phone']
-        user.active = content['active']
-        user.created_date = content['created_date']
         db.session.commit()

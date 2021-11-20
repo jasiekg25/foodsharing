@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col } from "react-bootstrap";
 import Offers from "./Offers";
 import { Redirect } from "react-router-dom";
 import api from "../api";
@@ -15,15 +14,22 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    padding: 0,
     flexGrow: 1,
   },
   paper: {
     padding: theme.spacing(2),
-    textAlign: "center",
+    textAlign: 'center',
+  },
+  map: {
+    display: 'none',
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
+    },
   },
 }));
 
-const SearchPage = ({ isLoggedIn }) => {
+const SearchPage = () => {
   const classes = useStyles();
 
   const { tags, selectedTags, setSelectedTags } = useTags();
@@ -84,15 +90,11 @@ const SearchPage = ({ isLoggedIn }) => {
     fitPoint({ lat: offer.pickup_latitude, lng: offer.pickup_longitude });
   };
 
-  if (!isLoggedIn) {
-    return <Redirect to="/login" />;
-  }
-
   return (
     <div className={classes.root}>
       <Grid container>
-        <Grid item xs={6}>
-          <Container style={{paddingRight: 0}}>
+        <Grid item md={6} xs={12}>
+          <Container style={{padding: 0}}>
             <Toolbar
               variant="regular"
               style={{
@@ -117,7 +119,7 @@ const SearchPage = ({ isLoggedIn }) => {
             />
           </Container>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item md={6} className={classes.map}>
           <Container style={{
                 paddingTop: "20px",
                 paddingLeft: 0

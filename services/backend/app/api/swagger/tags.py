@@ -11,8 +11,7 @@ tag = tags_namespace.model(
     "Tag",
     {
         "id": fields.Integer(readOnly=True),
-        "tag_name": fields.String(readOnly=True),
-        "is_wanted": fields.Boolean(readOnly=True),
+        "tag_name": fields.String(readOnly=True)
     },
 )
 
@@ -28,7 +27,7 @@ class Tags(Resource):
 
             return tags, 200
         except Exception as e:
-            logger.exception("Tags.post(): %s", str(e))
+            logger.exception("Tags.get(): %s", str(e))
             return "Couldn't load tags", 500
 
 

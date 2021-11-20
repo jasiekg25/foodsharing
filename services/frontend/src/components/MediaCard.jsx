@@ -25,34 +25,46 @@ import Order from "./Order";
 import Rating from "@material-ui/lab/Rating";
 import {Redirect} from "react-router-dom";
 import MyOffers from "./MyOffers";
+import EditProfile from './EditProfile';
+import { useAuth } from './IsLoggedIn';
 
-const useStyles = makeStyles(({ palette }) => ({
+const useStyles = makeStyles(({ palette, breakpoints }) => ({
     card: {
         marginTop: 10,
         marginLeft: 10,
+        marginRight: 10,
         borderRadius: 12,
-        width: 500,
         textAlign: 'center',
         overflow: 'auto',
+        width: '100%',
         scrollbarWidth: "none" /* Firefox */,
         maxHeight: 500,
         "&::-webkit-scrollbar": {
             display: "none"
-        }
+        },
+        [breakpoints.up('sm')]: {
+            marginRight: 0,
+            width: '30%',
+          },
     },
     itemsCard: {
         flexGrow: 1,
         marginTop: 10,
-        marginLeft: 20,
+        marginLeft: 10,
+        marginRight: 10,
         borderRadius: 12,
-        maxWidth: 700,
         textAlign: 'center',
         overflow: 'auto',
         scrollbarWidth: "none" /* Firefox */,
         maxHeight: 500,
         "&::-webkit-scrollbar": {
             display: "none"
-        }
+        },
+        [breakpoints.up('sm')]: {
+            marginLeft: 20,
+            marginRight: 0,
+            maxWidth: '40%',
+          },
     },
     tabList:{
         color: palette.grey[500],
@@ -110,9 +122,13 @@ const useStyles = makeStyles(({ palette }) => ({
         marginBottom: 4,
         letterSpacing: '1px',
     },
+    profilePage: {
+        // width: 
+    }
 }));
 
-function ProfileCard({isLoggedIn, logoutUser}) {
+function ProfileCard() {
+    const { logOut } = useAuth();
     const [value, setValue] = React.useState('1');
 
     const handleChange = (event, newValue) => {
@@ -127,6 +143,8 @@ function ProfileCard({isLoggedIn, logoutUser}) {
     const [user, setUser] = useState({});
     const [showModal, setShowModal] = useState(false);
 
+    const [showEditProfile, setShowEditProfile] = useState(false);
+
     useEffect(() => {
         getUserInfo();
     }, [])
@@ -140,56 +158,58 @@ function ProfileCard({isLoggedIn, logoutUser}) {
             })
     }
 
-    if (!isLoggedIn) {
-        return <Redirect to="/login" />;
-    }
-
-
     return (
-        <Box display={'flex'} flexWrap="wrap">
-        <Card className={cx(styles.card, shadowStyles.root)}>
-            <CardContent>
-                <CardHeader
-                    className={styles.header}
-                    action={
-                        <IconButton aria-label="settings">
-                            <EditIcon/>
-                        </IconButton>
-                    }
-                />
-                <Avatar className={styles.avatar} src={user.profile_picture} />
-                <h3 className={styles.heading}>{user.name} {user.surname}</h3>
+        <Box display={'flex'} flexWrap="wrap" justifyContent='center'>
+            <Card className={cx(styles.card, shadowStyles.root)}>
+                <CardContent>
+                    <CardHeader
+                        className={styles.header}
+                        action={
+                            <IconButton aria-label="settings"
+                            onClick={() => {setShowEditProfile(!showEditProfile)}}>
+                                <EditIcon/>
+                            </IconButton>
+                        }
+                    />
+                    <EditProfile 
+                        showEditProfile={showEditProfile}
+                        setShowEditProfile={setShowEditProfile}
+                        user={user}
+                        updateUser={getUserInfo}
+                    />
+                    <Avatar className={styles.avatar} src={user.profile_picture} />
+                    <h3 className={styles.heading}>{user.name} {user.surname}</h3>
+                    <Box display={'flex'}>
+                        <Box p={4} flex={'auto'} className={borderedGridStyles.item}>
+                            <p className={styles.statLabel}>Phone number: </p>
+                            <Typography variant="body2" color="textSecondary" component="p">{user.phone}</Typography>
+                        </Box>
+                        <Box p={4} flex={'auto'} className={borderedGridStyles.item}>
+                            <p className={styles.statLabel}>Email: </p>
+                            <Typography variant="body2" color="textSecondary" component="p">  {user.email}</Typography>
+                        </Box>
+                    </Box>
+                    <Typography variant="body2" color="textSecondary" component="p">{user.profile_description}</Typography>
+                </CardContent>
+                <Divider light />
                 <Box display={'flex'}>
-                    <Box p={4} flex={'auto'} className={borderedGridStyles.item}>
-                        <p className={styles.statLabel}>Phone number: </p>
-                        <Typography variant="body2" color="textSecondary" component="p">{user.phone}</Typography>
-                    </Box>
-                    <Box p={4} flex={'auto'} className={borderedGridStyles.item}>
-                        <p className={styles.statLabel}>Email: </p>
-                        <Typography variant="body2" color="textSecondary" component="p">  {user.email}</Typography>
+                    <Box p={2} flex={'auto'} className={borderedGridStyles.item}>
+                        <p className={styles.statLabel}>Rating: </p>
+                        <Rating
+                            name="read-only"
+                            precision={0.01}
+                            value={user.rating || 0}
+                            readOnly
+                            />
                     </Box>
                 </Box>
-                <Typography variant="body2" color="textSecondary" component="p">{user.profile_description}</Typography>
-            </CardContent>
-            <Divider light />
-            <Box display={'flex'}>
-                <Box p={2} flex={'auto'} className={borderedGridStyles.item}>
-                    <p className={styles.statLabel}>Rating: </p>
-                    <Rating
-                        name="read-only"
-                        precision={0.01}
-                        value={user.rating || 0}
-                        readOnly
-                        />
-                </Box>
-            </Box>
-            <Divider light/>
-            <CardActions style={{justifyContent: 'center'}}>
-                <Button size="large" color="primary" onClick={logoutUser}>
-                    Log out
-                </Button>
-            </CardActions>
-        </Card>
+                <Divider light/>
+                <CardActions style={{justifyContent: 'center'}}>
+                    <Button size="large" color="primary" onClick={logOut}>
+                        Log out
+                    </Button>
+                </CardActions>
+            </Card>
             <Card className={cx(styles.itemsCard, shadowStyles.root)}>
                 <TabContext value={value}>
                     <AppBar position="static">

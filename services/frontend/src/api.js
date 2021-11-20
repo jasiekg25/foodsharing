@@ -96,9 +96,7 @@ const api = {
     return axios.put(`${baseUrl}/user_profile`, body);
   },
   finalizeRegistration: () => {
-    return axios.get(`${baseUrl}/auth/finalize`)
-    .then(res => localStorage.setItem("accessToken", res.data.access_token))
-    .then(() => history.push('/offers'));
+    return axios.get(`${baseUrl}/auth/finalize`);
   },
   getOtherUserProfile: (id) => {
     return axios.get(`${baseUrl}/user_profile?user-id=${id}`)

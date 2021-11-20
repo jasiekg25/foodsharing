@@ -21,7 +21,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import {history} from "../index";
-import {toast} from "react-toastify";
+import {toast} from "../utils/toastWrapper";
 import placeholder from "../img/placeholder.jpg";
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
@@ -38,6 +38,7 @@ const useStyles = makeStyles(({palette}) => ({
     },
     avatar: {
         float: "right",
+        marginTop: 8,
     },
     heading: {
         fontSize: 18,
@@ -146,9 +147,6 @@ function MyOffers(props) {
         userOffers.map((offer) => {
                 return (
                     <Card key={offer.id} className={cx(styles.card, shadowStyles.root)}>
-                        <IconButton className={styles.avatar}>
-                            <EditIcon/>
-                        </IconButton>
                         <IconButton className={styles.avatar} onClick={(e) => handleDeleteOfferShow(offer)}>
                             <Delete/>
                         </IconButton>

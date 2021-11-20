@@ -28,8 +28,6 @@ class Tag(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     tag_name = db.Column('tag_name', db.String(255), nullable=False)
-    is_wanted = db.Column('is_wanted', db.Boolean, nullable=False)
-
     offers = db.relationship('OffersTags', back_populates='tag')
 
     def to_dict(self):
