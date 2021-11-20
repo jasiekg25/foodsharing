@@ -6,6 +6,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  ListItemIcon
 } from "@material-ui/core";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { useNotifications } from "../hooks/useNotifications";
@@ -23,7 +24,7 @@ const ListItemLink = (props) => {
   return <ListItem button component={Link} {...props} />;
 }
 
-const NotificationModal = () => {
+const NotificationModal = ({isMenu = false}) => {
   const classes = useStyles();
   const { notifications, unreadCount, clearUnreadCount } = useNotifications();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -41,30 +42,39 @@ const NotificationModal = () => {
   };
 
   return (
-    <div>
-      <IconButton onClick={handleClick} color="inherit">
-        <Badge badgeContent={unreadCount} >
-          <NotificationsIcon />
-        </Badge>
-      </IconButton>
+    <>
+      {isMenu ? (
+        <ListItemIcon onClick={handleClick} style={{ minWidth: '30px' }} color='inherit'>
+          <Badge badgeContent={unreadCount}>
+            <NotificationsIcon />
+          </Badge>
+        </ListItemIcon>
+      ) : (
+        <IconButton onClick={handleClick} color='inherit'>
+          <Badge badgeContent={unreadCount}>
+            <NotificationsIcon />
+          </Badge>
+        </IconButton>
+      )}
+
       <Popover
         id={id}
         open={open}
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
+          vertical: 'bottom',
+          horizontal: 'center',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
+          vertical: 'top',
+          horizontal: 'center',
         }}
       >
-        <List component="nav" aria-label="secondary mailbox folders">
+        <List component='nav' aria-label='secondary mailbox folders'>
           {notifications.length === 0 ? (
             <ListItem button>
-              <ListItemText primary="No notifications" />
+              <ListItemText primary='No notifications' />
             </ListItem>
           ) : (
             notifications.map((notif) => (
@@ -75,7 +85,7 @@ const NotificationModal = () => {
           )}
         </List>
       </Popover>
-    </div>
+    </>
   );
 };
 
