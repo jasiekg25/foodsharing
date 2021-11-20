@@ -13,6 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useAuth } from "./IsLoggedIn";
 
 const schema = yup.object().shape({
   email: yup
@@ -42,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = ({ onSubmit, isLoggedIn }) => {
+const Login = () => {
   const classes = useStyles();
   const {
     register,
@@ -52,9 +53,7 @@ const Login = ({ onSubmit, isLoggedIn }) => {
     resolver: yupResolver(schema),
   });
 
-  if (isLoggedIn) {
-    return <Redirect to="/" />;
-  }
+  const { logIn } = useAuth();
 
   return (
     <Container component="main" maxWidth="xs">
@@ -66,7 +65,7 @@ const Login = ({ onSubmit, isLoggedIn }) => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} onSubmit={handleSubmit(onSubmit)} noValidate>
+        <form className={classes.form} onSubmit={handleSubmit(logIn)} noValidate>
           <TextField
             variant="outlined"
             margin="normal"

@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SearchPage = ({ isLoggedIn }) => {
+const SearchPage = () => {
   const classes = useStyles();
 
   const { tags, selectedTags, setSelectedTags } = useTags();
@@ -89,10 +89,6 @@ const SearchPage = ({ isLoggedIn }) => {
     offer.expanded = true
     fitPoint({ lat: offer.pickup_latitude, lng: offer.pickup_longitude });
   };
-
-  if (!isLoggedIn) {
-    return <Redirect to="/login" />;
-  }
 
   return (
     <div className={classes.root}>

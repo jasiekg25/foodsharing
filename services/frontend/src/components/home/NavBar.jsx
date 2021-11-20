@@ -20,6 +20,7 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import ChatIcon from '@material-ui/icons/Chat';
+import { useAuth } from '../IsLoggedIn';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -91,7 +92,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PrimarySearchAppBar(props) {
+export default function PrimarySearchAppBar() {
+  const { isLoggedIn, logOut } = useAuth();
   const history = useHistory();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -142,7 +144,7 @@ export default function PrimarySearchAppBar(props) {
       <MenuItem
         onClick={() => {
           handleMenuClose();
-          props.logoutUser();
+          logOut();
         }}
       >
         <ListItemIcon style={{ minWidth: "30px" }}>
@@ -211,8 +213,9 @@ export default function PrimarySearchAppBar(props) {
       </Button>
     </>
   );
+      
 
-  if (props.isLoggedIn) {
+  if (isLoggedIn) {
     menu = (
       <>
         <Button
