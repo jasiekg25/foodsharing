@@ -30,7 +30,8 @@ chat_room = chat_room_namespace.model(
         'offer_photo': fields.String(readOnly=True),
         'offer_owner_name': fields.String(readOnly=True),
         'offer_owner_surname': fields.String(readOnly=True),
-        'last_message': fields.List(fields.Nested(message_fields))
+        'last_message': fields.List(fields.Nested(message_fields)),
+        'created_at': fields.DateTime(readOnly=True)
     }
 )
 
@@ -42,10 +43,10 @@ class ChatRooms(Resource):
         logger.info("ChatRoom.get()")
         try:
             user_id = current_user().id
-
             chat_rooms = ChatRoom.get_all_rooms(user_id)
-
-            return [chat_room.to_dict() for chat_room in chat_rooms]
+            chat_rooms = [chat_room.to_dict() for chat_room in chat_rooms]
+            sorted_chats = sorted(chat_rooms, key=lambda chat: chat['last_message'][0]['timestamp'] if chat['last_message'] else chat['created_at'], reverse=True)
+            return sorted_chats
 
         except Exception as e:
             logger.exception("ChatRoom.get(): %s", str(e))
