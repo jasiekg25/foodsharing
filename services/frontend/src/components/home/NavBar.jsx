@@ -246,12 +246,9 @@ export default function PrimarySearchAppBar() {
           <ListItemText>Profile</ListItemText>
         </MenuItem>
 
-        <MenuItem>
-          <NotificationModal isMenu={true} />
-          <ListItemText>Notifications</ListItemText>
-        </MenuItem>
+        <NotificationModal isMenu={true} />
 
-        <MenuItem>
+        <MenuItem >
           <ListItemIcon
             aria-label='chat'
             aria-controls={menuId}

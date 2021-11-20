@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   Badge,
   IconButton,
@@ -6,13 +6,14 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemIcon
-} from "@material-ui/core";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import { useNotifications } from "../hooks/useNotifications";
-import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
-import api from "../api";
+  ListItemIcon,
+  MenuItem,
+} from '@material-ui/core';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import { useNotifications } from '../hooks/useNotifications';
+import { makeStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
+import api from '../api';
 
 const useStyles = makeStyles((theme) => ({
   typography: {
@@ -22,15 +23,15 @@ const useStyles = makeStyles((theme) => ({
 
 const ListItemLink = (props) => {
   return <ListItem button component={Link} {...props} />;
-}
+};
 
-const NotificationModal = ({isMenu = false}) => {
+const NotificationModal = ({ isMenu = false }) => {
   const classes = useStyles();
   const { notifications, unreadCount, clearUnreadCount } = useNotifications();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
+  const id = open ? 'simple-popover' : undefined;
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -38,17 +39,20 @@ const NotificationModal = ({isMenu = false}) => {
 
   const handleClose = () => {
     setAnchorEl(null);
-    clearUnreadCount()
+    clearUnreadCount();
   };
 
   return (
     <>
       {isMenu ? (
-        <ListItemIcon onClick={handleClick} style={{ minWidth: '30px' }} color='inherit'>
-          <Badge badgeContent={unreadCount}>
-            <NotificationsIcon />
-          </Badge>
-        </ListItemIcon>
+        <MenuItem onClick={handleClick}>
+          <ListItemIcon style={{ minWidth: '30px' }} color='inherit'>
+            <Badge badgeContent={unreadCount}>
+              <NotificationsIcon />
+            </Badge>
+          </ListItemIcon>
+          <ListItemText>Notifications</ListItemText>
+        </MenuItem>
       ) : (
         <IconButton onClick={handleClick} color='inherit'>
           <Badge badgeContent={unreadCount}>
