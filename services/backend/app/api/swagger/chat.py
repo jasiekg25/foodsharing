@@ -102,10 +102,17 @@ class ChatIndividual(Resource):
             offer = Offer.get_offer_by_id(chat_room.offer_id)
             orders = Orders.get_orders_by_offer_id(chat_room.offer_id)
 
+            content = parser.parse_args()
+            paginated_messages = messages.paginate(page=content['page'], per_page=20)
+            try:
+                paginated_messages = [message.to_dict() for message in paginated_messages.items]
+            except:
+                paginated_messages = []
+
             chat = {
-                'offer' : offer.to_chat_dict(user_id),
-                'chat_messages' : [message.to_dict() for message in messages],
-                'orders' : [order.to_dict() for order in orders]
+                'offer': offer.to_chat_dict(user_id),
+                'chat_messages': paginated_messages,
+                'orders': [order.to_dict() for order in orders]
             }
             return chat
 
