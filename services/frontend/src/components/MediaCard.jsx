@@ -35,6 +35,7 @@ const useStyles = makeStyles(({ palette, breakpoints }) => ({
         borderRadius: 12,
         textAlign: 'center',
         overflow: 'auto',
+        width: '100%',
         scrollbarWidth: "none" /* Firefox */,
         maxHeight: 500,
         "&::-webkit-scrollbar": {
