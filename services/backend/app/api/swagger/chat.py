@@ -22,6 +22,7 @@ tags_fields = individual_chat_namespace.model(
 offer_search = individual_chat_namespace.model(
     "Offer",
     {
+        "is_my_offer": fields.Boolean(readOnly=True),
         "id": fields.Integer(readOnly=True),
         "user_id": fields.String(readOnly=True),
         "user_name": fields.String(readOnly=True),
@@ -95,13 +96,14 @@ class ChatIndividual(Resource):
         logger.info("Chat.get() chat_room_id: %s", str(chat_room_id))
         try:
             chat_room = ChatRoom.get_chat_room_by_id(chat_room_id)
+            user_id = current_user().id
 
             messages = ChatMessage.get_all_messages(chat_room_id)
             offer = Offer.get_offer_by_id(chat_room.offer_id)
             orders = Orders.get_orders_by_offer_id(chat_room.offer_id)
 
             chat = {
-                'offer' : offer.to_search_dict(),
+                'offer' : offer.to_chat_dict(user_id),
                 'chat_messages' : [message.to_dict() for message in messages],
                 'orders' : [order.to_dict() for order in orders]
             }

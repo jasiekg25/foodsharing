@@ -82,6 +82,34 @@ class Offer(db.Model):
 
         return data
 
+    def to_chat_dict(self, user_id):
+        user_rating = SharerRating.get_user_rating_aggregated(self.user.id)
+        data = {
+            "is_my_offer": self.user.id == user_id,
+            'id': self.id,
+            'user_id': self.user.id,
+            'user_username': self.user.username,
+            'user_name': self.user.name,
+            'user_surname': self.user.surname,
+            'user_photo': self.user.profile_picture,
+            'user_rating': user_rating,
+            'name': self.name,
+            'active': self.active,
+            "description": self.description,
+            "photo": self.photo,
+            "portions_number": self.portions_number,
+            "used_portions": sum([order.portions for order in self.orders if order.is_canceled == False]),
+            "pickup_latitude": self.pickup_latitude,
+            "pickup_longitude": self.pickup_longitude,
+            "post_time": self.post_time,
+            "pickup_times": self.pickup_times,
+            "offer_expiry": self.offer_expiry,
+            "tags": [offer_tag.tag.tag_name for offer_tag in self.tags]
+        }
+
+        return data
+
+
     @staticmethod
     def add_offer(user_id, name, active, portions_number, pickup_long, pickup_lat, post_time,
                   pickup_times,
