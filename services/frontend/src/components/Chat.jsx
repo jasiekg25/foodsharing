@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useRef} from "react";
 import io from "socket.io-client";
 import api from "../api";
 import {toast} from "../utils/toastWrapper";
@@ -10,6 +10,11 @@ import IconButton from "@material-ui/core/IconButton";
 import ChatOffer from "./ChatOffer";
 import {Card} from "@material-ui/core";
 import {makeStyles} from "@material-ui/core/styles";
+import InfiniteScroll from "react-infinite-scroll-component";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import InfiniteScrollReverse from "react-infinite-scroll-reverse";
+import cx from "clsx";
+
 
 let endPoint = `${process.env.REACT_APP_BACKEND_SERVICE_URL}/chat`;
 const accessToken = localStorage.getItem("accessToken")
@@ -20,14 +25,15 @@ const useStyles = makeStyles(({ palette }) => ({
         marginTop: 10,
         margin:"auto",
         borderRadius: 12,
-        width: 700,
+        maxWidth: 500,
         textAlign: 'center',
         overflow: 'auto',
         scrollbarWidth: "none" /* Firefox */,
         maxHeight: 200,
         "&::-webkit-scrollbar": {
             display: "none"
-        }
+        },
+        marginBottom: 30
     }
 }));
 
@@ -35,9 +41,14 @@ const useStyles = makeStyles(({ palette }) => ({
 function Chat(props) {
   const {roomId} = props.match.params
   const {offerId} = props.match.params
-  const [userId, setUserId] = useState(-1);
+    const [isOrdered, setIsOrdered] = useState(false);
+    const [isMyOffer, setIsMyOffer] = useState(false);
+    const [orderHistory, setOrderHistory] = useState([]);
+    const [offer, setOffer] = useState({})
+    const [userId, setUserId] = useState(-1);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState({from_user_id: userId, message: ""});
+  const ref = useRef()
 
   useEffect(() => {
     socket.emit("join_room", {roomId, offerId, accessToken})
@@ -47,19 +58,35 @@ function Chat(props) {
       }
   }, []);
 
+  useEffect(() =>{
+      if(messages.length !== 0){
+          console.log("XXXXXXXXXXXXX", ref.current)
+          ref.current.scrollTop = 9999
+      }
+  }, [messages])
+
     const styles = useStyles();
 
+
   const getMessages = () => {
-    api.getChatMessages(roomId)
-            .then((res) => setMessages(res.data))
-            .catch((err) => {
-                toast.error("Could not get any messages.")
-            })
     api.getProfile()
             .then((res) => setUserId(res.data.id))
             .catch((err) => {
                 toast.error("Could not get user information.")
             })
+      api.getChatMessages(roomId, 1)
+          .then((res) => {
+              setOffer(res.data.offer)
+              setMessages(res.data.chat_messages)
+              if(res.data.orders.length !== 0) {
+                  setIsOrdered(true)
+                  setOrderHistory(res.data.orders)
+              }
+              if(res.data.offer.is_my_offer) setIsMyOffer(true)
+          })
+          .catch((err) => {
+              toast.error("Could not get any messages.")
+          })
   };
 
   socket.on("message", (data) => {
@@ -95,35 +122,40 @@ function Chat(props) {
   return (
       <div>
           <Card className={styles.card}>
-              <ChatOffer offerId={offerId}/>
+              <ChatOffer offerId={offerId} isOrdered={isOrdered} orderHistory={orderHistory} offer={offer} isMyOffer={isMyOffer}/>
           </Card>
           <div onKeyPress={handleKeyPress}>
-              {messages.map((message) => {
-                  return (
-                      <MessageList
-                          className={(message.from_user_id === userId) ? "message-list" : ""}
-                          lockable={true}
-                          toBottomHeight={'100%'}
-                          dataSource={[
-                              {
-                                  position: (message.from_user_id === userId) ? 'right' : 'left',
-                                  text: message.message
-                              }
-                          ]
-                          } />
+              <div ref={ref} style={{maxHeight: "200px", overflowY: "scroll"}}>
+                  {messages.map((message) => {
+                      return (
+                          <MessageList
+                              className={(message.from_user_id === userId) ? "message-list" : ""}
+                              lockable
+                              toBottomHeight="100%"
+                              dataSource={[
+                                  {
+                                      position: (message.from_user_id === userId) ? 'right' : 'left',
+                                      text: message.message
+                                  }
+                              ]}
+                          />
                   )
-              })}
-              <Input
-                  className="chat-input"
-                  ref={el => (inputRef = el)}
-                  onChange={(e) => onChange(e)}
-                  placeholder="Type here..."
-                  multipleline={true}
-                  rightButtons={
-                      <IconButton color="primary" onClick={() => sendMessage()}>
-                          <SendIcon/>
-                      </IconButton>
-                  }/>
+                  })}
+              </div>
+              <div className="modal-footer">
+                  <Input
+                      className="chat-input"
+                      ref={el => (inputRef = el)}
+                      onChange={(e) => onChange(e)}
+                      placeholder="Type here..."
+                      multipleline
+                      rightButtons={
+                          <IconButton color="primary" onClick={() => sendMessage()}>
+                              <SendIcon />
+                          </IconButton>
+                      }
+                  />
+              </div>
           </div>
       </div>
   );

@@ -94,6 +94,9 @@ const useStyles = makeStyles(({palette}) => ({
         boxShadow: palette.grey[500],
         // padding: palette.spacing(2, 4, 3),
     },
+    tag: {
+        margin: '1px',
+    },
 }));
 
 function MyOffers(props) {

@@ -278,7 +278,7 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
                                             <form id="create-course-form"
                                                 onSubmit={handleSubmit((data) => {orderMeal(data)})}
                                                 noValidate>
-                                                <Form.Control size="lg" {...register(portions.name)} type={portions.type} min="0" max={chosenOffer.portions_number - chosenOffer.used_portions} defaultValue='0'/>
+                                                <Form.Control size="lg" {...register(portions.name)} type={portions.type} min="1" max={chosenOffer.portions_number - chosenOffer.used_portions} defaultValue='1'/>
                                                 <DialogActions>
                                                     <Button color="primary" type="submit">
                                                         Order

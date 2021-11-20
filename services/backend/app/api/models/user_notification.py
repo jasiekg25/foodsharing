@@ -52,3 +52,17 @@ def emit_and_safe_notification(user_id, message, offer_id):
     emit('notification', {'notification': {"message": message, "url": url}}, room=f'user_{user_id}',
          namespace="/notifs")
     UserNotification.add_user_notification(user_id, message, url)
+
+
+def emit_and_safe_notification_offer_author(author_id, message, offer_id, customer_id):
+    from flask_socketio import emit
+    from app.api.models.chat_room import ChatRoom
+    if ChatRoom.exists(customer_id, offer_id):
+        chat = ChatRoom.get_chat_room(customer_id, offer_id)
+    else:
+        ChatRoom.add_chat_room(customer_id, offer_id)
+        chat = ChatRoom.get_chat_room(customer_id, offer_id)
+    url = f"/chat/{chat.id}/offers/{offer_id}"
+    emit('notification', {'notification': {"message": message, "url": url}}, room=f'user_{author_id}',
+         namespace="/notifs")
+    UserNotification.add_user_notification(author_id, message, url)

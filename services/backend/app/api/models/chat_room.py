@@ -64,3 +64,7 @@ class ChatRoom(db.Model):
             .join(Offer) \
             .join(ChatMessage, isouter=True) \
             .filter((user_id == ChatRoom.client) | (user_id == Offer.user_id))
+
+    @staticmethod
+    def get_chat_room_by_id(chat_room_id):
+        return ChatRoom.query.filter_by(id=chat_room_id).first()
