@@ -26,6 +26,7 @@ import Rating from "@material-ui/lab/Rating";
 import {Redirect} from "react-router-dom";
 import MyOffers from "./MyOffers";
 import EditProfile from './EditProfile';
+import { useAuth } from './IsLoggedIn';
 
 const useStyles = makeStyles(({ palette, breakpoints }) => ({
     card: {
@@ -126,7 +127,8 @@ const useStyles = makeStyles(({ palette, breakpoints }) => ({
     }
 }));
 
-function ProfileCard({isLoggedIn, logoutUser}) {
+function ProfileCard() {
+    const { logOut } = useAuth();
     const [value, setValue] = React.useState('1');
 
     const handleChange = (event, newValue) => {
@@ -155,12 +157,6 @@ function ProfileCard({isLoggedIn, logoutUser}) {
                 console.log("Could not get current user " + err.message);
             })
     }
-
-    if (!isLoggedIn) {
-        return <Redirect to="/login" />;
-    }
-
-
 
     return (
         <Box display={'flex'} flexWrap="wrap" justifyContent='center'>
@@ -209,7 +205,7 @@ function ProfileCard({isLoggedIn, logoutUser}) {
                 </Box>
                 <Divider light/>
                 <CardActions style={{justifyContent: 'center'}}>
-                    <Button size="large" color="primary" onClick={logoutUser}>
+                    <Button size="large" color="primary" onClick={logOut}>
                         Log out
                     </Button>
                 </CardActions>

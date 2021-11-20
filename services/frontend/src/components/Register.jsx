@@ -95,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Register = ({ isLoggedIn }) => {
+const Register = () => {
   const classes = useStyles();
   const [isSubmitted, setSubmitted] = useState(false);
   const {
@@ -121,10 +121,6 @@ const Register = ({ isLoggedIn }) => {
         return false;
       });
   };
-
-  if (isLoggedIn) {
-    return <Redirect to="/" />;
-  }
 
   if (isSubmitted) {
     return (

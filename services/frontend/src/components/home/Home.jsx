@@ -2,10 +2,20 @@ import React from 'react';
 import './Home.css';
 import {Button, Row, Col} from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useAuth } from '../IsLoggedIn';
 
-function Home(props) {
-
-    let loginButton = props.isLoggedIn ? null : (<Button as={Link} to="/login" className="home-login-button" variant="dark">Log in</Button>);
+function Home() {
+    const { isLoggedIn } = useAuth();
+    let loginButton = isLoggedIn ? null : (
+      <Button
+        as={Link}
+        to='/login'
+        className='home-login-button'
+        variant='dark'
+      >
+        Log in
+      </Button>
+    );
 
     return (
         <Row className="home-container">
