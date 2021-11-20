@@ -39,7 +39,6 @@ class Offer(db.Model):
         data = {
             'id': self.id,
             'user_id': self.user.id,
-            'user_username': self.user.username,
             'user_name': self.user.name,
             'user_surname': self.user.surname,
             'name': self.name,
@@ -62,7 +61,6 @@ class Offer(db.Model):
         data = {
             'id': self.id,
             'user_id': self.user.id,
-            'user_username': self.user.username,
             'user_name': self.user.name,
             'user_surname': self.user.surname,
             'user_photo': self.user.profile_picture,
