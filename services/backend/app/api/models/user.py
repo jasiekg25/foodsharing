@@ -142,13 +142,8 @@ class User(db.Model):
     @staticmethod
     def update_user_profile_info(user_id, content, photo_url):
         user = User.query.filter_by(id=user_id).first()
-        user.username = content['username']
-        user.name = content['name']
-        user.surname = content['surname']
         user.email = content['email']
         user.profile_description = content['profile_description']
         user.profile_picture = photo_url
         user.phone = content['phone']
-        user.active = content['active']
-        user.created_date = content['created_date']
         db.session.commit()

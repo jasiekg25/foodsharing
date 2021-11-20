@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col } from "react-bootstrap";
 import Offers from "./Offers";
 import { Redirect } from "react-router-dom";
 import api from "../api";

@@ -25,6 +25,7 @@ import Order from "./Order";
 import Rating from "@material-ui/lab/Rating";
 import {Redirect} from "react-router-dom";
 import MyOffers from "./MyOffers";
+import EditProfile from './EditProfile';
 
 const useStyles = makeStyles(({ palette }) => ({
     card: {
@@ -127,6 +128,8 @@ function ProfileCard({isLoggedIn, logoutUser}) {
     const [user, setUser] = useState({});
     const [showModal, setShowModal] = useState(false);
 
+    const [showEditProfile, setShowEditProfile] = useState(false);
+
     useEffect(() => {
         getUserInfo();
     }, [])
@@ -145,6 +148,7 @@ function ProfileCard({isLoggedIn, logoutUser}) {
     }
 
 
+
     return (
         <Box display={'flex'} flexWrap="wrap">
         <Card className={cx(styles.card, shadowStyles.root)}>
@@ -152,10 +156,17 @@ function ProfileCard({isLoggedIn, logoutUser}) {
                 <CardHeader
                     className={styles.header}
                     action={
-                        <IconButton aria-label="settings">
+                        <IconButton aria-label="settings"
+                        onClick={() => {setShowEditProfile(!showEditProfile)}}>
                             <EditIcon/>
                         </IconButton>
                     }
+                />
+                <EditProfile 
+                    showEditProfile={showEditProfile}
+                    setShowEditProfile={setShowEditProfile}
+                    user={user}
+                    updateUser={getUserInfo}
                 />
                 <Avatar className={styles.avatar} src={user.profile_picture} />
                 <h3 className={styles.heading}>{user.name} {user.surname}</h3>
