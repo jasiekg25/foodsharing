@@ -1,32 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import CardContent from "@material-ui/core/CardContent";
-import Avatar from "@material-ui/core/Avatar";
-import Typography from "@material-ui/core/Typography";
-import CardActions from "@material-ui/core/CardActions";
+import React, {useState} from 'react';
 import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import {makeStyles} from "@material-ui/core/styles";
-import cx from "clsx";
-import {useFadedShadowStyles} from '@mui-treasury/styles/shadow/faded';
-import CardMedia from "@material-ui/core/CardMedia";
-import LocalMallOutlinedIcon from '@material-ui/icons/LocalMallOutlined';
 import Grid from "@material-ui/core/Grid";
 import api from "../api";
-import Modal from "@material-ui/core/Modal";
-import Fade from "@material-ui/core/Fade";
-import Backdrop from "@material-ui/core/Backdrop";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import TextField from '@material-ui/core/TextField';
 import FileUplader from './fileUplader/FileUplader';
 
-
-const useStyles = makeStyles(({palette}) => ({
-
-}));
 
 function EditProfile({showEditProfile, setShowEditProfile, user, updateUser}) {
     const {id, email, profile_description, profile_picture, phone} = user;
@@ -34,8 +16,6 @@ function EditProfile({showEditProfile, setShowEditProfile, user, updateUser}) {
     const [userProfileDescription, setUserProfileDescription] = useState(profile_description);
     const [userProfilePicture, setUserProfilePicture] = useState(profile_picture);
     const [userPhone, setUserPhone] = useState(phone);
-    const styles = useStyles();
-    const shadowStyles = useFadedShadowStyles();
 
     const handleSaveChanges = () => {
         console.log(userEmail);
