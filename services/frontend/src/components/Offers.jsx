@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import api from "../api.js";
 // import "./Offers.css";
-import {toast} from 'react-toastify';
+import {toast} from "../utils/toastWrapper";
 import 'react-toastify/dist/ReactToastify.css';
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";

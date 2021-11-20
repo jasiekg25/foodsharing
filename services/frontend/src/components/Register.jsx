@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import * as yup from "yup";
 import { Link, Redirect } from "react-router-dom";
-import { toast } from "react-toastify";
+import {toast} from "../utils/toastWrapper";
 import api from "../api";
 import "./LoginRegister.css";
 

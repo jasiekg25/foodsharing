@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
 import api from "../api";
-import {toast} from "react-toastify";
+import {toast} from "../utils/toastWrapper";
 import 'react-chat-elements/dist/main.css';
 import { Input, Button, MessageList } from 'react-chat-elements';
 import "./Chat.css"
