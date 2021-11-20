@@ -1,10 +1,10 @@
 import React from "react";
 import * as yup from "yup";
 import "./LoginRegister.css";
-import {  Redirect, Link } from "react-router-dom";
+import {  Link } from "react-router-dom";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -25,10 +25,11 @@ const schema = yup.object().shape({
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(3),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    padding: theme.spacing(3),
   },
   avatar: {
     margin: theme.spacing(1),
@@ -57,8 +58,7 @@ const Login = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
+      <Paper className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
@@ -116,7 +116,7 @@ const Login = () => {
             </Grid>
           </Grid>
         </form>
-      </div>
+      </Paper>
     </Container>
   );
 };

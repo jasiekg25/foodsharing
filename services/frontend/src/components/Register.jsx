@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import * as yup from "yup";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {toast} from "../utils/toastWrapper";
 import api from "../api";
 import "./LoginRegister.css";
@@ -10,7 +10,7 @@ import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
+import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -77,7 +77,8 @@ const schema = yup.object().shape({
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(3),
+    padding: theme.spacing(3),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -142,8 +143,7 @@ const Register = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
+      <Paper className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
@@ -247,7 +247,7 @@ const Register = () => {
             </Grid>
           </Grid>
         </form>
-      </div>
+      </Paper>
     </Container>
   );
 };
