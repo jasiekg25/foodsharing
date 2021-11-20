@@ -32,7 +32,8 @@ class ChatRoom(db.Model):
             'offer_photo': self.offer_chat_rooms.photo,
             'offer_owner_name': self.offer_chat_rooms.user.name,
             'offer_owner_surname': self.offer_chat_rooms.user.surname,
-            'last_message': [message.to_dict() for message in self.messages.limit(1)]
+            'last_message': [message.to_dict() for message in self.messages.limit(1)],
+            'created_at': self.timestamp,
         }
         return data
 
@@ -47,24 +48,19 @@ class ChatRoom(db.Model):
 
     @staticmethod
     def get_chat_room(client, offer_id):
-        return ChatRoom.query\
-            .filter(and_(ChatRoom.client == client, ChatRoom.offer_id == offer_id))\
+        return ChatRoom.query \
+            .filter(and_(ChatRoom.client == client, ChatRoom.offer_id == offer_id)) \
             .first()
 
     @staticmethod
     def exists(client, offer_id):
         return ChatRoom.query \
-            .filter(and_(ChatRoom.client == client, ChatRoom.offer_id == offer_id))\
-            .first() is not None
+                   .filter(and_(ChatRoom.client == client, ChatRoom.offer_id == offer_id)) \
+                   .first() is not None
 
     @staticmethod
     def get_all_rooms(user_id):
-        # .join(ChatMessage,(ChatMessage.chat_room_id == ChatRoom.id) & (ChatMessage.id == max(ChatMessage.id)), isouter=True) \
-
         return ChatRoom.query \
             .join(Offer) \
             .join(ChatMessage, isouter=True) \
-            .filter((user_id == ChatRoom.client) | (user_id == Offer.user_id)) \
-            .order_by(nullslast(ChatMessage.timestamp.desc()))
-            # .group_by(ChatRoom.id) \
-
+            .filter((user_id == ChatRoom.client) | (user_id == Offer.user_id))
