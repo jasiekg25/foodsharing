@@ -166,6 +166,7 @@ function ProfileCard({isLoggedIn, logoutUser}) {
                     showEditProfile={showEditProfile}
                     setShowEditProfile={setShowEditProfile}
                     user={user}
+                    updateUser={getUserInfo}
                 />
                 <Avatar className={styles.avatar} src={user.profile_picture} />
                 <h3 className={styles.heading}>{user.name} {user.surname}</h3>
