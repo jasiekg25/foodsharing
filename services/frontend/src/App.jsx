@@ -3,7 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import api from "./api";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { history } from "./index";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 import NavBar from "./components/home/NavBar";
 import Login from "./components/Login";
@@ -21,6 +21,7 @@ import Chat from "./components/Chat";
 import ChatRooms from "./components/ChatRooms";
 import ProfileCard from "./components/MediaCard";
 import { CssBaseline } from "@material-ui/core";
+import { toast } from "./utils/toastWrapper";
 
 const PageNoFound = () => (
   <section className="hero is-halfheight">

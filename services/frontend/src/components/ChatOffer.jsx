@@ -20,7 +20,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import api from "../api";
 import {makeStyles} from "@material-ui/core/styles";
 import {history} from "../index";
-import {toast} from "react-toastify";
+import {toast} from "../utils/toastWrapper";
 import {useFadedShadowStyles} from '@mui-treasury/styles/shadow/faded';
 import ChatIcon from "@material-ui/icons/Chat";
 import {Collapse} from "@material-ui/core";

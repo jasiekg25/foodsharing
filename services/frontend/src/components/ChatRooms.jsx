@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import api from "../api.js";
-import {toast} from "react-toastify";
+import {toast} from "../utils/toastWrapper";
 import 'react-chat-elements/dist/main.css';
 import { ChatItem } from 'react-chat-elements';
 import {history} from "../index";

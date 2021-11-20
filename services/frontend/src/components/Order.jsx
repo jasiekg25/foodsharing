@@ -21,7 +21,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import {history} from "../index";
-import {toast} from "react-toastify";
+import {toast} from "../utils/toastWrapper";
 import placeholder from "../img/placeholder.jpg";
 import Rating from "@material-ui/lab/Rating";
 import Chip from "@material-ui/core/Chip";
