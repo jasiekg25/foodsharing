@@ -59,7 +59,7 @@ const useStyles = makeStyles(({ palette, breakpoints }) => ({
         "&::-webkit-scrollbar": {
             display: "none"
         },
-        [breakpoints.up('xl')]: {
+        [breakpoints.up('sm')]: {
             marginLeft: 20,
             marginRight: 0,
             maxWidth: '40%',
