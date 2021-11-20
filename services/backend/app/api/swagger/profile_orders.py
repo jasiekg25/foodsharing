@@ -7,7 +7,7 @@ from flask_praetorian import current_user, auth_required
 from app import logger
 from app.api.models.offer import Offer
 from app.api.models.orders import Orders
-from app.api.models.user_notification import emit_and_safe_notification
+from app.api.models.user_notification import emit_and_safe_notification, emit_and_safe_notification_offer_author
 
 profile_orders_namespace = Namespace("profile_orders")
 offers_namespace = Namespace("offers")
@@ -105,16 +105,16 @@ class OrdersNamespace(Resource):
             author_id = offer.user_id
 
             if content['is_canceled'] and not current_order['is_canceled']:
-                message = f'Your order for {offer_title} has been canceled'
-                emit_and_safe_notification(author_id, message, content['offer_id'])
                 message = f'You canceled order for {offer_title}'
                 emit_and_safe_notification(user_id, message, content['offer_id'])
+                message = f'Your order for {offer_title} has been canceled'
+                emit_and_safe_notification_offer_author(author_id, message, content['offer_id'], user_id)
 
             if content['is_picked'] and not current_order['is_picked']:
-                message = f'Your order for {offer_title} has been picked'
-                emit_and_safe_notification(author_id, message, content['offer_id'])
                 message = f'You picked your order {offer_title}'
                 emit_and_safe_notification(user_id, message, content['offer_id'])
+                message = f'Your order for {offer_title} has been picked'
+                emit_and_safe_notification_offer_author(author_id, message, content['offer_id'], user_id)
             return 'User order has been updated', 200
         except Exception as e:
             logger.exception("Order.put(): %s", str(e))
