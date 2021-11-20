@@ -35,6 +35,7 @@ const useStyles = makeStyles(({ palette, breakpoints }) => ({
         borderRadius: 12,
         textAlign: 'center',
         overflow: 'auto',
+        width: '100%',
         scrollbarWidth: "none" /* Firefox */,
         maxHeight: 500,
         "&::-webkit-scrollbar": {
@@ -58,7 +59,7 @@ const useStyles = makeStyles(({ palette, breakpoints }) => ({
         "&::-webkit-scrollbar": {
             display: "none"
         },
-        [breakpoints.up('sm')]: {
+        [breakpoints.up('xl')]: {
             marginLeft: 20,
             marginRight: 0,
             maxWidth: '40%',
