@@ -27,6 +27,8 @@ import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
 import CardHeader from "@material-ui/core/CardHeader";
 import {Delete, DeleteOutline} from "@material-ui/icons";
+import Box from "@material-ui/core/Box";
+import Chip from "@material-ui/core/Chip";
 
 
 const useStyles = makeStyles(({palette}) => ({
@@ -95,7 +97,7 @@ const useStyles = makeStyles(({palette}) => ({
 
 function MyOffers(props) {
     const [userOffers, setUserOffers] = useState([]);
-    const [offer, setChosenOffer] = useState({})
+    const [chosenOffer, setChosenOffer] = useState({})
     const [showDeleteOfferModal, setShowDeleteOfferModal] = useState(false);
 
     useEffect(() => {
@@ -111,10 +113,12 @@ function MyOffers(props) {
             })
     }
 
-    const deleteOffer = () => {
+    const deleteOffer = (offer) => {
         handleDeleteOfferClose();
+        const formData = new FormData()
         offer.active = false;
-        api.putUserCurrentOffers(offer)
+        formData.append('data', JSON.stringify(offer));
+        api.putUserCurrentOffers(formData)
             .then((res) => {
                 toast.success(`Your offer has been deleted!`);
                 console.log(res.data);
@@ -145,8 +149,8 @@ function MyOffers(props) {
                         <IconButton className={styles.avatar}>
                             <EditIcon/>
                         </IconButton>
-                        <IconButton className={styles.avatar}>
-                            <Delete onClick={(offer) => handleDeleteOfferShow(offer)}/>
+                        <IconButton className={styles.avatar} onClick={(e) => handleDeleteOfferShow(offer)}>
+                            <Delete/>
                         </IconButton>
                         <CardContent>
                             {
@@ -161,18 +165,25 @@ function MyOffers(props) {
                                     />
                             }
                             <h3 className={styles.heading}>{offer.name}</h3>
-                            <Grid className={styles.icons}>
-                                <Typography variant="body2" color="textSecondary" component="p"> Portions number: {offer.portions_number}</Typography>
-                            </Grid>
-                            <Grid className={styles.icons}>
-                                <Typography variant="body2" color="textSecondary" component="p"> Pick-up times: {offer.pickup_times}</Typography>
-                            </Grid>
-                            <Grid className={styles.icons}>
-                                <Typography variant="body2" color="textSecondary" component="p"> Expire date: {offer.offer_expiry}</Typography>
-                            </Grid>
-                            <Typography variant="body2" color="textSecondary" component="p">
-                                {offer.description}
-                            </Typography>
+                            <ul>
+                                {offer.tags.map((tag) =>
+                                    <Chip className={styles.tag} size="small" label={`#${tag.tag_name}`} />
+                                )}
+                            </ul>
+                            <Box display={'flex'} className={styles.info} >
+                                <Box p={4} flex={'auto'} >
+                                    <p className={styles.statLabel}>Pick-up times: </p>
+                                    <Typography variant="body2" color="textSecondary" component="p"> {offer.pickup_times}</Typography>
+                                </Box>
+                                <Box p={4} flex={'auto'} >
+                                    <p className={styles.statLabel}>Expire date: </p>
+                                    <Typography variant="body2" color="textSecondary" component="p"> {offer.offer_expiry}</Typography>
+                                </Box>
+                                <Box p={4} flex={'auto'} >
+                                    <p className={styles.statLabel}>Portions number: </p>
+                                    <Typography variant="body2" color="textSecondary" component="p"> {offer.portions_number}</Typography>
+                                </Box>
+                            </Box>
                         </CardContent>
                         <Dialog
                             open={showDeleteOfferModal}
@@ -184,11 +195,11 @@ function MyOffers(props) {
                             <DialogTitle id="alert-dialog-title">{"Confirm delete offer"}</DialogTitle>
                             <DialogContent>
                                 <DialogContentText id="alert-dialog-description">
-                                    Are you sure you want to delete {offer.name}?
+                                    Are you sure you want to delete {chosenOffer.name}?
                                 </DialogContentText>
                             </DialogContent>
                             <DialogActions>
-                                <Button onClick={(e) => deleteOffer()} color="primary">
+                                <Button onClick={() => deleteOffer(offer)} color="primary">
                                     Confirm
                                 </Button>
                                 <Button onClick={(e) => handleDeleteOfferClose()} color="primary" autoFocus>

@@ -4,8 +4,7 @@ from sqlalchemy.dialects.postgresql import array_agg
 
 from sqlalchemy.sql import func, desc
 from app import db
-from .orders import Orders
-from .tag import OffersTags, Tag
+from .tag import OffersTags
 from .sharer_rating import SharerRating
 from .user import User
 
@@ -41,6 +40,7 @@ class Offer(db.Model):
             'user_id': self.user.id,
             'user_name': self.user.name,
             'user_surname': self.user.surname,
+            'user_rating': SharerRating.get_user_rating_aggregated(self.user.id),
             'name': self.name,
             'active': self.active,
             "description": self.description,
@@ -58,12 +58,14 @@ class Offer(db.Model):
         return data
 
     def to_search_dict(self):
+        user_rating = SharerRating.get_user_rating_aggregated(self.user.id)
         data = {
             'id': self.id,
             'user_id': self.user.id,
             'user_name': self.user.name,
             'user_surname': self.user.surname,
             'user_photo': self.user.profile_picture,
+            'user_rating': user_rating,
             'name': self.name,
             'active': self.active,
             "description": self.description,

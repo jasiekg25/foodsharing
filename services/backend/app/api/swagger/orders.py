@@ -16,6 +16,13 @@ orders_namespace = Namespace("orders")
 offers_namespace = Namespace("offers")
 
 # doing this add description to Swagger Doc
+tags_fields = orders_namespace.model(
+    'Tags',
+    {
+        'tag_id': fields.Integer(readOnly=True),
+        'tag_name': fields.String(readOnly=True)
+    })
+
 order = orders_namespace.model(
     "Order",
     {
@@ -25,7 +32,8 @@ order = orders_namespace.model(
         "time": fields.DateTime(readOnly=True),
         "portions": fields.Integer(readOnly=True),
         "is_canceled": fields.Boolean(readOnly=True),
-        "is_picked": fields.Boolean(readOnly=True)
+        "is_picked": fields.Boolean(readOnly=True),
+        "tags": fields.List(fields.Nested(tags_fields))
     },
 )
 

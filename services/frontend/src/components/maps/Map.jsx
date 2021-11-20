@@ -22,6 +22,7 @@ const Map = ({
   children,
   onClick,
   geolocation = true,
+  mapStyle = mapContainerStyle
 }) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
@@ -57,7 +58,7 @@ const Map = ({
       <Search panTo={setCenter} />
 
     <div style={{height: '100%'}}> <GoogleMap
-        mapContainerStyle={mapContainerStyle}
+        mapContainerStyle={mapStyle}
         zoom={15}
         center={center}
         options={options}

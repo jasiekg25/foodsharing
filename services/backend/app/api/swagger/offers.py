@@ -7,6 +7,7 @@ from flask_praetorian import current_user, auth_required
 from app import logger, cloudinary_uploader
 from app.api.models.offer import Offer
 from app.api.models.tag import OffersTags, Tag
+from app.api.models.sharer_rating import SharerRating
 
 offers_namespace = Namespace("offers")
 
@@ -39,6 +40,7 @@ offer_search = offers_namespace.model(
         "user_name": fields.String(readOnly=True),
         "user_surname": fields.String(readOnly=True),
         "user_photo": fields.String(readOnly=True),
+        "user_rating": fields.Float(readOnly=True),
         "name": fields.String(readOnly=True),
         "active": fields.Boolean(readOnly=True),
         "description": fields.String(readOnly=True),
@@ -88,7 +90,7 @@ class Offers(Resource):
 
             paginated_offers = sorted_offers.paginate(page=content['page'], per_page=15)
 
-            return [offer.to_search_dict() for offer in paginated_offers.items], 200
+            return [offer.to_search_dict() for offer in paginated_offers.items if offer.to_search_dict()['portions_number'] > offer.to_search_dict()['used_portions']], 200
         except Exception as e:
             logger.exception("Offers.get(): %s", str(e))
             return "Couldn't load offers", 500
@@ -122,4 +124,21 @@ class Offers(Resource):
             return "Couldn't add offers", 500
 
 
+class OffersIndividual(Resource):
+    @auth_required
+    @offers_namespace.marshal_with(offer_search)
+    def get(self, offer_id):
+        """Returns offer with specific id"""
+        logger.info("Offer.get() offer_id: %s", str(offer_id))
+        try:
+            individual_offer = Offer.get_offer_by_id(offer_id)
+
+            return individual_offer.to_search_dict(), 200
+        except Exception as e:
+            logger.exception("Offers.get(): %s", str(e))
+            return "Couldn't load offers", 500
+
+
 offers_namespace.add_resource(Offers, "")
+offers_namespace.add_resource(OffersIndividual, "/<int:offer_id>")
+

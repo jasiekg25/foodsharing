@@ -6,13 +6,11 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 
-export default function SortSelect({sortBy, setSortBy, searchFunction}) {
+export default function SortSelect({sortBy, searchFunction}) {
   const [open, setOpen] = React.useState(false);
 
   const handleChange = (event) => {
     const updatedValue = event.target.value
-    console.log(updatedValue)
-    setSortBy(updatedValue);
     searchFunction(updatedValue);
   };
 

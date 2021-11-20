@@ -30,6 +30,9 @@ import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Chip from "@material-ui/core/Chip";
+import {Collapse} from "@material-ui/core";
+import Star from '@material-ui/icons/Star';
+import {Form} from "react-bootstrap";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -53,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         overflow: 'auto',
         scrollbarWidth: "none" /* Firefox */,
-        maxHeight: 200,
+        maxHeight: 300,
         "&::-webkit-scrollbar": {
             display: "none"
         },
@@ -66,8 +69,8 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 18,
         fontWeight: 'bold',
         letterSpacing: '0.5px',
-        marginTop: 8,
-        marginRight: -100
+        marginTop: 30,
+        marginLeft: "40%"
     },
     photo: {
         float: "left",
@@ -117,12 +120,19 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: theme.palette.grey[500],
         // padding: palette.spacing(2, 4, 3),
     },
+    info: {
+        marginLeft: 70
+    },
+    description: {
+        marginLeft: 0,
+        margin: "auto"
+    },
     tag: {
         margin: '1px',
     },
 }));
 
-const portions = {
+let portions = {
     name: "portions",
     label: "Portions number",
     type: "number",
@@ -138,8 +148,7 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
     const {
         register,
         handleSubmit,
-        formState: { errors },
-        reset
+        formState: { errors }
     } = useForm({
         resolver: yupResolver(schema),
     });
@@ -151,7 +160,6 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
     const [showModal, setShowModal] = useState(false);
 
     const handleClose = () => {
-        reset();
         setShowModal(false);
     }
     const handleShow = (offer) => {
@@ -166,10 +174,9 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
     const orderMeal = (data) => {
         handleClose();
         data['offer_id'] = chosenOffer.id;
-        console.log(data)
         api.postOrder(data)
             .then((res) => {
-                getOffers();
+                getOffers(true);
                 toast.success(`${chosenOffer.name} order was successful.`);
                 console.log(res.data);
             })
@@ -177,6 +184,7 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
                 console.log("Could not order meal " + err)
                 toast.error(`Could not order ${chosenOffer.name}`);
             })
+        document.getElementById("create-course-form").reset();
     }
 
     const sendMessage = (offer) => {
@@ -203,7 +211,9 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
                 <Box>
                     {offers.map((offer) => {
                         return (
-                            <Card key={offer.id} className={cx(styles.itemsCard, shadowStyles.root)}>
+                            <Card key={offer.id} className={cx(styles.itemsCard, shadowStyles.root)} onClick={() => {
+                                onOfferSelect(offer)
+                            }}>
                                 <CardContent>
                                     {
                                         offer.photo ?
@@ -216,7 +226,10 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
                                                        component="img"
                                             />
                                     }
-                                    <Avatar onClick={(e) => handleShowUserProfile(offer.user_id)} className={styles.avatar} src={offer.photo}/>
+                                    <ul className={styles.avatar}>
+                                        <Chip avatar={<Avatar onClick={(e) => handleShowUserProfile(offer.user_id)} className={styles.avatar} src={offer.photo}/>} label={offer.user_name} variant="outlined"/>
+                                        <Chip avatar={<Star fontSize="inherit" style={{color:'#ffc107'}}/>} label={offer.user_rating} variant="outlined"/>
+                                    </ul>
                                     <CardContent>
                                         <h3 className={styles.heading}>{offer.name}</h3>
                                     </CardContent>
@@ -225,28 +238,32 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
                                             <Chip className={styles.tag} size="small" label={`#${tag}`} />
                                         )}
                                     </ul>
-                                    <Grid className={styles.icons}>
-                                        <Typography variant="body2" color="textSecondary" component="p"> Pick-up times: {offer.pickup_times}</Typography>
-                                    </Grid>
-                                    <Grid className={styles.icons}>
-                                        <Typography variant="body2" color="textSecondary" component="p"> Expire date: {offer.offer_expiry}</Typography>
-                                    </Grid>
-                                    <Grid className={styles.icons}>
-                                        <Typography variant="body2" color="textSecondary" component="p"> Remaining portions: {offer.portions_number - offer.used_portions}</Typography>
-                                    </Grid>
-                                        <Typography variant="subtitle1" component="p">
-                                            {offer.description}
-                                        </Typography>
-                                </CardContent>
-                                <CardContent>
-                                    <CardActions className={styles.buttons}>
-                                        <Button color="primary" onClick={(e) => sendMessage(offer)} startIcon={<ChatIcon />}>
-                                            Chat
-                                        </Button>
-                                        <Button size="medium" color="primary" onClick={(e) => handleShow(offer)}>
-                                            Make order
-                                        </Button>
-                                    </CardActions>
+                                    <CardContent>
+                                        <CardActions className={styles.buttons}>
+                                            <Button color="primary" onClick={(e) => sendMessage(offer)} startIcon={<ChatIcon />}>
+                                                Chat
+                                            </Button>
+                                            <Button size="medium" color="primary" onClick={() => handleShow(offer)}>
+                                                Make order
+                                            </Button>
+                                        </CardActions>
+                                    </CardContent>
+                                    <Collapse in={offer.expanded} timeout="auto" unmountOnExit>
+                                        <Box display={'flex'} className={styles.info} >
+                                            <Box p={5} flex={'auto'} >
+                                                <p className={styles.statLabel}>Pick-up times: </p>
+                                                <Typography variant="body2" color="textSecondary" component="p"> {offer.pickup_times}</Typography>
+                                            </Box>
+                                            <Box p={5} flex={'auto'} >
+                                                <p className={styles.statLabel}>Expire date: </p>
+                                                <Typography variant="body2" color="textSecondary" component="p"> {offer.offer_expiry}</Typography>
+                                            </Box>
+                                            <Box p={5} flex={'auto'} >
+                                                <p className={styles.statLabel}>Remaining portions: </p>
+                                                <Typography variant="body2" color="textSecondary" component="p"> {offer.portions_number - offer.used_portions}</Typography>
+                                            </Box>
+                                        </Box>
+                                    </Collapse>
                                 </CardContent>
                                 <Dialog
                                     open={showModal}
@@ -255,24 +272,13 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
                                     aria-describedby="alert-dialog-description"
                                     fullWidth={true}
                                 >
-                                    <DialogTitle id="alert-dialog-title">{`Choose number of ${offer.name} portions:`}</DialogTitle>
+                                    <DialogTitle id="alert-dialog-title">{`Choose number of ${chosenOffer.name} portions:`}</DialogTitle>
                                     <DialogContent>
                                         <DialogContentText>
-                                            <form
+                                            <form id="create-course-form"
                                                 onSubmit={handleSubmit((data) => {orderMeal(data)})}
                                                 noValidate>
-                                                <TextField
-                                                    variant="outlined"
-                                                    fullWidth
-                                                    InputProps={{
-                                                        inputProps: {
-                                                            max: 10, min: 1, defaultValue: 1
-                                                        }
-                                                    }}
-                                                    {...register(portions.name)}
-                                                    error={!!errors.portions}
-                                                    type={portions.type}
-                                                />
+                                                <Form.Control size="lg" {...register(portions.name)} type={portions.type} min="0" max={chosenOffer.portions_number - chosenOffer.used_portions} defaultValue='0'/>
                                                 <DialogActions>
                                                     <Button color="primary" type="submit">
                                                         Order

@@ -27,7 +27,7 @@ export const useNotifications = () => {
           console.log(res.data)
           setNotifications(
             res.data.map((notif) => {
-              return { url: `/user_${notif.user_id}`, message: notif.message };
+              return { url: notif.chat_url, message: notif.message };
             })
           );
         })

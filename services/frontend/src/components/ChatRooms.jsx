@@ -21,7 +21,7 @@ function ChatRooms() {
             .then((res) => {
                 res.data.map(room => {
                     if(room.last_message.length > 0){
-                        room.message = room.last_message[0].message
+                        room.message = room.last_message[0].from_user_name + " " + room.last_message[0].from_user_surname + ": " + room.last_message[0].message
                         room.messageTimestamp = room.last_message[0].timestamp
                     }
                 })
@@ -47,7 +47,6 @@ function ChatRooms() {
                             avatar={chat.offer_photo}
                             title={chat.offer_name}
                             subtitle= {chat.message}
-                            text= {chat.message}
                             date={new Date(chat.messageTimestamp)}
                              />
                     </div>
