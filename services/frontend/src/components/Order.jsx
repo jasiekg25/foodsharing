@@ -26,6 +26,7 @@ import placeholder from "../img/placeholder.jpg";
 import Rating from "@material-ui/lab/Rating";
 import Chip from "@material-ui/core/Chip";
 import Star from "@material-ui/icons/Star";
+import Box from "@material-ui/core/Box";
 
 
 const useStyles = makeStyles(({palette}) => ({
@@ -41,6 +42,7 @@ const useStyles = makeStyles(({palette}) => ({
         fontWeight: 'bold',
         letterSpacing: '0.5px',
         marginTop: 8,
+        marginBottom: 20
     },
     photo: {
         float: "left",
@@ -86,6 +88,9 @@ const useStyles = makeStyles(({palette}) => ({
         border: '2px solid #000',
         boxShadow: palette.grey[500],
         // padding: palette.spacing(2, 4, 3),
+    },
+    tag: {
+        margin: '1px',
     },
 }));
 
@@ -194,6 +199,11 @@ function Order(props) {
                                 <Chip avatar={<Star fontSize="inherit" style={{color:'#ffc107'}}/>} label={order.fromUser_rating} variant="outlined"/>
                             </ul>
                             <h3 className={styles.heading}>{order.offer_name}</h3>
+                            <ul>
+                                {order.tags.map((tag) =>
+                                    <Chip className={styles.tag} size="small" label={`#${tag.tag_name}`} />
+                                )}
+                            </ul>
                             <Grid className={styles.icons}>
                                 <Typography variant="body2" color="textSecondary" component="p"> Ordered portions: {order.portions}</Typography>
                             </Grid>

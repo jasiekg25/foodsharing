@@ -87,6 +87,7 @@ chat = individual_chat_namespace.model(
 
 parser = reqparse.RequestParser()
 parser.add_argument('chat_room_id', type=int)
+parser.add_argument('page', type=int)
 
 class ChatIndividual(Resource):
     @auth_required

@@ -35,6 +35,12 @@ const useStyles = makeStyles(({palette}) => ({
     card: {
         maxWidth: "100%",
         marginTop: 5,
+        overflow: 'auto',
+        overflowY: "scroll",
+        scrollbarWidth: "none" /* Firefox */,
+        "&::-webkit-scrollbar": {
+            display: "none"
+        },
     },
     avatar: {
         float: "right",
@@ -90,6 +96,9 @@ const useStyles = makeStyles(({palette}) => ({
         boxShadow: palette.grey[500],
         // padding: palette.spacing(2, 4, 3),
     },
+    tag: {
+        margin: '1px',
+    },
 }));
 
 let portions = {
@@ -104,7 +113,7 @@ const schema = yup.object().shape({
         .moreThan(0, "Portions number has to be greater than 0."),
 });
 
-function ChatOffer({offerId}) {
+function ChatOffer({offerId, isOrdered, orderHistory, offer, isMyOffer}) {
 
     const {
         register,
@@ -114,23 +123,11 @@ function ChatOffer({offerId}) {
         resolver: yupResolver(schema),
     });
 
-    const [isOrdered, setIsOrdered] = useState(false);
-    const [orderHistory, setOrderHistory] = useState([]);
     const [showCancelOrderModal, setShowCancelOrderModal] = useState(false);
     const [showConfirmPickupModal, setShowConfirmPickupModal] = useState(false);
     const [rating, setRating] = useState(0);
     const [chosenOrder, setChosenOrder] = useState({});
-    const [offer, setOffer] = useState({})
     const [showModal, setShowModal] = useState(false);
-
-
-    useEffect(() => {
-        getOrders();
-    }, [])
-
-    useEffect(() => {
-        getOffer();
-    }, {})
 
 
     const styles = useStyles();
@@ -152,28 +149,6 @@ function ChatOffer({offerId}) {
         setShowConfirmPickupModal(true);
     }
 
-    const getOrders = () => {
-        api.getUserOrdersHistory()
-            .then((res) => {
-                setOrderHistory(res.data.filter(order => order.offer_id === parseInt(offerId)));
-            })
-            .catch((err) => {
-                console.log("Could not get current user orders" + err.message);
-            })
-
-        if(orderHistory.length > 0) setIsOrdered(true)
-    }
-
-    const getOffer = () => {
-        api.getOffer(parseInt(offerId))
-            .then((res) => {
-                setOffer(res.data)
-            })
-            .catch((err) => {
-                console.log("Could not get current offer" + err.message);
-            })
-    }
-
     const handleShowUserProfile = (id) => {
         history.push(`/users/${id}`);
     }
@@ -185,10 +160,8 @@ function ChatOffer({offerId}) {
             .then((res) => {
                 toast.success(`Your order has been canceled!`);
                 console.log(res.data);
-                getOrders();
             })
             .catch((err) => {
-                getOrders();
                 toast.error("Could not cancel your order.")
                 console.log("Could not cancel your order " + err.message);
             })
@@ -210,10 +183,8 @@ function ChatOffer({offerId}) {
             .then((res) => {
                 toast.success(`Your order pick up has been confirmed!`);
                 console.log(res.data);
-                getOrders();
             })
             .catch((err) => {
-                getOrders();
                 toast.error("Could not confirm pick up.")
                 console.log("Could not confirm pick up " + err.message);
             })
@@ -234,7 +205,7 @@ function ChatOffer({offerId}) {
             .then((res) => {
                 toast.success(`${offer.name} order was successful.`);
                 console.log(res.data);
-                getOrders()
+                window.location.reload(false)
             })
             .catch((err) => {
                 console.log("Could not order meal " + err)
@@ -245,7 +216,7 @@ function ChatOffer({offerId}) {
 
     return (
         <div>
-        {isOrdered ? orderHistory.map((order) => {
+        {isOrdered && !isMyOffer ? orderHistory.map((order) => {
                         return (
                             <Card key={order.id} className={cx(styles.card, shadowStyles.root)}>
                                 <CardContent>
@@ -268,6 +239,11 @@ function ChatOffer({offerId}) {
                                               variant="outlined"/>
                                     </ul>
                                     <h3 className={styles.heading}>{order.offer_name}</h3>
+                                    <ul>
+                                        {order.tags.map((tag) =>
+                                            <Chip className={styles.tag} size="small" label={`#${tag.tag_name}`} />
+                                        )}
+                                    </ul>
                                     <Grid className={styles.icons}>
                                         <Typography variant="body2" color="textSecondary" component="p"> Ordered
                                             portions: {order.portions}</Typography>
@@ -373,23 +349,39 @@ function ChatOffer({offerId}) {
                             />
                     }
                     <ul className={styles.avatar}>
-                        <Chip avatar={<Avatar onClick={(e) => handleShowUserProfile(offer.user_id)} className={styles.avatar} src={offer.photo}/>} label={offer.user_name} variant="outlined"/>
-                        <Chip avatar={<Star fontSize="inherit" style={{color:'#ffc107'}}/>} label="4" variant="outlined"/>
+                        <Chip avatar={<Avatar onClick={(e) => handleShowUserProfile(offer.user_id)} className={styles.avatar} src={offer.user_photo}/>} label={offer.user_name} variant="outlined"/>
+                        <Chip avatar={<Star fontSize="inherit" style={{color:'#ffc107'}}/>} label={offer.user_rating} variant="outlined"/>
                     </ul>
                     <CardContent>
                         <h3 className={styles.heading}>{offer.name}</h3>
                     </CardContent>
-                    {/*<ul>*/}
-                    {/*    {offer.tags.map((tag) =>*/}
-                    {/*        <Chip className={styles.tag} size="small" label={`#${tag}`} />*/}
-                    {/*    )}*/}
-                    {/*</ul>*/}
+                    <ul>
+                        {(offer.tags || []).map((tag) =>
+                            <Chip className={styles.tag} size="small" label={`#${tag}`} />
+                        )}
+                    </ul>
+                    <Box display={'flex'} className={styles.info} >
+                        <Box p={5} flex={'auto'} >
+                            <p className={styles.statLabel}>Pick-up times: </p>
+                            <Typography variant="body2" color="textSecondary" component="p"> {offer.pickup_times}</Typography>
+                        </Box>
+                        <Box p={5} flex={'auto'} >
+                            <p className={styles.statLabel}>Expire date: </p>
+                            <Typography variant="body2" color="textSecondary" component="p"> {offer.offer_expiry}</Typography>
+                        </Box>
+                        <Box p={5} flex={'auto'} >
+                            <p className={styles.statLabel}>Remaining portions: </p>
+                            <Typography variant="body2" color="textSecondary" component="p"> {offer.portions_number - offer.used_portions}</Typography>
+                        </Box>
+                    </Box>
                     <CardContent>
-                        <CardActions className={styles.buttons}>
-                            <Button size="medium" color="primary" onClick={() => handleShow(offer)}>
-                                Make order
-                            </Button>
-                        </CardActions>
+                        {
+                            !isMyOffer ? <CardActions className={styles.buttons}>
+                                <Button size="medium" color="primary" onClick={() => handleShow(offer)}>
+                                    Make order
+                                </Button>
+                            </CardActions> : null
+                        }
                     </CardContent>
                     <Collapse >
                         <Box display={'flex'} className={styles.info} >
