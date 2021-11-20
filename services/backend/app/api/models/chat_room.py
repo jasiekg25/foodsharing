@@ -47,15 +47,15 @@ class ChatRoom(db.Model):
 
     @staticmethod
     def get_chat_room(client, offer_id):
-        return ChatRoom.query\
-            .filter(and_(ChatRoom.client == client, ChatRoom.offer_id == offer_id))\
+        return ChatRoom.query \
+            .filter(and_(ChatRoom.client == client, ChatRoom.offer_id == offer_id)) \
             .first()
 
     @staticmethod
     def exists(client, offer_id):
         return ChatRoom.query \
-            .filter(and_(ChatRoom.client == client, ChatRoom.offer_id == offer_id))\
-            .first() is not None
+                   .filter(and_(ChatRoom.client == client, ChatRoom.offer_id == offer_id)) \
+                   .first() is not None
 
     @staticmethod
     def get_all_rooms(user_id):
@@ -65,6 +65,8 @@ class ChatRoom(db.Model):
             .join(Offer) \
             .join(ChatMessage, isouter=True) \
             .filter((user_id == ChatRoom.client) | (user_id == Offer.user_id)) \
-            .order_by(nullslast(ChatMessage.timestamp.desc()))
-            # .group_by(ChatRoom.id) \
-
+            .order_by(nullslast(desc(db.case(
+            [(ChatRoom.timestamp > ChatMessage.timestamp, ChatRoom.timestamp)],
+            else_= ChatMessage.timestamp))))
+        # .order_by(ChatRoom.timestamp.desc(), nullslast(ChatMessage.timestamp.desc()))
+        # .group_by(ChatRoom.id)
