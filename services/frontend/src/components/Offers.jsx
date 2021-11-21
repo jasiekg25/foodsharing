@@ -74,8 +74,8 @@ const useStyles = makeStyles((theme) => ({
     },
     photo: {
         float: "left",
-        height: "40%",
-        width: "40%",
+        height: "170px",
+        width: "250px",
     },
     header: {
         height: 10,
@@ -227,7 +227,7 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
                                             />
                                     }
                                     <ul className={styles.avatar}>
-                                        <Chip avatar={<Avatar  className={styles.avatar} src={offer.photo}/>} label={offer.user_name} variant="outlined" onClick={(e) => handleShowUserProfile(offer.user_id)} style={{marginRight: '5px'}} />
+                                        <Chip avatar={<Avatar  className={styles.avatar} src={offer.user_photo}/>} label={offer.user_name} variant="outlined" onClick={(e) => handleShowUserProfile(offer.user_id)} style={{marginRight: '5px'}} />
                                         <Chip avatar={<Star fontSize="inherit" style={{color:'#ffc107'}}/>} label={offer.user_rating} variant="outlined"/>
                                     </ul>
                                     <CardContent>
