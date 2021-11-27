@@ -28,7 +28,7 @@ def recreate_db():
 def load_data():
 
     # load user table
-    db.session.add(User(username='test', email="test@test.com", password="test"))
+    db.session.add(User(username='test', email="test@test.com", password="test", phone="660-780-600", profile_picture='http://res.cloudinary.com/dlgnsfzeg/image/upload/v1637492347/uxwrnxkwkpjjzfxzrmfo.jpg'))
     db.session.add(User(username='lebronjames', email="ljames@nba.com", password="mypassword"))
     db.session.add(User(username='stephencurry', email="stephencurry@nba.com", password="mypassword"))
     db.session.add(User(username='test2', email="test2@test2.com", password="test2"))

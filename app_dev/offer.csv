@@ -50,3 +50,4 @@ id,user_id,name,active,description,photo,portions_number,pickup_longitude,pickup
 148,6,pomidorowa,TRUE,Zupa pomidorowa z makaronem,,22,21.45,48.98,'2020-10-19 10:23:54',dzisiaj godz 20,'2022-10-19 10:23:54'
 149,7,indyk,TRUE,Indyk z ryżem i marchewka,,20,19.24,52.06,'2020-10-19 10:23:54',jutro wieczorem,'2022-10-19 10:23:54'
 150,8,miód,TRUE,Słodki miód z domowej pasieki,,10,23.15,45.02,'2020-10-19 10:23:54',Miedzy 7 a 15,'2022-10-19 10:23:54'
+151,5,Oferta Testowa,TRUE,Oferta Testowa,http://res.cloudinary.com/dlgnsfzeg/image/upload/v1637429727/eelc8lo1tmlspxb3h0q6.jpg,500,13.25,52.02,'2020-10-19 10:23:54',Miejsce I data odbioru do ustalenia,'2022-10-19 10:23:54'
