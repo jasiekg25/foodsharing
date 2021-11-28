@@ -29,6 +29,11 @@ import CardHeader from "@material-ui/core/CardHeader";
 import {Delete, DeleteOutline} from "@material-ui/icons";
 import Box from "@material-ui/core/Box";
 import Chip from "@material-ui/core/Chip";
+import Star from "@material-ui/icons/Star";
+import ChatIcon from "@material-ui/icons/Chat";
+import {Collapse} from "@material-ui/core";
+import {useGutterBorderedGridStyles} from '@mui-treasury/styles/grid/gutterBordered';
+
 
 
 const useStyles = makeStyles(({palette}) => ({
@@ -38,18 +43,17 @@ const useStyles = makeStyles(({palette}) => ({
     },
     avatar: {
         float: "right",
-        marginTop: 8,
     },
     heading: {
         fontSize: 18,
         fontWeight: 'bold',
         letterSpacing: '0.5px',
-        marginTop: 8,
+        marginLeft: 25,
     },
     photo: {
         float: "left",
-        height: "30%",
-        width: "30%",
+        height: "100%",
+        width: "100%",
     },
     header: {
         height: 10,
@@ -145,46 +149,68 @@ function MyOffers(props) {
 
     const styles = useStyles();
     const shadowStyles = useFadedShadowStyles();
+    const borderedGridStyles = useGutterBorderedGridStyles({
+        borderColor: 'rgba(0, 0, 0, 0.08)',
+        height: '50%',
+    });
 
     return (
         userOffers.map((offer) => {
                 return (
                     <Card key={offer.id} className={cx(styles.card, shadowStyles.root)}>
-                        <IconButton className={styles.avatar} onClick={(e) => handleDeleteOfferShow(offer)}>
-                            <Delete/>
-                        </IconButton>
                         <CardContent>
-                            {
-                                offer.photo ?
-                                    <CardMedia className={styles.photo}
-                                               src={offer.photo}
-                                               component="img"
-                                    /> :
-                                    <CardMedia className={styles.photo}
-                                               src={placeholder}
-                                               component="img"
-                                    />
-                            }
-                            <h3 className={styles.heading}>{offer.name}</h3>
-                            <ul>
-                                {offer.tags.map((tag) =>
-                                    <Chip className={styles.tag} size="small" label={`#${tag.tag_name}`} />
-                                )}
-                            </ul>
-                            <Box display={'flex'} className={styles.info} >
-                                <Box p={4} flex={'auto'} >
-                                    <p className={styles.statLabel}>Pick-up times: </p>
-                                    <Typography variant="body2" color="textSecondary" component="p"> {offer.pickup_times}</Typography>
-                                </Box>
-                                <Box p={4} flex={'auto'} >
-                                    <p className={styles.statLabel}>Expire date: </p>
-                                    <Typography variant="body2" color="textSecondary" component="p"> {offer.offer_expiry}</Typography>
-                                </Box>
-                                <Box p={4} flex={'auto'} >
-                                    <p className={styles.statLabel}>Portions number: </p>
-                                    <Typography variant="body2" color="textSecondary" component="p"> {offer.portions_number}</Typography>
-                                </Box>
-                            </Box>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <IconButton className={styles.avatar} onClick={(e) => handleDeleteOfferShow(offer)}>
+                                        <Delete/>
+                                    </IconButton>
+                                </Grid>
+                                <Grid item sm={5} xs={12}>
+                                    {
+                                        offer.photo ?
+                                            <CardMedia className={styles.photo}
+                                                       src={offer.photo}
+                                                       component="img"
+                                            /> :
+                                            <CardMedia className={styles.photo}
+                                                       src={placeholder}
+                                                       component="img"
+                                            />
+                                    }
+                                </Grid>
+                                <Grid item sm={7} xs={12}>
+                                    <h3 className={styles.heading}>{offer.name}</h3>
+                                    <ul>
+                                        {offer.tags.map((tag) =>
+                                            <Chip className={styles.tag} size="small" label={`#${tag.tag_name}`} />
+                                        )}
+                                    </ul>
+                                </Grid>
+                                    <Grid item xs={12}>
+                                        <Box p={2} className={borderedGridStyles.item}>
+                                            <p className={styles.statLabel}>Description: </p>
+                                            <Typography variant="body2" color="textSecondary" component="p"> {offer.description}</Typography>
+                                        </Box>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <Box p={2} flex={'auto'} >
+                                            <p className={styles.statLabel}>Pick-up times: </p>
+                                            <Typography variant="body2" color="textSecondary" component="p"> {offer.pickup_times}</Typography>
+                                        </Box>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <Box p={2} flex={'auto'} >
+                                            <p className={styles.statLabel}>Expire date: </p>
+                                            <Typography variant="body2" color="textSecondary" component="p"> {offer.offer_expiry}</Typography>
+                                        </Box>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <Box p={2} flex={'auto'} >
+                                            <p className={styles.statLabel}>Portions number: </p>
+                                            <Typography variant="body2" color="textSecondary" component="p"> {offer.portions_number}</Typography>
+                                        </Box>
+                                    </Grid>
+                            </Grid>
                         </CardContent>
                         <Dialog
                             open={showDeleteOfferModal}

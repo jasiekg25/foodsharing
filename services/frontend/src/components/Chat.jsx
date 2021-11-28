@@ -14,6 +14,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import InfiniteScrollReverse from "react-infinite-scroll-reverse";
 import cx from "clsx";
+import Grid from "@material-ui/core/Grid";
+import CardContent from "@material-ui/core/CardContent";
 
 
 let endPoint = `${process.env.REACT_APP_BACKEND_SERVICE_URL}/chat`;
@@ -23,10 +25,10 @@ let inputRef = React.createRef();
 const useStyles = makeStyles(({ palette }) => ({
     card: {
         marginTop: 10,
-        margin:"auto",
         borderRadius: 12,
-        maxWidth: 500,
         textAlign: 'center',
+        maxWidth: 500,
+        margin: "auto",
         overflow: 'auto',
         scrollbarWidth: "none" /* Firefox */,
         maxHeight: 200,
@@ -60,7 +62,6 @@ function Chat(props) {
 
   useEffect(() =>{
       if(messages.length !== 0){
-          console.log("XXXXXXXXXXXXX", ref.current)
           ref.current.scrollTop = 9999
       }
   }, [messages])
@@ -121,9 +122,12 @@ function Chat(props) {
 
   return (
       <div>
-          <Card className={styles.card}>
-              <ChatOffer offerId={offerId} isOrdered={isOrdered} orderHistory={orderHistory} offer={offer} isMyOffer={isMyOffer}/>
-          </Card>
+          <Grid container spacing={2} className={styles.card} justifyContent="center">
+              <Grid item sm={12} xs={9}>
+                  <ChatOffer offerId={offerId} isOrdered={isOrdered} orderHistory={orderHistory} offer={offer} isMyOffer={isMyOffer}/>
+              </Grid>
+          </Grid>
+
           <div onKeyPress={handleKeyPress}>
               <div ref={ref} style={{maxHeight: "200px", overflowY: "scroll"}}>
                   {messages.map((message) => {
