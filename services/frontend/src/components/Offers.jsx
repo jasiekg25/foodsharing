@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
 import api from "../api.js";
 // import "./Offers.css";
+import {useGutterBorderedGridStyles} from '@mui-treasury/styles/grid/gutterBordered';
+
+
 import {toast} from "../utils/toastWrapper";
 import 'react-toastify/dist/ReactToastify.css';
 import {useForm} from "react-hook-form";
@@ -37,10 +40,10 @@ import {Form} from "react-bootstrap";
 
 const useStyles = makeStyles((theme) => ({
     card: {
-        maxWidth: "100%",
+        // maxWidth: "1000px",
         marginTop: 5,
         overflow: 'auto',
-        overflowY: "scroll",
+        // overflowY: "scroll",
         scrollbarWidth: "none" /* Firefox */,
         "&::-webkit-scrollbar": {
             display: "none"
@@ -56,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         overflow: 'auto',
         scrollbarWidth: "none" /* Firefox */,
-        maxHeight: 300,
+        // maxHeight: 300,
         "&::-webkit-scrollbar": {
             display: "none"
         },
@@ -69,16 +72,18 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 18,
         fontWeight: 'bold',
         letterSpacing: '0.5px',
-        marginTop: 30,
-        marginLeft: "40%"
+        marginTop: 50,
+        marginBottom: 30,
+        marginLeft: 25,
     },
     photo: {
         float: "left",
-        height: "170px",
-        width: "250px",
+        height: "100%",
+        width: "100%",
     },
     header: {
-        height: 10,
+        marginRight: 50,
+        height: "10%",
     },
     buttons: {
         float: "right"
@@ -154,6 +159,10 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
     });
 
     const styles = useStyles();
+    const borderedGridStyles = useGutterBorderedGridStyles({
+        borderColor: 'rgba(0, 0, 0, 0.08)',
+        height: '50%',
+    });
     const shadowStyles = useFadedShadowStyles();
 
     const [chosenOffer, setChosenOffer] = useState({})
@@ -208,62 +217,78 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
                 loader={<LinearProgress />}
                 className={cx(styles.card)}
                 >
-                <Box>
+                <Grid item md={12} xs={12}>
                     {offers.map((offer) => {
                         return (
                             <Card key={offer.id} className={cx(styles.itemsCard, shadowStyles.root)} onClick={() => {
                                 onOfferSelect(offer)
                             }}>
                                 <CardContent>
-                                    {
-                                        offer.photo ?
-                                            <CardMedia className={styles.photo}
-                                                       src={offer.photo}
-                                                       component="img"
-                                            /> :
-                                            <CardMedia className={styles.photo}
-                                                       src={placeholder}
-                                                       component="img"
-                                            />
-                                    }
-                                    <ul className={styles.avatar}>
-                                        <Chip avatar={<Avatar  className={styles.avatar} src={offer.user_photo}/>} label={offer.user_name} variant="outlined" onClick={(e) => handleShowUserProfile(offer.user_id)} style={{marginRight: '5px'}} />
-                                        <Chip avatar={<Star fontSize="inherit" style={{color:'#ffc107'}}/>} label={offer.user_rating} variant="outlined"/>
-                                    </ul>
-                                    <CardContent>
-                                        <h3 className={styles.heading}>{offer.name}</h3>
-                                    </CardContent>
-                                    <ul>
-                                        {offer.tags.map((tag) => 
-                                            <Chip className={styles.tag} size="small" label={`#${tag}`} />
-                                        )}
-                                    </ul>
-                                    <CardContent>
-                                        <CardActions className={styles.buttons}>
-                                            <Button color="primary" onClick={(e) => sendMessage(offer)} startIcon={<ChatIcon />}>
-                                                Chat
-                                            </Button>
-                                            <Button size="medium" color="primary" onClick={() => handleShow(offer)}>
-                                                Make order
-                                            </Button>
-                                        </CardActions>
-                                    </CardContent>
-                                    <Collapse in={offer.expanded} timeout="auto" unmountOnExit>
-                                        <Box display={'flex'} className={styles.info} >
-                                            <Box p={5} flex={'auto'} >
+                                    <Grid container spacing={2}>
+                                        <Grid item sm={5} xs={12}>
+                                            {
+                                                offer.photo ?
+                                                    <CardMedia className={styles.photo}
+                                                               src={offer.photo}
+                                                               component="img"
+                                                    /> :
+                                                    <CardMedia className={styles.photo}
+                                                               src={placeholder}
+                                                               component="img"
+                                                    />
+                                            }
+                                        </Grid>
+                                        <Grid item sm={7} xs={12}>
+                                            <ul className={styles.avatar}>
+                                                <Chip avatar={<Avatar  className={styles.avatar} src={offer.user_photo}/>} label={offer.user_name} variant="outlined" onClick={(e) => handleShowUserProfile(offer.user_id)} style={{marginRight: '5px'}} />
+                                                <Chip avatar={<Star fontSize="inherit" style={{color:'#ffc107'}}/>} label={offer.user_rating} variant="outlined"/>
+                                            </ul>
+                                            <h3 className={styles.heading}>{offer.name}</h3>
+                                            <ul>
+                                                {offer.tags.map((tag) =>
+                                                    <Chip className={styles.tag} size="small" label={`#${tag}`} />
+                                                )}
+                                            </ul>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <CardActions className={styles.buttons}>
+                                                <Button color="primary" onClick={(e) => sendMessage(offer)} startIcon={<ChatIcon />}>
+                                                    Chat
+                                                </Button>
+                                                <Button size="medium" color="primary" onClick={() => handleShow(offer)}>
+                                                    Make order
+                                                </Button>
+                                            </CardActions>
+                                        </Grid>
+                                    </Grid>
+                                        <Collapse in={offer.expanded} timeout="auto" unmountOnExit>
+                                            <Grid container spacing={2}>
+                                            <Grid item xs={12}>
+                                            <Box p={2} className={borderedGridStyles.item}>
+                                                <p className={styles.statLabel}>Description: </p>
+                                                <Typography variant="body2" color="textSecondary" component="p"> {offer.description}</Typography>
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={4}>
+                                            <Box p={2} className={borderedGridStyles.item}>
                                                 <p className={styles.statLabel}>Pick-up times: </p>
                                                 <Typography variant="body2" color="textSecondary" component="p"> {offer.pickup_times}</Typography>
                                             </Box>
-                                            <Box p={5} flex={'auto'} >
+                                        </Grid>
+                                        <Grid item xs={4}>
+                                            <Box p={2} flex={'auto'} >
                                                 <p className={styles.statLabel}>Expire date: </p>
                                                 <Typography variant="body2" color="textSecondary" component="p"> {offer.offer_expiry}</Typography>
                                             </Box>
-                                            <Box p={5} flex={'auto'} >
+                                        </Grid>
+                                        <Grid item xs={4}>
+                                            <Box p={2} className={borderedGridStyles.item}>
                                                 <p className={styles.statLabel}>Remaining portions: </p>
                                                 <Typography variant="body2" color="textSecondary" component="p"> {offer.portions_number - offer.used_portions}</Typography>
                                             </Box>
-                                        </Box>
-                                    </Collapse>
+                                        </Grid>
+                                            </Grid>
+                                        </Collapse>
                                 </CardContent>
                                 <Dialog
                                     open={showModal}
@@ -294,7 +319,7 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
                             </Card>
                         )
                     })}
-                </Box>
+                </Grid>
             </InfiniteScroll>
     )
 }

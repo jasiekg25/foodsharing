@@ -22,6 +22,8 @@ import {makeStyles} from "@material-ui/core/styles";
 import {history} from "../index";
 import {toast} from "../utils/toastWrapper";
 import {useFadedShadowStyles} from '@mui-treasury/styles/shadow/faded';
+import {useGutterBorderedGridStyles} from '@mui-treasury/styles/grid/gutterBordered';
+
 import ChatIcon from "@material-ui/icons/Chat";
 import {Collapse} from "@material-ui/core";
 import Box from "@material-ui/core/Box";
@@ -49,12 +51,14 @@ const useStyles = makeStyles(({palette}) => ({
         fontSize: 18,
         fontWeight: 'bold',
         letterSpacing: '0.5px',
-        marginTop: 8,
+        marginTop: 50,
+        marginBottom: 30,
+        marginLeft: 25,
     },
     photo: {
         float: "left",
-        height: "27%",
-        width: "27%",
+        height: "100%",
+        width: "100%",
     },
     buttons: {
         float: "right",
@@ -132,6 +136,10 @@ function ChatOffer({offerId, isOrdered, orderHistory, offer, isMyOffer}) {
 
     const styles = useStyles();
     const shadowStyles = useFadedShadowStyles();
+    const borderedGridStyles = useGutterBorderedGridStyles({
+        borderColor: 'rgba(0, 0, 0, 0.08)',
+        height: '50%',
+    });
 
     const handleCancelOrderClose = () => {
         setShowCancelOrderModal(false);
@@ -220,63 +228,72 @@ function ChatOffer({offerId, isOrdered, orderHistory, offer, isMyOffer}) {
                         return (
                             <Card key={order.id} className={cx(styles.card, shadowStyles.root)}>
                                 <CardContent>
-                                    {
-                                        order.offer_photo ?
-                                            <CardMedia className={styles.photo}
-                                                       src={order.offer_photo}
-                                                       component="img"
-                                            /> :
-                                            <CardMedia className={styles.photo}
-                                                       src={placeholder}
-                                                       component="img"
-                                            />
-                                    }
-                                    <ul className={styles.avatar}>
-                                        <Chip avatar={<Avatar onClick={(e) => handleShowUserProfile(order.fromUser_id)}
-                                                              className={styles.avatar} src={order.fromUser_photo}/>}
-                                              label={order.fromUser_name} variant="outlined"/>
-                                        <Chip avatar={<Star fontSize="inherit" style={{color: '#ffc107'}}/>} label={order.fromUser_rating}
-                                              variant="outlined"/>
-                                    </ul>
-                                    <h3 className={styles.heading}>{order.offer_name}</h3>
-                                    <ul>
-                                        {order.tags.map((tag) =>
-                                            <Chip className={styles.tag} size="small" label={`#${tag.tag_name}`} />
-                                        )}
-                                    </ul>
-                                    <Grid className={styles.icons}>
-                                        <Typography variant="body2" color="textSecondary" component="p"> Ordered
-                                            portions: {order.portions}</Typography>
+                                    <Grid container spacing={2}>
+                                        <Grid item sm={5} xs={12}>
+                                            {
+                                                order.offer_photo ?
+                                                    <CardMedia className={styles.photo}
+                                                               src={order.offer_photo}
+                                                               component="img"
+                                                    /> :
+                                                    <CardMedia className={styles.photo}
+                                                               src={placeholder}
+                                                               component="img"
+                                                    />
+                                            }
+                                        </Grid>
+                                        <Grid item sm={7} xs={12}>
+                                            <ul className={styles.avatar}>
+                                                <Chip avatar={<Avatar onClick={(e) => handleShowUserProfile(order.fromUser_id)} className={styles.avatar} src={order.fromUser_photo}/>} label={order.fromUser_name} variant="outlined"/>
+                                                <Chip avatar={<Star fontSize="inherit" style={{color:'#ffc107'}}/>} label={order.fromUser_rating} variant="outlined"/>
+                                            </ul>
+                                            <h3 className={styles.heading}>{order.offer_name}</h3>
+                                            <ul>
+                                                {order.tags.map((tag) =>
+                                                    <Chip className={styles.tag} size="small" label={`#${tag.tag_name}`} />
+                                                )}
+                                            </ul>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Box p={2} className={borderedGridStyles.item}>
+                                                <p className={styles.statLabel}>Description: </p>
+                                                <Typography variant="body2" color="textSecondary" component="p"> {order.offer_description}</Typography>
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Box p={2} className={borderedGridStyles.item}>
+                                                <p className={styles.statLabel}>Ordered portions: </p>
+                                                <Typography variant="body2" color="textSecondary" component="p">  {order.portions}</Typography>
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            {(!order.is_picked && !order.is_canceled) ?
+                                                <CardContent>
+                                                    <CardActions className={styles.buttons}>
+                                                        <Button size="medium" color="primary" onClick={(e) => handleConfirmPickupShow(order)}>
+                                                            Confirm pickup
+                                                        </Button>
+                                                        <Button size="medium" color="primary" onClick={(e) => handleCancelOrderShow(order)}>
+                                                            Cancel order
+                                                        </Button>
+                                                    </CardActions>
+                                                </CardContent> : null
+                                            }
+                                            {
+                                                order.is_picked ?
+                                                    <CardContent>
+                                                        <Typography className={styles.confirmLabel} variant="body2" component="p">You have picked up your order!</Typography>
+                                                    </CardContent> : null
+                                            }
+                                            {
+                                                order.is_canceled ?
+                                                    <CardContent>
+                                                        <Typography className={styles.cancelLabel} variant="body2" component="p">You have canceled your order!</Typography>
+                                                    </CardContent> : null
+                                            }
+                                        </Grid>
                                     </Grid>
                                 </CardContent>
-                                {(!order.is_picked && !order.is_canceled) ?
-                                    <CardContent>
-                                        <CardActions className={styles.buttons}>
-                                            <Button size="medium" color="primary"
-                                                    onClick={(e) => handleConfirmPickupShow(order)}>
-                                                Confirm pickup
-                                            </Button>
-                                            <Button size="medium" color="primary"
-                                                    onClick={(e) => handleCancelOrderShow(order)}>
-                                                Cancel order
-                                            </Button>
-                                        </CardActions>
-                                    </CardContent> : null
-                                }
-                                {
-                                    order.is_picked ?
-                                        <CardContent>
-                                            <Typography className={styles.confirmLabel} variant="body2" component="p">You
-                                                have picked up your order!</Typography>
-                                        </CardContent> : null
-                                }
-                                {
-                                    order.is_canceled ?
-                                        <CardContent>
-                                            <Typography className={styles.cancelLabel} variant="body2" component="p">You
-                                                have canceled your order!</Typography>
-                                        </CardContent> : null
-                                }
                                 <Dialog
                                     open={showConfirmPickupModal}
                                     onClose={(e) => handleConfirmPickupClose()}
@@ -337,68 +354,66 @@ function ChatOffer({offerId, isOrdered, orderHistory, offer, isMyOffer}) {
                 :
             <Card className={cx(styles.card, shadowStyles.root)}>
                 <CardContent>
-                    {
-                        offer.photo ?
-                            <CardMedia className={styles.photo}
-                                       src={offer.photo}
-                                       component="img"
-                            /> :
-                            <CardMedia className={styles.photo}
-                                       src={placeholder}
-                                       component="img"
-                            />
-                    }
-                    <ul className={styles.avatar}>
-                        <Chip avatar={<Avatar onClick={(e) => handleShowUserProfile(offer.user_id)} className={styles.avatar} src={offer.user_photo}/>} label={offer.user_name} variant="outlined"/>
-                        <Chip avatar={<Star fontSize="inherit" style={{color:'#ffc107'}}/>} label={offer.user_rating} variant="outlined"/>
-                    </ul>
-                    <CardContent>
-                        <h3 className={styles.heading}>{offer.name}</h3>
-                    </CardContent>
-                    <ul>
-                        {(offer.tags || []).map((tag) =>
-                            <Chip className={styles.tag} size="small" label={`#${tag}`} />
-                        )}
-                    </ul>
-                    <Box display={'flex'} className={styles.info} >
-                        <Box p={5} flex={'auto'} >
-                            <p className={styles.statLabel}>Pick-up times: </p>
-                            <Typography variant="body2" color="textSecondary" component="p"> {offer.pickup_times}</Typography>
-                        </Box>
-                        <Box p={5} flex={'auto'} >
-                            <p className={styles.statLabel}>Expire date: </p>
-                            <Typography variant="body2" color="textSecondary" component="p"> {offer.offer_expiry}</Typography>
-                        </Box>
-                        <Box p={5} flex={'auto'} >
-                            <p className={styles.statLabel}>Remaining portions: </p>
-                            <Typography variant="body2" color="textSecondary" component="p"> {offer.portions_number - offer.used_portions}</Typography>
-                        </Box>
-                    </Box>
-                    <CardContent>
-                        {
-                            !isMyOffer ? <CardActions className={styles.buttons}>
-                                <Button size="medium" color="primary" onClick={() => handleShow(offer)}>
-                                    Make order
-                                </Button>
-                            </CardActions> : null
-                        }
-                    </CardContent>
-                    <Collapse >
-                        <Box display={'flex'} className={styles.info} >
-                            <Box p={5} flex={'auto'} >
-                                <p className={styles.statLabel}>Pick-up times: </p>
-                                <Typography variant="body2" color="textSecondary" component="p"> {offer.pickup_times}</Typography>
-                            </Box>
-                            <Box p={5} flex={'auto'} >
-                                <p className={styles.statLabel}>Expire date: </p>
-                                <Typography variant="body2" color="textSecondary" component="p"> {offer.offer_expiry}</Typography>
-                            </Box>
-                            <Box p={5} flex={'auto'} >
-                                <p className={styles.statLabel}>Remaining portions: </p>
-                                <Typography variant="body2" color="textSecondary" component="p"> {offer.portions_number - offer.used_portions}</Typography>
-                            </Box>
-                        </Box>
-                    </Collapse>
+                    <Grid container spacing={2}>
+                        <Grid item sm={5} xs={12}>
+                            {
+                                offer.photo ?
+                                    <CardMedia className={styles.photo}
+                                               src={offer.photo}
+                                               component="img"
+                                    /> :
+                                    <CardMedia className={styles.photo}
+                                               src={placeholder}
+                                               component="img"
+                                    />
+                            }
+                        </Grid>
+                        <Grid item sm={7} xs={12}>
+                            <ul className={styles.avatar}>
+                                <Chip avatar={<Avatar  className={styles.avatar} src={offer.user_photo}/>} label={offer.user_name} variant="outlined" onClick={(e) => handleShowUserProfile(offer.user_id)} style={{marginRight: '5px'}} />
+                                <Chip avatar={<Star fontSize="inherit" style={{color:'#ffc107'}}/>} label={offer.user_rating} variant="outlined"/>
+                            </ul>
+                            <h3 className={styles.heading}>{offer.name}</h3>
+                            <ul>
+                                {(offer.tags || []).map((tag) =>
+                                    <Chip className={styles.tag} size="small" label={`#${tag}`} />
+                                )}
+                            </ul>
+                        </Grid>
+                            <Grid item xs={12}>
+                                <Box p={2} className={borderedGridStyles.item}>
+                                    <p className={styles.statLabel}>Description: </p>
+                                    <Typography variant="body2" color="textSecondary" component="p"> {offer.description}</Typography>
+                                </Box>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Box p={2} className={borderedGridStyles.item}>
+                                    <p className={styles.statLabel}>Pick-up times: </p>
+                                    <Typography variant="body2" color="textSecondary" component="p"> {offer.pickup_times}</Typography>
+                                </Box>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Box p={2} flex={'auto'} >
+                                    <p className={styles.statLabel}>Expire date: </p>
+                                    <Typography variant="body2" color="textSecondary" component="p"> {offer.offer_expiry}</Typography>
+                                </Box>
+                            </Grid>
+                            <Grid item xs={4}>
+                                <Box p={2} className={borderedGridStyles.item}>
+                                    <p className={styles.statLabel}>Remaining portions: </p>
+                                    <Typography variant="body2" color="textSecondary" component="p"> {offer.portions_number - offer.used_portions}</Typography>
+                                </Box>
+                            </Grid>
+                        <Grid item xs={12}>
+                            {
+                                !isMyOffer ? <CardActions className={styles.buttons}>
+                                    <Button size="medium" color="primary" onClick={() => handleShow(offer)}>
+                                        Make order
+                                    </Button>
+                                </CardActions> : null
+                            }
+                        </Grid>
+                    </Grid>
                 </CardContent>
                 <Dialog
                     open={showModal}
