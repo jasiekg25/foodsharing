@@ -144,6 +144,7 @@ class User(db.Model):
         user = User.query.filter_by(id=user_id).first()
         user.email = content['email']
         user.profile_description = content['profile_description']
-        user.profile_picture = photo_url
+        if photo_url:
+            user.profile_picture = photo_url
         user.phone = content['phone']
         db.session.commit()
