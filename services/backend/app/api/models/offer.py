@@ -167,7 +167,8 @@ class Offer(db.Model):
     def get_current_offers_of_user(user_id):
         return Offer.query.filter_by(user_id=user_id) \
             .filter(Offer.active == True) \
-            .filter(Offer.offer_expiry >= datetime.now())
+            .filter(Offer.offer_expiry >= datetime.now()) \
+            .order_by(desc(Offer.post_time))
 
     @staticmethod
     def get_all_active_offers_except_mine(user_id):
