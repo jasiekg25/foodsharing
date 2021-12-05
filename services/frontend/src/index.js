@@ -9,7 +9,8 @@ export const history = createBrowserHistory();
 
 ReactDOM.render(
   (
-    <Router history={history}> 
+    <Router history={history}>
+      <meta name='viewport' content='width=device-width, initial-scale=1.0' />
       <App />
     </Router>
   ),
