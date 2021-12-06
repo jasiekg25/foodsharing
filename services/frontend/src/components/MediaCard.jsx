@@ -42,7 +42,7 @@ const useStyles = makeStyles(({ palette, breakpoints }) => ({
         "&::-webkit-scrollbar": {
             display: "none"
         },
-        [breakpoints.up('sm')]: {
+        [breakpoints.up('md')]: {
             marginRight: 0,
             width: '30%',
           },
@@ -60,7 +60,7 @@ const useStyles = makeStyles(({ palette, breakpoints }) => ({
         "&::-webkit-scrollbar": {
             display: "none"
         },
-        [breakpoints.up('sm')]: {
+        [breakpoints.up('md')]: {
             marginLeft: 20,
             marginRight: 0,
             maxWidth: '40%',
