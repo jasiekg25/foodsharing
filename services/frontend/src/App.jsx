@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useRef} from "react";
 import { Route, Switch } from "react-router-dom";
 import api from "./api";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -41,10 +41,12 @@ const PageNoFound = () => (
 );
 
 const App = () => {
+    const aboutRef = useRef()
+    const rulesRef = useRef()
   return (
     <Auth>
       <CssBaseline />
-      <NavBar />
+      <NavBar aboutRef={aboutRef} rulesRef={rulesRef}/>
 
       <ToastContainer position="top-center"/>
 
@@ -55,8 +57,8 @@ const App = () => {
           render={() => (
             <div>
               <Home />
-              <About />
-              <Rules />
+              <About aboutRef={aboutRef}/>
+              <Rules rulesRef={rulesRef}/>
             </div>
           )}
         />

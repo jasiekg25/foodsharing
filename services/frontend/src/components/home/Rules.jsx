@@ -3,10 +3,10 @@ import {Col, Card, Row} from "react-bootstrap";
 import "./Rules.css";
 
 
-function Rules(props) {
+function Rules({rulesRef}) {
     return (
         <Row>
-            <div className="rules-container">
+            <div ref={rulesRef} className="rules-container">
                 <h4 className="rules-title">Trust & safety</h4>
                 <h5 className="rules-text">Food safety is extremely important to take into account when sharing surplus
                     food and both the person giving the food and the person picking the food up should always take the

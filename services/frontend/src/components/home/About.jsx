@@ -3,9 +3,9 @@ import {Row, Col, Image} from "react-bootstrap";
 import sharing from "../../img/sharing.jpg";
 import "./About.css";
 
-function About(props) {
+function About({aboutRef}) {
     return (
-        <div className="about-container">
+        <div ref={aboutRef} className="about-container">
             <h4 className="about-title">About us</h4>
             <Row>
                 <Col md={7}>
