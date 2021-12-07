@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: 20,
         marginRight: 20,
         borderRadius: 12,
-        maxWidth: 700,
+        // maxWidth: 700,
         textAlign: 'center',
         overflow: 'auto',
         scrollbarWidth: "none" /* Firefox */,
@@ -217,7 +217,7 @@ function Offers({offers, getOffers, onOfferSelect, hasNextPage}) {
                 loader={<LinearProgress />}
                 className={cx(styles.card)}
                 >
-                <Grid item md={12} xs={12}>
+                <Grid item lg={12} md={12} sm={12} xs={12}>
                     {offers.map((offer) => {
                         return (
                             <Card key={offer.id} className={cx(styles.itemsCard, shadowStyles.root)} onClick={() => {

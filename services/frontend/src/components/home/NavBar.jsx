@@ -92,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
+export default function PrimarySearchAppBar({aboutRef, rulesRef}) {
   const { isLoggedIn, logOut } = useAuth();
   const history = useHistory();
   const classes = useStyles();
@@ -160,8 +160,8 @@ export default function PrimarySearchAppBar() {
   let menu = (
     <>
       <div className={classes.sectionDesktop}>
-        <Button className={classes.menuButton}>About us</Button>
-        <Button className={classes.menuButton}>Trust & safety</Button>
+        <Button className={classes.menuButton} onClick={(e) => aboutRef.current.scrollIntoView()}>About us</Button>
+        <Button className={classes.menuButton} onClick={(e) => rulesRef.current.scrollIntoView()}>Trust & safety</Button>
       </div>
       <div className={classes.grow} />
       <Button

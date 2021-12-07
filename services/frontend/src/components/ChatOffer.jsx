@@ -255,18 +255,6 @@ function ChatOffer({offerId, isOrdered, orderHistory, offer, isMyOffer}) {
                                             </ul>
                                         </Grid>
                                         <Grid item xs={12}>
-                                            <Box p={2} className={borderedGridStyles.item}>
-                                                <p className={styles.statLabel}>Description: </p>
-                                                <Typography variant="body2" color="textSecondary" component="p"> {order.offer_description}</Typography>
-                                            </Box>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Box p={2} className={borderedGridStyles.item}>
-                                                <p className={styles.statLabel}>Ordered portions: </p>
-                                                <Typography variant="body2" color="textSecondary" component="p">  {order.portions}</Typography>
-                                            </Box>
-                                        </Grid>
-                                        <Grid item xs={12}>
                                             {(!order.is_picked && !order.is_canceled) ?
                                                 <CardContent>
                                                     <CardActions className={styles.buttons}>
@@ -291,6 +279,18 @@ function ChatOffer({offerId, isOrdered, orderHistory, offer, isMyOffer}) {
                                                         <Typography className={styles.cancelLabel} variant="body2" component="p">You have canceled your order!</Typography>
                                                     </CardContent> : null
                                             }
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Box p={2} className={borderedGridStyles.item}>
+                                                <p className={styles.statLabel}>Description: </p>
+                                                <Typography variant="body2" color="textSecondary" component="p"> {order.offer_description}</Typography>
+                                            </Box>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Box p={2} className={borderedGridStyles.item}>
+                                                <p className={styles.statLabel}>Ordered portions: </p>
+                                                <Typography variant="body2" color="textSecondary" component="p">  {order.portions}</Typography>
+                                            </Box>
                                         </Grid>
                                     </Grid>
                                 </CardContent>
@@ -380,6 +380,15 @@ function ChatOffer({offerId, isOrdered, orderHistory, offer, isMyOffer}) {
                                 )}
                             </ul>
                         </Grid>
+                        <Grid item xs={12}>
+                            {
+                                !isMyOffer ? <CardActions className={styles.buttons}>
+                                    <Button size="medium" color="primary" onClick={() => handleShow(offer)}>
+                                        Make order
+                                    </Button>
+                                </CardActions> : null
+                            }
+                        </Grid>
                             <Grid item xs={12}>
                                 <Box p={2} className={borderedGridStyles.item}>
                                     <p className={styles.statLabel}>Description: </p>
@@ -404,15 +413,6 @@ function ChatOffer({offerId, isOrdered, orderHistory, offer, isMyOffer}) {
                                     <Typography variant="body2" color="textSecondary" component="p"> {offer.portions_number - offer.used_portions}</Typography>
                                 </Box>
                             </Grid>
-                        <Grid item xs={12}>
-                            {
-                                !isMyOffer ? <CardActions className={styles.buttons}>
-                                    <Button size="medium" color="primary" onClick={() => handleShow(offer)}>
-                                        Make order
-                                    </Button>
-                                </CardActions> : null
-                            }
-                        </Grid>
                     </Grid>
                 </CardContent>
                 <Dialog

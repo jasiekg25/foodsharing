@@ -94,11 +94,14 @@ const SearchPage = () => {
     <div className={classes.root}>
       <Grid container>
         <Grid item md={6} xs={12}>
-          <Container style={{padding: 0}}>
+          <Grid item lg={12} md={12} sm={12} xs={12} style={{padding: 0}}>
             <Toolbar
               variant="regular"
               style={{
                 paddingTop: "20px",
+                alignItems: "center",
+                textAlign: "center",
+                justifyContent: "center"
               }}
             >
               <SortSelect
@@ -117,7 +120,7 @@ const SearchPage = () => {
               onOfferSelect={onOfferSelect}
               hasNextPage={hasNextPage}
             />
-          </Container>
+          </Grid>
         </Grid>
         <Grid item md={6} className={classes.map}>
           <Container style={{

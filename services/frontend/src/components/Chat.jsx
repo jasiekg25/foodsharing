@@ -27,15 +27,30 @@ const useStyles = makeStyles(({ palette }) => ({
         marginTop: 10,
         borderRadius: 12,
         textAlign: 'center',
-        maxWidth: 500,
+        maxWidth: 900,
         margin: "auto",
         overflow: 'auto',
         scrollbarWidth: "none" /* Firefox */,
-        maxHeight: 200,
+        height: "30vh",
+        "&::-webkit-scrollbar": {
+            width: "9px",
+            backgroundColor: "#fff",
+        },
+        "&::-webkit-scrollbar-track": {
+            backgroundColor: "#fff",
+        },
+        "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#babac0",
+            borderRadius: "12px"
+        },
+        marginBottom: 30
+    },
+    messages: {
+        height: "40vh",
+        overflowY: "scroll",
         "&::-webkit-scrollbar": {
             display: "none"
         },
-        marginBottom: 30
     }
 }));
 
@@ -129,7 +144,7 @@ function Chat(props) {
           </Grid>
 
           <div onKeyPress={handleKeyPress}>
-              <div ref={ref} style={{maxHeight: "200px", overflowY: "scroll"}}>
+              <div ref={ref} className={styles.messages}>
                   {messages.map((message) => {
                       return (
                           <MessageList
