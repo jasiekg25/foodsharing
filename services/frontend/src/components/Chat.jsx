@@ -27,13 +27,21 @@ const useStyles = makeStyles(({ palette }) => ({
         marginTop: 10,
         borderRadius: 12,
         textAlign: 'center',
-        maxWidth: 500,
+        maxWidth: 900,
         margin: "auto",
         overflow: 'auto',
         scrollbarWidth: "none" /* Firefox */,
         height: "30vh",
         "&::-webkit-scrollbar": {
-            display: "none"
+            width: "9px",
+            backgroundColor: "#fff",
+        },
+        "&::-webkit-scrollbar-track": {
+            backgroundColor: "#fff",
+        },
+        "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#babac0",
+            borderRadius: "12px"
         },
         marginBottom: 30
     },
