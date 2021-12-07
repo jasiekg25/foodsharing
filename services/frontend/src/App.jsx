@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ToastContainer } from 'react-toastify';
 import { makeStyles } from '@material-ui/core/styles';
@@ -48,6 +48,8 @@ const useStyles = makeStyles((theme) => ({
 
 const App = () => {
   const classes = useStyles();
+  const aboutRef = useRef()
+  const rulesRef = useRef()
   return (
     <Auth>
       <div className={classes.root}>
@@ -55,7 +57,7 @@ const App = () => {
 
         <ToastContainer position='top-center' />
         <div>
-          <NavBar />
+          <NavBar aboutRef={aboutRef} rulesRef={rulesRef} />
 
           <Switch>
             <Route
@@ -64,8 +66,8 @@ const App = () => {
               render={() => (
                 <div>
                   <Home />
-                  <About />
-                  <Rules />
+                  <About aboutRef={aboutRef} />
+                  <Rules rulesRef={rulesRef} />
                 </div>
               )}
             />
