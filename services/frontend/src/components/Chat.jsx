@@ -31,11 +31,18 @@ const useStyles = makeStyles(({ palette }) => ({
         margin: "auto",
         overflow: 'auto',
         scrollbarWidth: "none" /* Firefox */,
-        maxHeight: 200,
+        height: "30vh",
         "&::-webkit-scrollbar": {
             display: "none"
         },
         marginBottom: 30
+    },
+    messages: {
+        height: "40vh",
+        overflowY: "scroll",
+        "&::-webkit-scrollbar": {
+            display: "none"
+        },
     }
 }));
 
@@ -129,7 +136,7 @@ function Chat(props) {
           </Grid>
 
           <div onKeyPress={handleKeyPress}>
-              <div ref={ref} style={{maxHeight: "200px", overflowY: "scroll"}}>
+              <div ref={ref} className={styles.messages}>
                   {messages.map((message) => {
                       return (
                           <MessageList
