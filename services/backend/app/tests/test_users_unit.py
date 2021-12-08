@@ -6,7 +6,7 @@ from datetime import datetime
 
 import pytest
 
-import app.api.users
+import app.api.utils
 from app import guard
 from app.api.utils import get_user_by_id
 
@@ -19,19 +19,19 @@ def test_add_user(test_app, monkeypatch):
         return True
 
     monkeypatch.setattr(
-        app.api.users, "get_user_by_email", mock_get_user_by_email
+        app.api.utils, "get_user_by_email", mock_get_user_by_email
     )
-    monkeypatch.setattr(app.api.users, "add_user", mock_add_user)
+    monkeypatch.setattr(app.api.utils, "add_user", mock_add_user)
 
     client = test_app.test_client()
     resp = client.post(
         "/users",
-        data=json.dumps({"username": "michael", "email": "michael@testdriven.io"}),
+        data=json.dumps({"username": "test", "email": "test@user.com", "password": "Test123!"}),
         content_type="application/json",
     )
     data = json.loads(resp.data.decode())
     assert resp.status_code == 201
-    assert "michael@testdriven.io was added!" in data["message"]
+    assert "test@user.com was added!" in data["message"]
 
 
 def test_add_user_invalid_json(test_app):

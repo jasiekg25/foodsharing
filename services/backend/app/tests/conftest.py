@@ -4,21 +4,20 @@
 import pytest
 
 from app import create_app, db
-from app.api.models_old import User
-
+from app.api.models.user import User
 
 @pytest.fixture(scope="module")
 def test_app():
     app = create_app()
-    app.config.from_object("app.config.TestingConfig")
+    app.config.from_object("app.tests.config.TestingConfig")
     with app.app_context():
-        yield app  # testing happens here
+        yield app
 
 
 @pytest.fixture(scope="module")
 def test_database():
     db.create_all()
-    yield db  # testing happens here
+    yield db
     db.session.remove()
     db.drop_all()
 

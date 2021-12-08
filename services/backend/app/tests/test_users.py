@@ -5,7 +5,7 @@ import json
 
 import pytest
 
-from app.api.models_old import User
+from app.api.models.user import User
 
 
 def test_add_user(test_app, test_database):
@@ -14,9 +14,9 @@ def test_add_user(test_app, test_database):
         "/users",
         data=json.dumps(
             {
-                "username": "michael",
-                "email": "michael@testdriven.io",
-                "password": "greaterthaneight",
+                "username": "testUser",
+                "email": "test@user.com",
+                "password": "test",
             }
         ),
         content_type="application/json",
